@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+node "Рабочее место" { component "Браузер" as Browser }
+node "helios: учётная запись студента" {
+node "Одна JVM Spring Boot" {
+component "MVC-контроллеры / Thymeleaf / Security" as Web
+component "Прикладные сервисы
+Режим demo: тестовые адаптеры" as Services
+component "Репозитории / JPA" as Repo
+}
+folder "Файлы и логи" as Files
+}
+database "PostgreSQL
+выделенный сервер / своя схема" as DB
+component "Платёжный сервис
+рабочий режим" as Pay
+component "SMTP-сервис
+рабочий режим" as Mail
+component "Официальный сайт метро
+источник справочника" as Metro
+Browser --> Web : HTTP через SSH-туннель
+Web --> Services
+Services --> Repo
+Repo --> DB : JDBC
+Services --> Files : файловый I/O
+Services --> Pay
+Services --> Mail
+Metro ..> Services : ручное обновление администратором
+@enduml

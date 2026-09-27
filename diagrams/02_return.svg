@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1720" height="1280" viewBox="0 0 1720 1280">
+<rect width="100%" height="100%" fill="white"/>
+<text x="860.0" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">ИС «Потеряшки»: поиск и возврат</text>
+<rect x="345" y="85" width="1005" height="1105" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="845" y="110.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Граница информационной системы</text>
+<circle cx="140" cy="600" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="140,620 140,675" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="105,643 175,643" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="140,675 110,715" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="140,675 170,715" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="140" y="748.0" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Подписчик</text>
+<circle cx="1550" cy="360" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="1550,380 1550,435" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1515,403 1585,403" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1550,435 1520,475" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1550,435 1580,475" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1550" y="508.0" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Посетитель</text>
+<circle cx="1550" cy="810" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="1550,830 1550,885" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1515,853 1585,853" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1550,885 1520,925" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1550,885 1580,925" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1550" y="958.0" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Модератор</text>
+<polyline points="175,643 300,643 300,200 385,200" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="175,643 300,643 300,430 385,430" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="175,643 300,643 300,680 385,680" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="175,643 300,643 300,1030 385,1030" fill="none" stroke="#263746" stroke-width="3"/>
+<ellipse cx="600" cy="200" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="600" y="180.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-05. Публикация</text>
+<text x="600" y="219.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">объявления</text>
+<ellipse cx="1100" cy="200" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1100" y="180.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-06. Проверка</text>
+<text x="1100" y="219.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">объявления</text>
+<ellipse cx="600" cy="430" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="600" y="430.0" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-07. Поиск вещи</text>
+<ellipse cx="1100" cy="430" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1100" y="410.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-08. Инструкция</text>
+<text x="1100" y="449.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">для метро</text>
+<ellipse cx="600" cy="680" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="600" y="660.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-09. Заявка</text>
+<text x="600" y="699.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">на возврат</text>
+<ellipse cx="600" cy="1030" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="600" y="1010.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-10. Подтверждение</text>
+<text x="600" y="1049.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">передачи</text>
+<ellipse cx="1100" cy="850" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1100" y="830.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-11. Жалоба</text>
+<text x="1100" y="869.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">и разбор спора</text>
+<polyline points="815,200 885,200" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="866.0906108505937,190.86572378366418 885,200 866.0906108505937,209.13427621633582" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="850" y="155.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«include»</text>
+<polyline points="1315,430 1440,430 1440,403 1515,403" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1100,372 1100,315 600,315 600,258" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="590.8657237836642,276.9093891494062 600,258 609.1342762163358,276.9093891494062" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="840" y="292.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«extend» [место — метро]</text>
+<polyline points="1100,908 1100,1150 300,1150 300,643 175,643" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1315,200 1410,200 1410,853 1515,853" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1315,850 1515,850" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="885,820 815,710" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="817.4457505446295,730.857092421367 815,710 832.8582246686893,721.0491543424198" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="995" y="721.5" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«extend»</text>
+<text x="995" y="748.5" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">[спор]</text>
+<polyline points="885,880 815,1000" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="832.4178883733946,988.2689657484106 815,1000 816.6378982320961,979.0639714993197" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="980" y="951.5" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«extend»</text>
+<text x="980" y="978.5" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">[спор]</text>
+</svg>

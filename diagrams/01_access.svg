@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1650" height="1180" viewBox="0 0 1650 1180">
+<rect width="100%" height="100%" fill="white"/>
+<text x="825.0" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">ИС «Потеряшки»: регистрация и подписка</text>
+<rect x="340" y="85" width="950" height="1015" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="815" y="110.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Граница информационной системы</text>
+<circle cx="135" cy="160" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="135,180 135,235" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="100,203 170,203" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,235 105,275" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,235 165,275" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="135" y="308.0" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Посетитель</text>
+<circle cx="135" cy="400" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="135,420 135,475" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="100,443 170,443" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,475 105,515" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,475 165,515" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="135" y="530.5" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Владелец</text>
+<text x="135" y="565.5" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">аккаунта</text>
+<circle cx="135" cy="930" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="135,950 135,1005" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="100,973 170,973" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,1005 105,1045" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,1005 165,1045" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="135" y="1078.0" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Подписчик</text>
+<circle cx="1490" cy="160" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,180 1490,235" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1455,203 1525,203" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,235 1460,275" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,235 1520,275" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1490" y="290.5" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Почтовый</text>
+<text x="1490" y="325.5" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">сервис</text>
+<circle cx="1490" cy="400" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,420 1490,475" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1455,443 1525,443" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,475 1460,515" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,475 1520,515" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1490" y="548.0" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Модератор</text>
+<circle cx="1490" cy="880" r="20" fill="white" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,900 1490,955" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1455,923 1525,923" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,955 1460,995" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1490,955 1520,995" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1490" y="1010.5" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Платёжный</text>
+<text x="1490" y="1045.5" font-family="Arial, sans-serif" font-size="28" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">сервис</text>
+<polyline points="170,203 290,203 290,200 365,200" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="170,443 290,443 290,440 365,440" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="170,443 290,443 290,680 365,680" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="170,443 290,443 290,920 365,920" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="135,910 135,590" fill="none" stroke="#263746" stroke-width="3"/>
+<polygon points="135,590 125.86572378366417,608.9093891494063 144.13427621633585,608.9093891494063" fill="white" stroke="#263746" stroke-width="3"/>
+<ellipse cx="580" cy="200" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="580" y="180.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-01. Регистрация</text>
+<text x="580" y="219.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">и подтверждение почты</text>
+<ellipse cx="580" cy="440" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="580" y="420.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-02. Проверка</text>
+<text x="580" y="459.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">профиля</text>
+<ellipse cx="580" cy="680" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="580" y="680.0" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-03. Вход</text>
+<ellipse cx="580" cy="920" rx="215.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="580" y="920.0" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">UC-04. Подписка</text>
+<ellipse cx="1075" cy="680" rx="170.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1075" y="660.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Восстановить</text>
+<text x="1075" y="699.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">пароль</text>
+<ellipse cx="1075" cy="920" rx="170.0" ry="57.5" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1075" y="900.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Обработать</text>
+<text x="1075" y="939.5" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">результат оплаты</text>
+<polyline points="795,200 1455,200" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="795,440 1455,440" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1245,680 1340,680 1340,203 1455,203" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1245,920 1455,920" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="905,680 795,680" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="813.9093891494063,689.1342762163358 795,680 813.9093891494063,670.8657237836642" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="845" y="625.0" font-family="Arial, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«extend»</text>
+<text x="1075" y="778.0" font-family="Arial, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">[пароль утрачен]</text>
+<polyline points="795,920 905,920" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="886.0906108505937,910.8657237836642 905,920 886.0906108505937,929.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="845" y="865.0" font-family="Arial, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«include»</text>
+</svg>

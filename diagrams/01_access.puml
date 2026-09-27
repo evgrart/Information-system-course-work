@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+actor "Посетитель" as Visitor
+actor "Владелец аккаунта" as Account
+actor "Подписчик" as Subscriber
+actor "Модератор" as Moderator
+actor "Почтовый сервис" as Mail
+actor "Платёжный сервис" as Payment
+Subscriber --|> Account
+rectangle "ИС Потеряшки" {
+usecase "UC-01. Регистрация и подтверждение почты" as U1
+usecase "UC-02. Проверка профиля" as U2
+usecase "UC-03. Вход" as U3
+usecase "UC-04. Подписка" as U4
+usecase "Восстановить пароль" as Reset
+usecase "Обработать результат оплаты" as Result
+}
+Visitor -- U1
+Account -- U2
+Account -- U3
+Account -- U4
+Mail -- U1
+Mail -- Reset
+Moderator -- U2
+Payment -- Result
+Reset ..> U3 : <<extend>>
+[пароль утрачен]
+U4 ..> Result : <<include>>
+@enduml

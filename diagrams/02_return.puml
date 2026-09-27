@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+actor "Подписчик" as Subscriber
+actor "Посетитель" as Visitor
+actor "Модератор" as Moderator
+rectangle "ИС Потеряшки" {
+usecase "UC-05. Публикация объявления" as U5
+usecase "UC-06. Проверка объявления" as U6
+usecase "UC-07. Поиск вещи" as U7
+usecase "UC-08. Инструкция для метро" as U8
+usecase "UC-09. Заявка на возврат" as U9
+usecase "UC-10. Подтверждение передачи" as U10
+usecase "UC-11. Жалоба и разбор спора" as U11
+}
+Subscriber -- U5
+Subscriber -- U7
+Subscriber -- U9
+Subscriber -- U10
+Subscriber -- U11
+Visitor -- U8
+Moderator -- U6
+Moderator -- U11
+U5 ..> U6 : <<include>>
+U8 ..> U5 : <<extend>>
+[место — метро]
+U11 ..> U9 : <<extend>>
+[спор]
+U11 ..> U10 : <<extend>>
+[спор]
+@enduml

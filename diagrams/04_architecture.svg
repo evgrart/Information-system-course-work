@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1720" height="1390" viewBox="0 0 1720 1390">
+<rect width="100%" height="100%" fill="white"/>
+<text x="860.0" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Компоненты и развёртывание на helios</text>
+<rect x="65" y="120" width="340" height="235" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="235.0" y="204.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Рабочее место</text>
+<text x="235.0" y="237.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Браузер</text>
+<text x="235.0" y="270.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">HTML / CSS / JS</text>
+<rect x="505" y="100" width="835" height="1080" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="920" y="135.0" font-family="Arial, sans-serif" font-size="27" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">helios — учётная запись студента</text>
+<rect x="550" y="190" width="750" height="735" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="925" y="230.0" font-family="Arial, sans-serif" font-size="27" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Одна JVM: Spring Boot / Spring MVC</text>
+<rect x="605" y="285" width="640" height="105" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="925.0" y="321.0" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Контроллеры и Thymeleaf</text>
+<text x="925.0" y="354.0" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Сессии, роли, проверка подписки</text>
+<rect x="605" y="455" width="640" height="185" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="925.0" y="485.5" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Прикладные сервисы</text>
+<text x="925.0" y="516.5" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Аккаунты • Подписки • Объявления</text>
+<text x="925.0" y="547.5" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Возвраты • Аукционы • Модерация</text>
+<text x="925.0" y="578.5" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Справочник • Уведомления • Аудит</text>
+<text x="925.0" y="609.5" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Режим demo: тестовые адаптеры</text>
+<rect x="605" y="705" width="640" height="100" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="925.0" y="738.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Репозитории / JPA</text>
+<text x="925.0" y="771.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Транзакции и ограничения</text>
+<rect x="570" y="985" width="350" height="140" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="745.0" y="1038.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Файлы и логи</text>
+<text x="745.0" y="1071.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Домашний каталог</text>
+<rect x="1450" y="985" width="210" height="220" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1555.0" y="1047.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PostgreSQL</text>
+<text x="1555.0" y="1079.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Выделенный</text>
+<text x="1555.0" y="1111.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">сервер /</text>
+<text x="1555.0" y="1143.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">своя схема</text>
+<rect x="1420" y="175" width="255" height="195" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1547.5" y="242.5" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Платёжный сервис</text>
+<text x="1547.5" y="272.5" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Реальная оплата</text>
+<text x="1547.5" y="302.5" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">(рабочий режим)</text>
+<rect x="1420" y="465" width="255" height="185" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="1547.5" y="527.5" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">SMTP-сервис</text>
+<text x="1547.5" y="557.5" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Доставка писем</text>
+<text x="1547.5" y="587.5" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">(рабочий режим)</text>
+<rect x="65" y="570" width="340" height="290" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="235.0" y="653.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Официальный сайт</text>
+<text x="235.0" y="684.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">метрополитена</text>
+<text x="235.0" y="715.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Источник контактов</text>
+<text x="235.0" y="746.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Ручное обновление</text>
+<text x="235.0" y="777.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">администратором</text>
+<polyline points="405,335 605,335" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="586.0906108505937,325.8657237836642 605,335 586.0906108505937,344.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="485" y="275.0" font-family="Arial, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">SSH-туннель</text>
+<text x="485" y="310.0" font-family="Arial, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">HTTP</text>
+<polyline points="925,390 925,455" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="934.1342762163358,436.0906108505938 925,455 915.8657237836642,436.0906108505938" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="925,640 925,705" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="934.1342762163358,686.0906108505937 925,705 915.8657237836642,686.0906108505937" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="605,600 575,600 575,950 745,950 745,985" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="754.1342762163358,966.0906108505937 745,985 735.8657237836642,966.0906108505937" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="710" y="900.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Файловый I/O</text>
+<polyline points="1245,755 1390,755 1390,1075 1450,1075" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1431.0906108505937,1065.8657237836642 1450,1075 1431.0906108505937,1084.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1390" y="925.0" font-family="Arial, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">JDBC</text>
+<polyline points="1245,505 1370,505 1370,275 1420,275" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1401.0906108505937,265.8657237836642 1420,275 1401.0906108505937,284.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1245,565 1420,565" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1401.0906108505937,555.8657237836642 1420,565 1401.0906108505937,574.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="405,700 465,700 465,540 605,540" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="586.0906108505937,530.8657237836642 605,540 586.0906108505937,549.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="250" y="920.5" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">API метро в первой версии</text>
+<text x="250" y="949.5" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">не используется</text>
+<text x="930" y="1243.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Сборка Maven выполняется локально; JAR переносится на helios.</text>
+<text x="930" y="1276.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Без обязательных Docker, root и Node.js на сервере.</text>
+</svg>
