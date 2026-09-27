@@ -23,8 +23,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 
 ROOT = Path(__file__).resolve().parents[1]
-DIAGRAMS = ROOT / 'diagrams'
-DIAGRAMS.mkdir(exist_ok=True)
+REPORT_DIR = ROOT / 'docs' / 'part1'
+DIAGRAMS = REPORT_DIR / 'uml'
+DIAGRAMS.mkdir(parents=True,exist_ok=True)
 FONTS = Path('C:/Windows/Fonts')
 INK = '#263746'
 BLUE = '#edf3f8'
@@ -401,7 +402,7 @@ def build_docx(items):
             caption,path=val
             p=doc.add_paragraph();p.paragraph_format.first_line_indent=Cm(0);p.alignment=WD_ALIGN_PARAGRAPH.CENTER
             p.paragraph_format.keep_with_next=True
-            p.add_run().add_picture(str(ROOT/path),width=Cm(16.4))
+            p.add_run().add_picture(str(REPORT_DIR/path),width=Cm(16.4))
             p=doc.add_paragraph(caption);p.alignment=WD_ALIGN_PARAGRAPH.CENTER
             p.paragraph_format.first_line_indent=Cm(0);p.paragraph_format.line_spacing=1
             for r in p.runs:r.font.size=Pt(12)
@@ -438,7 +439,7 @@ def build_docx(items):
     doc.core_properties.last_modified_by=''
     doc.core_properties.created=datetime.now(timezone.utc)
     doc.core_properties.modified=datetime.now(timezone.utc)
-    path=ROOT/'Этап_1_Потеряшки.docx'
+    path=REPORT_DIR/'report.docx'
     doc.save(path)
     # Remove irrelevant template statistics and application defaults.
     with ZipFile(path) as source:
@@ -515,9 +516,9 @@ def build_pdf(items, toc_pages=None):
             story.append(Paragraph(pdf_inline(('• ' if kind=='bullet' else '')+val),liststyle if kind in ['number','bullet'] else base))
         elif kind=='image':
             capt,path=val
-            im=Image.open(ROOT/path)
+            im=Image.open(REPORT_DIR/path)
             width=164*mm;height=width*im.height/im.width
-            story.append(KeepTogether([PDFImage(str(ROOT/path),width=width,height=height),Paragraph(pdf_inline(capt),caption)]))
+            story.append(KeepTogether([PDFImage(str(REPORT_DIR/path),width=width,height=height),Paragraph(pdf_inline(capt),caption)]))
         elif kind=='table':
             data=[[Paragraph(pdf_inline(s),th if i==0 else ts) for s in row] for i,row in enumerate(val)]
             table=Table(data,colWidths=table_widths(val,165*mm),repeatRows=1,hAlign='LEFT')
@@ -536,7 +537,7 @@ def build_pdf(items, toc_pages=None):
                 key='section_'+str(len(self.section_pages))
                 self.canv.bookmarkPage(key)
                 self.canv.addOutlineEntry(flowable.section_title,key,level=0)
-    doc=ReportTemplate(str(ROOT/'Этап_1_Потеряшки.pdf'),pagesize=A4,leftMargin=30*mm,rightMargin=15*mm,topMargin=20*mm,bottomMargin=20*mm,title='ИС «Потеряшки». Отчёт по этапу 1',author='',allowSplitting=True)
+    doc=ReportTemplate(str(REPORT_DIR/'report.pdf'),pagesize=A4,leftMargin=30*mm,rightMargin=15*mm,topMargin=20*mm,bottomMargin=20*mm,title='ИС «Потеряшки». Отчёт по этапу 1',author='',allowSplitting=True)
     doc.section_pages={}
     doc.build(story,onFirstPage=footer,onLaterPages=footer)
     if toc_pages is None:build_pdf(items,doc.section_pages)
@@ -544,7 +545,7 @@ def build_pdf(items, toc_pages=None):
 
 if __name__=='__main__':
     make_diagrams()
-    items=list(blocks((ROOT/'Отчет_этап_1.md').read_text(encoding='utf-8')))
+    items=list(blocks((REPORT_DIR/'report.md').read_text(encoding='utf-8')))
     start=next(i for i,(kind,val) in enumerate(items) if kind=='heading' and val[0]==2)
     items=items[start:]
     build_docx(items)
