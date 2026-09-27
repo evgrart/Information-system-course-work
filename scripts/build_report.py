@@ -251,44 +251,45 @@ note right of U14
 end note''')
 
     g=Drawing('04_architecture',1720,1390,'Компоненты и развёртывание на helios')
-    g.box(65,120,405,355,'Рабочее место\nБраузер\nHTML / CSS / JS',BLUE)
+    g.box(65,120,405,355,'Браузер\nNext.js • TypeScript\nRedux Toolkit',BLUE)
     g.box(505,100,1340,1180)
     g.text(920,135,'helios — учётная запись студента',27,bold=True)
     g.box(550,190,1300,925)
     g.text(925,230,'Одна JVM: Spring Boot / Spring MVC',27,bold=True)
-    g.box(605,285,1245,390,'Контроллеры и Thymeleaf\nСессии, роли, проверка подписки',BLUE)
+    g.box(605,285,1245,390,'REST API • Spring MVC\nSpring Security • JWT\nРаздача frontend Next.js',BLUE,size=24)
     g.box(605,455,1245,640,'Прикладные сервисы\nАккаунты • Подписки • Объявления\nВозвраты • Аукционы • Модерация\nСправочник • Уведомления • Аудит\nРежим demo: тестовые адаптеры',BLUE,size=24)
-    g.box(605,705,1245,805,'Репозитории / JPA\nТранзакции и ограничения',BLUE)
-    g.box(570,985,920,1125,'Файлы и логи\nДомашний каталог',BLUE)
+    g.box(605,705,1245,805,'Hibernate / JPA / JDBC\nФункции PL/pgSQL',BLUE)
+    g.box(570,985,920,1125,'Статический frontend\nHTML / CSS / JS\nВ составе JAR',BLUE,size=24)
     g.box(1450,985,1660,1205,'PostgreSQL\nВыделенный\nсервер /\nсвоя схема',BLUE,size=25)
     g.box(1420,175,1675,370,'Платёжный сервис\nРеальная оплата\n(рабочий режим)',BLUE,size=23)
     g.box(1420,465,1675,650,'SMTP-сервис\nДоставка писем\n(рабочий режим)',BLUE,size=23)
-    g.box(65,570,405,860,'Официальный сайт\nметрополитена\nИсточник контактов\nРучное обновление\nадминистратором',BLUE,size=24)
+    g.box(65,570,405,860,'MinIO\nФотографии и материалы\nЗакрытый бакет\nОтдельный сервис',BLUE,size=24)
+    g.box(65,940,405,1180,'Официальный сайт\nметрополитена\nИсточник контактов\nРучное обновление',BLUE,size=24)
     g.line([(405,335),(605,335)],arrow=True)
     g.text(485,275,'SSH-туннель',21)
     g.text(485,310,'HTTP',21)
     g.line([(925,390),(925,455)],arrow=True)
     g.line([(925,640),(925,705)],arrow=True)
-    g.line([(605,600),(575,600),(575,950),(745,950),(745,985)],arrow=True)
-    g.text(710,900,'Файловый I/O',20)
+    g.line([(605,600),(450,600),(450,720),(405,720)],arrow=True)
+    g.text(235,825,'S3 API',20)
     g.line([(1245,755),(1390,755),(1390,1075),(1450,1075)],arrow=True)
     g.text(1390,925,'JDBC',21)
     g.line([(1245,505),(1370,505),(1370,275),(1420,275)],arrow=True)
     g.line([(1245,565),(1420,565)],arrow=True)
-    g.line([(405,700),(465,700),(465,540),(605,540)],dashed=True,arrow=True)
-    g.text(250,935,'API метро в первой версии\nне используется',22)
-    g.text(930,1260,'Сборка Maven выполняется локально; JAR переносится на helios.\nБез обязательных Docker, root и Node.js на сервере.',26)
+    g.line([(405,1050),(485,1050),(485,540),(605,540)],dashed=True,arrow=True)
+    g.text(930,1260,'Локальная сборка: Gradle Wrapper и pnpm.\nНа helios — JAR с frontend; MinIO — отдельный сервис.',26)
     g.save()
-    uml_file('04_architecture','''node "Рабочее место" { component "Браузер" as Browser }
+    uml_file('04_architecture','''node "Рабочее место" { component "Браузер\nNext.js / TypeScript / Redux" as Browser }
 node "helios: учётная запись студента" {
 node "Одна JVM Spring Boot" {
-component "MVC-контроллеры / Thymeleaf / Security" as Web
+component "REST API / Spring MVC / Spring Security / JWT" as Web
 component "Прикладные сервисы\nРежим demo: тестовые адаптеры" as Services
-component "Репозитории / JPA" as Repo
+component "Hibernate / JPA / JDBC / функции PL/pgSQL" as Repo
 }
-folder "Файлы и логи" as Files
+artifact "Статический frontend\nHTML / CSS / JS в JAR" as Frontend
 }
 database "PostgreSQL\nвыделенный сервер / своя схема" as DB
+node "Отдельный сервис" { database "MinIO\nзакрытый бакет" as Files }
 component "Платёжный сервис\nрабочий режим" as Pay
 component "SMTP-сервис\nрабочий режим" as Mail
 component "Официальный сайт метро\nисточник справочника" as Metro
@@ -296,7 +297,7 @@ Browser --> Web : HTTP через SSH-туннель
 Web --> Services
 Services --> Repo
 Repo --> DB : JDBC
-Services --> Files : файловый I/O
+Services --> Files : S3 API
 Services --> Pay
 Services --> Mail
 Metro ..> Services : ручное обновление администратором''')

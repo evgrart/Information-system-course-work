@@ -2,18 +2,22 @@
 left to right direction
 skinparam shadowing false
 skinparam defaultFontName Arial
-node "Рабочее место" { component "Браузер" as Browser }
+node "Рабочее место" { component "Браузер
+Next.js / TypeScript / Redux" as Browser }
 node "helios: учётная запись студента" {
 node "Одна JVM Spring Boot" {
-component "MVC-контроллеры / Thymeleaf / Security" as Web
+component "REST API / Spring MVC / Spring Security / JWT" as Web
 component "Прикладные сервисы
 Режим demo: тестовые адаптеры" as Services
-component "Репозитории / JPA" as Repo
+component "Hibernate / JPA / JDBC / функции PL/pgSQL" as Repo
 }
-folder "Файлы и логи" as Files
+artifact "Статический frontend
+HTML / CSS / JS в JAR" as Frontend
 }
 database "PostgreSQL
 выделенный сервер / своя схема" as DB
+node "Отдельный сервис" { database "MinIO
+закрытый бакет" as Files }
 component "Платёжный сервис
 рабочий режим" as Pay
 component "SMTP-сервис
@@ -24,7 +28,7 @@ Browser --> Web : HTTP через SSH-туннель
 Web --> Services
 Services --> Repo
 Repo --> DB : JDBC
-Services --> Files : файловый I/O
+Services --> Files : S3 API
 Services --> Pay
 Services --> Mail
 Metro ..> Services : ручное обновление администратором
