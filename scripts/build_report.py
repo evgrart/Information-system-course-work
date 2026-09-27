@@ -322,6 +322,7 @@ def blocks(text):
         elif line.startswith('!['):
             m=re.match(r'!\[(.*?)\]\((.*?)\)',line)
             yield 'image',m.groups()
+        elif re.match(r'^Таблица \d+ — ',line):yield 'caption',line
         elif re.match(r'^\d+\. ',line):yield 'number',line
         elif line.startswith('- '):yield 'bullet',line[2:]
         else:
@@ -332,7 +333,7 @@ def blocks(text):
         i+=1
 
 
-def plain(s):return re.sub(r'\*\*(.*?)\*\*',r'\1',s)
+def plain(s):return re.sub(r'\*\*(.*?)\*\*',r'\1',s).replace('<br>','\n')
 
 
 def word_inline(p,s):
@@ -341,9 +342,9 @@ def word_inline(p,s):
 
 
 TITLE_FIELDS=['[Наименование образовательной организации]','[Факультет / кафедра]',
-              'КУРСОВАЯ РАБОТА','Информационная система «Потеряшки»',
+              'КУРСОВАЯ РАБОТА','Создание информационной системы\nдля поиска и возврата потерянных вещей\n«Потеряшки»',
               'Этап 1. Анализ предметной области\nи проектирование системы',
-              'Дисциплина: [название дисциплины]','Выполнил: [ФИО], группа [номер]',
+              'Дисциплина: «Информационные системы»','Выполнил: [ФИО], группа [номер]',
               'Преподаватель: [ФИО]','Санкт-Петербург — 2026']
 
 
@@ -371,7 +372,7 @@ def build_docx(items):
         st.paragraph_format.first_line_indent=Cm(0)
         st.paragraph_format.space_before=Pt(12);st.paragraph_format.space_after=Pt(6)
         st.paragraph_format.keep_with_next=True
-    doc.styles['Heading 1'].paragraph_format.page_break_before=True
+    doc.styles['Heading 1'].paragraph_format.page_break_before=False
     foot=sec.footer.paragraphs[0];foot.alignment=WD_ALIGN_PARAGRAPH.CENTER
     foot.paragraph_format.first_line_indent=Cm(0)
     f=OxmlElement('w:fldSimple');f.set(qn('w:instr'),'PAGE');foot._p.append(f)
@@ -391,7 +392,13 @@ def build_docx(items):
         if kind=='heading':
             level,title=val
             if level==1:continue
-            doc.add_heading(title,level=level-1)
+            p=doc.add_heading(title,level=level-1)
+            if title=='Задание':p.paragraph_format.page_break_before=True
+        elif kind=='caption':
+            p=doc.add_paragraph(val);p.alignment=WD_ALIGN_PARAGRAPH.CENTER
+            p.paragraph_format.first_line_indent=Cm(0);p.paragraph_format.line_spacing=1
+            p.paragraph_format.space_after=Pt(8)
+            for r in p.runs:r.font.size=Pt(12)
         elif kind in ['paragraph','bullet','number']:
             p=doc.add_paragraph()
             if kind in ['bullet','number']:
@@ -407,6 +414,7 @@ def build_docx(items):
             p.paragraph_format.first_line_indent=Cm(0);p.paragraph_format.line_spacing=1
             for r in p.runs:r.font.size=Pt(12)
         elif kind=='table':
+            is_case=val[0][0]=='Прецедент'
             t=doc.add_table(rows=1,cols=len(val[0]));t.style='Table Grid'
             for j,s in enumerate(val[0]):t.rows[0].cells[j].text=plain(s)
             trPr=t.rows[0]._tr.get_or_add_trPr();repeat=OxmlElement('w:tblHeader');trPr.append(repeat)
@@ -427,11 +435,11 @@ def build_docx(items):
                         p.paragraph_format.space_after=Pt(4)
                         p.paragraph_format.space_before=Pt(3)
                         p.alignment=WD_ALIGN_PARAGRAPH.LEFT
-                        p.paragraph_format.keep_with_next=ri==0
+                        p.paragraph_format.keep_with_next=ri==0 or (is_case and ri==len(val)-1)
                         for r in p.runs:r.font.name='Times New Roman';r.font.size=Pt(11);r.bold=ri==0
                     if ri==0:
                         shade=OxmlElement('w:shd');shade.set(qn('w:fill'),'EDF3F8');cell._tc.get_or_add_tcPr().append(shade)
-            doc.add_paragraph().paragraph_format.space_after=Pt(4)
+            if not is_case:doc.add_paragraph().paragraph_format.space_after=Pt(4)
     doc.core_properties.title='ИС «Потеряшки». Отчёт по этапу 1'
     doc.core_properties.subject='Анализ предметной области, требования, прецеденты, архитектура'
     doc.core_properties.author=''
@@ -475,6 +483,7 @@ def table_widths(rows,total):
 
 def pdf_inline(s):
     s=html.escape(s)
+    s=s.replace('&lt;br&gt;','<br/>')
     s=re.sub(r'\*\*(.*?)\*\*',r'<b>\1</b>',s)
     s=re.sub(r'https://[^\s<]+',lambda m:f'<link href="{m.group(0)}" color="#234e76">{m.group(0)}</link>',s)
     return s
@@ -508,22 +517,27 @@ def build_pdf(items, toc_pages=None):
         if kind=='heading':
             level,text=val
             if level==1:continue
-            if level==2:story.append(PageBreak())
+            if level==2 and text=='Задание':story.append(PageBreak())
             p=Paragraph(pdf_inline(text),h1 if level==2 else h2)
             if level==2:p.section_title=text
             story.append(p)
         elif kind in ['paragraph','number','bullet']:
             story.append(Paragraph(pdf_inline(('• ' if kind=='bullet' else '')+val),liststyle if kind in ['number','bullet'] else base))
+        elif kind=='caption':story.append(Paragraph(pdf_inline(val),caption))
         elif kind=='image':
             capt,path=val
             im=Image.open(REPORT_DIR/path)
             width=164*mm;height=width*im.height/im.width
             story.append(KeepTogether([PDFImage(str(REPORT_DIR/path),width=width,height=height),Paragraph(pdf_inline(capt),caption)]))
         elif kind=='table':
+            is_case=val[0][0]=='Прецедент'
             data=[[Paragraph(pdf_inline(s),th if i==0 else ts) for s in row] for i,row in enumerate(val)]
             table=Table(data,colWidths=table_widths(val,165*mm),repeatRows=1,hAlign='LEFT')
             table.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('GRID',(0,0),(-1,-1),.5,colors.HexColor('#6c7a85')),('BACKGROUND',(0,0),(-1,0),colors.HexColor(BLUE)),('LEFTPADDING',(0,0),(-1,-1),5),('RIGHTPADDING',(0,0),(-1,-1),5),('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5)]))
-            story += [table,Spacer(1,5*mm)]
+            if is_case:
+                table.keepWithNext=True
+                story.append(table)
+            else:story += [table,Spacer(1,5*mm)]
     def footer(canvas,doc):
         canvas.setCreator('')
         canvas.setSubject('Анализ предметной области и проектирование информационной системы')
