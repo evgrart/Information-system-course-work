@@ -10,3 +10,9 @@
 *.pdf binary
 *.docx binary
 *.png binary
+*.java text eol=lf
+*.gradle text eol=lf
+*.properties text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
