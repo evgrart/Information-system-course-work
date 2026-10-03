@@ -302,6 +302,8 @@ BEGIN
 END $$;
 CREATE TRIGGER lf_transfer_guard BEFORE INSERT OR UPDATE ON lf_transfers FOR EACH ROW EXECUTE FUNCTION lf_transfer_guard();
 CREATE TRIGGER lf_transfer_audit AFTER INSERT OR UPDATE ON lf_transfers FOR EACH ROW EXECUTE FUNCTION lf_audit_change();
+CREATE TRIGGER lf_transfer_delete_guard BEFORE DELETE OR TRUNCATE ON lf_transfers
+    FOR EACH STATEMENT EXECUTE FUNCTION lf_immutable();
 CREATE FUNCTION lf_resolve_return(p_transfer bigint,p_moderator bigint,p_reason text) RETURNS void
 LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
 DECLARE v_claim lf_claims%ROWTYPE; v_transfer lf_transfers%ROWTYPE;
@@ -412,7 +414,7 @@ CREATE FUNCTION lf_place_bid(p_auction bigint,p_bidder bigint,p_amount numeric,p
 LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
 DECLARE v_listing bigint; v_bid lf_bids%ROWTYPE; v_id bigint;
 BEGIN
-    IF p_amount IS NULL OR p_amount<>round(p_amount,2) THEN RAISE EXCEPTION 'Сумма ставки должна иметь не более двух десятичных знаков'; END IF;
+    IF p_amount IS NULL OR p_amount='NaN'::numeric OR p_amount<>round(p_amount,2) THEN RAISE EXCEPTION 'Требуется конечная сумма ставки с не более чем двумя десятичными знаками'; END IF;
     SELECT listing_id INTO STRICT v_listing FROM lf_auctions WHERE id=p_auction;
     PERFORM 1 FROM lf_listings WHERE id=v_listing FOR UPDATE;
     PERFORM 1 FROM lf_auctions WHERE id=p_auction FOR UPDATE;
@@ -448,7 +450,7 @@ CREATE PROCEDURE lf_close_due_auctions(p_limit integer DEFAULT 100)
 LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
 DECLARE v_id bigint;
 BEGIN
-    IF p_limit NOT BETWEEN 1 AND 1000 THEN RAISE EXCEPTION 'Некорректный размер пакета'; END IF;
+    IF p_limit IS NULL OR p_limit NOT BETWEEN 1 AND 1000 THEN RAISE EXCEPTION 'Некорректный размер пакета'; END IF;
     FOR v_id IN SELECT id FROM lf_auctions WHERE state IN ('scheduled','active') AND ends_at<=clock_timestamp()
       ORDER BY ends_at,id LIMIT p_limit LOOP
       PERFORM lf_finalize_auction(v_id);
@@ -460,7 +462,7 @@ CREATE FUNCTION lf_search_listings(p_text text DEFAULT NULL,p_kind varchar DEFAU
 RETURNS TABLE(id bigint,title varchar,kind varchar,event_at timestamptz,location_id bigint)
 LANGUAGE plpgsql STABLE SET search_path FROM CURRENT AS $$
 BEGIN
-    IF p_limit NOT BETWEEN 1 AND 100 OR (p_from IS NOT NULL AND p_to IS NOT NULL AND p_from>p_to) THEN
+    IF p_limit IS NULL OR p_limit NOT BETWEEN 1 AND 100 OR (p_from IS NOT NULL AND p_to IS NOT NULL AND p_from>p_to) THEN
       RAISE EXCEPTION 'Некорректные параметры поиска';
     END IF;
     RETURN QUERY SELECT l.id,l.title,l.kind,l.event_at,l.location_id FROM lf_listings l

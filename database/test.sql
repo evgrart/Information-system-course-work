@@ -62,6 +62,11 @@ DO $$ DECLARE v_id bigint; BEGIN
  v_id:=lf_place_bid(1,4,1200,'30000000-0000-0000-0000-000000000031');
  IF lf_place_bid(1,4,1200,'30000000-0000-0000-0000-000000000031')<>v_id THEN RAISE EXCEPTION 'Повтор ставки создал новый результат'; END IF;
  INSERT INTO lf_test_results VALUES ('31. Идемпотентность ставки','PASS');
+ BEGIN
+  PERFORM lf_place_bid(1,4,'NaN'::numeric,'30000000-0000-0000-0000-000000000099');
+  RAISE EXCEPTION 'NaN ошибочно принят в качестве суммы' USING ERRCODE='XX000';
+ EXCEPTION WHEN SQLSTATE 'P0001' THEN NULL;
+ END;
  INSERT INTO lf_claims(listing_id,claimant_id,evidence) VALUES (2,4,'Особый признак наушников');
  IF (SELECT state FROM lf_auctions WHERE id=1)<>'suspended' THEN RAISE EXCEPTION 'Аукцион не приостановлен'; END IF;
  INSERT INTO lf_test_results VALUES ('32. Обращение владельца приостанавливает торги','PASS');
@@ -89,6 +94,21 @@ DO $$ BEGIN
    RAISE EXCEPTION 'В публичном представлении раскрыты закрытые данные'; END IF;
  IF NOT EXISTS (SELECT 1 FROM lf_search_listings('сумка')) THEN RAISE EXCEPTION 'Поиск не находит сумму'; END IF;
  INSERT INTO lf_test_results VALUES ('41. Публичное представление и русский поиск','PASS');
+ BEGIN
+  PERFORM lf_search_listings(p_limit=>NULL);
+  RAISE EXCEPTION 'Поиск с NULL-лимитом ошибочно разрешён' USING ERRCODE='XX000';
+ EXCEPTION WHEN SQLSTATE 'P0001' THEN NULL;
+ END;
+ BEGIN
+  CALL lf_close_due_auctions(NULL);
+  RAISE EXCEPTION 'Пакет с NULL-лимитом ошибочно разрешён' USING ERRCODE='XX000';
+ EXCEPTION WHEN SQLSTATE 'P0001' THEN NULL;
+ END;
+ BEGIN
+  DELETE FROM lf_transfers WHERE id=1;
+  RAISE EXCEPTION 'История передачи ошибочно удалена' USING ERRCODE='XX000';
+ EXCEPTION WHEN SQLSTATE 'P0001' THEN NULL;
+ END;
 END $$;
 SELECT pg_temp.expect_error('42. Некорректный интервал потери',$q$INSERT INTO lf_listings(author_id,category_id,location_id,kind,title,description,event_at,event_until) VALUES (3,1,1,'lost','Тест','Интервал',clock_timestamp()-interval '1 day',clock_timestamp()-interval '2 days')$q$,'23514');
 SELECT pg_temp.expect_error('43. Прямой возврат без передачи',$q$UPDATE lf_listings SET state='returned' WHERE id=3$q$);
