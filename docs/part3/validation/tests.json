@@ -1,0 +1,29 @@
+[
+  {
+    "name": "ru.itmo.is.poteryashki.ServiceIntegrationTest",
+    "tests": "40",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-03T23:46:03.437Z",
+    "time": "55.473"
+  },
+  {
+    "name": "ru.itmo.is.poteryashki.SqlNamesTest",
+    "tests": "1",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-03T23:46:58.918Z",
+    "time": "0.002"
+  },
+  {
+    "name": "ru.itmo.is.poteryashki.TransactionIntegrationTest",
+    "tests": "4",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-03T23:46:58.938Z",
+    "time": "13.654"
+  }
+]

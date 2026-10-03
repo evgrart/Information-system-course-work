@@ -1,0 +1,31 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-10-04T02:29:38.969+03:00  INFO 42394 --- [poteryashki] [           main] r.i.i.p.PoteryashkiApplication           : Starting PoteryashkiApplication v0.3.0 using Java 21.0.4 with PID 42394 (/home/studs/s465826/poteryashki-course/backend/build/libs/poteryashki.jar started by s465826 in /home/studs/s465826/poteryashki-course)
+2026-10-04T02:29:38.973+03:00  INFO 42394 --- [poteryashki] [           main] r.i.i.p.PoteryashkiApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-10-04T02:29:39.588+03:00  INFO 42394 --- [poteryashki] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-04T02:29:39.659+03:00  INFO 42394 --- [poteryashki] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 61 ms. Found 2 JPA repository interfaces.
+2026-10-04T02:29:43.661+03:00  INFO 42394 --- [poteryashki] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-04T02:29:43.693+03:00  INFO 42394 --- [poteryashki] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-04T02:29:44.201+03:00  INFO 42394 --- [poteryashki] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6a567f7b
+2026-10-04T02:29:44.203+03:00  INFO 42394 --- [poteryashki] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-04T02:29:49.044+03:00  INFO 42394 --- [poteryashki] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-04T02:29:49.681+03:00  INFO 42394 --- [poteryashki] [           main] r.i.i.p.PoteryashkiApplication           : Started PoteryashkiApplication in 11.277 seconds (process running for 11.846)
+DEMO identity=3
+DEMO search=[{id=6, title=Спортивная сумка, kind=found, event_at=2026-02-03 19:59:42.372929, location_id=1}, {id=5, title=Связка ключей, kind=lost, event_at=2026-09-29 19:59:42.372584, location_id=1}, {id=4, title=Обложка с документом, kind=found, event_at=2026-09-30 19:59:42.372224, location_id=1}, {id=3, title=Сумка в метро, kind=found, event_at=2026-10-02 19:59:42.371784, location_id=2}, {id=2, title=Беспроводные наушники, kind=found, event_at=2026-02-03 19:59:42.371359, location_id=1}]
+DEMO organizations=[{id=1, name=Петербургский метрополитен, phone=8-800-350-11-55, address=null, instructions=Уточнить сведения о забытых вещах в информационно-справочном центре. В метрополитене вещи хранятся 10 дней, затем передаются в городской центр утерянных документов и средств связи на Большой Монетной улице, 16. Для получения нужны документ, удостоверяющий личность, и заявление., source_url=https://metro.spb.ru/zabitieveshy.html?v=1, verified_on=2026-09-27, needs_review=false}]
+DEMO notifications=1
+DEMO completed: service -> repository -> PostgreSQL
+2026-10-04T02:29:53.436+03:00  INFO 42394 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-04T02:29:53.438+03:00  INFO 42394 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-04T02:29:53.441+03:00  INFO 42394 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+openjdk version "21.0.4" 2024-07-16
+OpenJDK Runtime Environment (build 21.0.4+7-1)
+OpenJDK 64-Bit Server VM (build 21.0.4+7-1, mixed mode, sharing)

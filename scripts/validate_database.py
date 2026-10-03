@@ -51,7 +51,8 @@ created=False
 with tempfile.TemporaryDirectory(prefix='poteryashki-validation-') as tmp:
     folder=Path(tmp)
     for source in (ROOT/'database').glob('*.sql'):
-        (folder/source.name).write_text(source.read_text(encoding='utf-8').replace('lf_','lfcheck_'),encoding='utf-8')
+        text=source.read_text(encoding='utf-8').replace('lf\\_','lfcheck\\_').replace('lf_','lfcheck_')
+        (folder/source.name).write_text(text,encoding='utf-8')
     try:
         file(folder/'create.sql'); created=True
         file(folder/'seed.sql')

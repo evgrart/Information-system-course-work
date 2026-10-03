@@ -1,0 +1,111 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :clean
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :resolveMainClassName
+> Task :bootJar
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+
+> Task :test
+
+ServiceIntegrationTest > sellerCannotBid() PASSED
+
+ServiceIntegrationTest > unknownEmailResetDoesNotIssueToken() PASSED
+
+ServiceIntegrationTest > searchCallsFunctionAndReturnsBoundedPublicProjection() PASSED
+
+ServiceIntegrationTest > expiredSubscriptionCanCompletePreviouslyAgreedReturn() PASSED
+
+ServiceIntegrationTest > pendingPermissionReviewedByModerator() PASSED
+
+ServiceIntegrationTest > metroItemMustBeCollectedThroughOrganization() PASSED
+
+ServiceIntegrationTest > invalidSearchLimitRejectedByPostgres() PASSED
+
+ServiceIntegrationTest > documentsCannotBeSold() PASSED
+
+ServiceIntegrationTest > outboxDeliveryAndRetryDoNotDuplicateNotifications() PASSED
+
+ServiceIntegrationTest > privateAttributesOnlyForOwner() PASSED
+
+ServiceIntegrationTest > metroDirectoryReturnsOfficialContacts() PASSED
+
+ServiceIntegrationTest > administratorCanManageTariffsAndRoles() PASSED
+
+ServiceIntegrationTest > blockingBidderRevokesIdentityAndFreezesLot() PASSED
+
+ServiceIntegrationTest > changedBidWithSameKeyRejectedByDatabase() PASSED
+
+ServiceIntegrationTest > moderatorCannotPublishUnsubmittedListing() PASSED
+
+ServiceIntegrationTest > registrationConfirmationAndIndependentModeration() PASSED
+
+ServiceIntegrationTest > roleRevocationRecordsReasonAndRechecksAccess() PASSED
+
+ServiceIntegrationTest > auctionNeedsValidOwnershipPermission() PASSED
+
+ServiceIntegrationTest > privateConversationRejectsOutsider() PASSED
+
+ServiceIntegrationTest > validationRejectsFutureEvent() PASSED
+
+ServiceIntegrationTest > newClaimSuspendsAuctionAndModeratorCanCancelIt() PASSED
+
+ServiceIntegrationTest > anotherUserCannotEditListing() PASSED
+
+ServiceIntegrationTest > publicationAndEditRequireNewReview() PASSED
+
+ServiceIntegrationTest > confirmationTokenCannotBeConsumedTwice() PASSED
+
+ServiceIntegrationTest > passwordResetRevokesIdentityAndRefreshTokens() PASSED
+
+ServiceIntegrationTest > complaintReviewedAndNotificationRead() PASSED
+
+ServiceIntegrationTest > accessChangeRequiresReasonAndLastAdministratorIsProtected() PASSED
+
+ServiceIntegrationTest > moderatorCanResolveDisputedReturn() PASSED
+
+ServiceIntegrationTest > authenticationUsesBcryptAndNeverReturnsPassword() PASSED
+
+ServiceIntegrationTest > bidRetryDoesNotInsertDuplicate() PASSED
+
+ServiceIntegrationTest > anotherUserCannotPayOrder() PASSED
+
+ServiceIntegrationTest > moderatorCannotReadAuditWithoutRole() PASSED
+
+ServiceIntegrationTest > expiredSubscriptionCannotSearch() PASSED
+
+ServiceIntegrationTest > invalidProcedureBatchRejectedByDatabase() PASSED
+
+ServiceIntegrationTest > returnRequiresBothPartiesAndAuditActor() PASSED
+
+ServiceIntegrationTest > blockedBidderCannotReplayPreviouslyAcceptedBid() PASSED
+
+ServiceIntegrationTest > paymentOrderAndEventRetriesCreateOnePeriod() PASSED
+
+ServiceIntegrationTest > backgroundCallsCanonicalClosingProcedure() PASSED
+
+ServiceIntegrationTest > imageMetadataIsOwnedAndBounded() PASSED
+
+ServiceIntegrationTest > acceptedClaimCanBeCancelledAtomically() PASSED
+
+SqlNamesTest > prefixCannotInjectSql() PASSED
+
+TransactionIntegrationTest > failedPaymentRollsBackEventAndOrderState() PASSED
+
+TransactionIntegrationTest > twoTransactionsCannotReserveOneItemTwice() PASSED
+
+TransactionIntegrationTest > concurrentCallbackCreatesSingleSubscription() PASSED
+
+TransactionIntegrationTest > closingProcedureAndFinalizeFunctionSelectActualWinner() PASSED
+
+2026-10-04T02:47:12.608+03:00  INFO 4040 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-04T02:47:12.614+03:00  INFO 4040 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-04T02:47:12.620+03:00  INFO 4040 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+BUILD SUCCESSFUL in 1m 40s
+7 actionable tasks: 7 executed
