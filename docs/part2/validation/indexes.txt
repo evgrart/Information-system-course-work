@@ -1,0 +1,90 @@
+BEGIN
+SET
+INSERT 0 10000
+ANALYZE
+ gin_clean_pending_list 
+------------------------
+                     44
+(1 строка)
+
+Полнотекстовый поиск: индекс GIN
+                                                           QUERY PLAN                                                            
+---------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on lf_listings  (cost=12.82..20.46 rows=2 width=27) (actual time=0.038..0.051 rows=10.00 loops=1)
+   Recheck Cond: ((search_vector @@ '''термос'''::tsquery) AND ((state)::text = 'published'::text))
+   Heap Blocks: exact=10
+   Buffers: shared hit=13
+   ->  Bitmap Index Scan on lf_listing_text_idx  (cost=0.00..12.82 rows=2 width=0) (actual time=0.019..0.019 rows=10.00 loops=1)
+         Index Cond: (search_vector @@ '''термос'''::tsquery)
+         Index Searches: 1
+         Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=102
+ Planning Time: 0.563 ms
+ Execution Time: 0.075 ms
+(12 строк)
+
+Поиск по месту и интервалу: составной частичный индекс
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using lf_listing_place_idx on lf_listings  (cost=0.28..46.32 rows=12 width=35) (actual time=0.032..0.042 rows=11.00 loops=1)
+   Index Cond: ((location_id = 1) AND (event_at >= (statement_timestamp() - '02:00:00'::interval)))
+   Index Searches: 1
+   Buffers: shared hit=10
+ Planning:
+   Buffers: shared hit=32
+ Planning Time: 0.212 ms
+ Execution Time: 0.055 ms
+(8 строк)
+
+Лента с курсором: частичный B-tree
+                                                                   QUERY PLAN                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.28..2.11 rows=20 width=27) (actual time=0.013..0.027 rows=20.00 loops=1)
+   Buffers: shared hit=8
+   ->  Index Scan using lf_listing_feed_idx on lf_listings  (cost=0.28..165.87 rows=1805 width=27) (actual time=0.013..0.024 rows=20.00 loops=1)
+         Index Cond: (id < 9007)
+         Index Searches: 1
+         Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=5
+ Planning Time: 0.117 ms
+ Execution Time: 0.038 ms
+(10 строк)
+
+Определение победителя: составной B-tree (малый учебный набор)
+                                                   QUERY PLAN                                                    
+-----------------------------------------------------------------------------------------------------------------
+ Limit  (cost=1.03..1.04 rows=1 width=13) (actual time=0.038..0.038 rows=1.00 loops=1)
+   Buffers: shared hit=4
+   ->  Sort  (cost=1.03..1.04 rows=2 width=13) (actual time=0.037..0.037 rows=1.00 loops=1)
+         Sort Key: amount DESC, id
+         Sort Method: quicksort  Memory: 25kB
+         Buffers: shared hit=4
+         ->  Seq Scan on lf_bids  (cost=0.00..1.02 rows=2 width=13) (actual time=0.015..0.016 rows=2.00 loops=1)
+               Filter: (auction_id = 1)
+               Buffers: shared hit=1
+ Planning:
+   Buffers: shared hit=139
+ Planning Time: 0.402 ms
+ Execution Time: 0.050 ms
+(13 строк)
+
+DROP INDEX
+Полнотекстовый поиск без GIN на тех же данных
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using lf_listing_feed_idx on lf_listings  (cost=0.28..182.38 rows=2 width=27) (actual time=0.014..1.477 rows=10.00 loops=1)
+   Filter: (search_vector @@ '''термос'''::tsquery)
+   Rows Removed by Filter: 1996
+   Index Searches: 1
+   Buffers: shared hit=489
+ Planning:
+   Buffers: shared hit=8
+ Planning Time: 0.112 ms
+ Execution Time: 1.487 ms
+(9 строк)
+
+ROLLBACK
+SET
+ANALYZE
