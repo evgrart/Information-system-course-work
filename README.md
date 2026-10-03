@@ -1,23 +1,51 @@
 # Потеряшки
 
-Система предназначена для поиска и возврата потерянных вещей в Санкт-Петербурге. Проект предусматривает подписку, проверку пользователей, модерацию объявлений, справочник метрополитена и аукционы.
+Курсовая работа по дисциплине «Информационные системы»: поиск и возврат потерянных вещей в Санкт-Петербурге. Предусмотрены подписка, проверка пользователей, модерация объявлений, справочник метрополитена и аукционы. [Задание](TASK.md).
 
-Проект выполняется в рамках курсовой работы по дисциплине «Информационные системы». [Задание](TASK.md).
+| Материалы | PDF | DOCX | Исходный текст |
+| --- | --- | --- | --- |
+| Этап 1 | [Отчёт](docs/part1/report.pdf) | [Отчёт](docs/part1/report.docx) | [Markdown](docs/part1/report.md) |
+| Этапы 1–2 | [Общий отчёт](docs/part1-2/report.pdf) | [Общий отчёт](docs/part1-2/report.docx) | [Markdown](docs/part1-2/report.md) |
 
-| Этап | Результат | Материалы |
-| --- | --- | --- |
-| 1 | Анализ предметной области и проектирование | [PDF](docs/part1/report.pdf), [DOCX](docs/part1/report.docx), [исходный текст](docs/part1/report.md), [UML](docs/part1/uml) |
+Первый этап: предметная область, требования, 16 прецедентов и архитектура. Стек последующей реализации: Java 17, Spring Boot, Spring Security/JWT, Hibernate/JPA, PostgreSQL, MinIO; frontend — Next.js, TypeScript, Redux Toolkit, Tailwind CSS, Radix UI/shadcn. Сборка — Gradle Wrapper и pnpm. На helios планируется запуск JAR со статическим frontend; файловый сервис размещается отдельно.
 
-В отчёте приведены описание предметной области, требования, сценарии прецедентов, архитектура и план проверки. Стек приложения: Java 17, Spring Boot, Spring Security/JWT, Hibernate/JPA, PostgreSQL и MinIO; frontend — Next.js, TypeScript, Redux Toolkit, Tailwind CSS и Radix UI/shadcn. Backend собирается Gradle Wrapper, frontend — pnpm. На helios размещается JAR со статической сборкой интерфейса; MinIO работает отдельным сервисом.
+Второй этап: 27 таблиц, 41 внешний ключ, связь пользователей и ролей M:N, ограничения, триггеры, индексы и функции PL/pgSQL. [Модели](docs/part2/model), [SQL](database), [текст этапа 2](docs/part2/report.md), [протоколы](docs/part2/validation).
 
-Перед сдачей следует заполнить титульный лист: образовательная организация, кафедра, дисциплина, ФИО, группа и преподаватель. Форматирование: A4, Times New Roman 14, межстрочный интервал 1,5, поля слева 30 мм, справа 15 мм, сверху и снизу 20 мм. Таблицы и подписи к рисункам набраны меньшим кеглем.
+Установка на helios выполнена 03.10.2026: PostgreSQL 18.3, база studs, схема s465826, объекты с префиксом lf_. Каталог /home/studs/s465826/poteryashki-course. У аккаунта нет права создавать отдельную базу или схему. Объекты лабораторной не изменяются.
 
-Сборка документов (PowerShell):
+Показ второго этапа:
+
+```sh
+ssh -p 2222 s465826@helios.cs.ifmo.ru
+cd ~/poteryashki-course
+sh scripts/db.sh test
+python3.11 scripts/validate_database.py --schema s465826
+sh scripts/db.sh explain
+psql -h pg -d studs -X
+```
+
+В psql список объектов: \dt s465826.lf_*. Поиск:
+
+```sql
+SET search_path TO s465826, pg_catalog;
+SELECT * FROM lf_search_listings('сумка');
+SELECT * FROM lf_public_listings WHERE metro_station IS NOT NULL;
+```
+
+Проверены 50 условий целостности; два соединения для резервирования, ставок и повторной оплаты; пакетное завершение аукциона; полный цикл создания и удаления проверочного набора lfcheck_*; планы на 10 000 временных объявлениях. Основные данные сохраняются. Identity-последовательности могут получить пропуски после ROLLBACK.
+
+Первичная установка в доступную схему: sh scripts/db.sh create, затем sh scripts/db.sh seed. На helios эти команды уже выполнены. Повторное создание останавливается. Сброс собственной курсовой — sh scripts/db.sh drop; перечисляются только lf_*, проверяется маркер, CASCADE не используется. [Создание](database/create_database.sql) и [удаление](database/drop_database.sql) отдельной локальной БД не предназначены для общей базы studs.
+
+Сборка отчётов в Windows:
 
 ```powershell
 uv venv --python 3.12 .venv
 uv pip install --python .venv\Scripts\python.exe -r requirements.txt
-.venv\Scripts\python.exe scripts\build_report.py
+.venv\Scripts\python.exe scripts\build_models.py
+.venv\Scripts\python.exe scripts\build_reports.py
+powershell -File scripts\update_contents.ps1
 ```
 
-Скрипт обновляет DOCX, PDF и изображения диаграмм. Для сборки используются шрифты Times New Roman и Arial из каталога Windows. Исходники PlantUML предназначены для редактирования моделей; изображения в составе отчёта строятся локальным скриптом.
+Оформление и титульный лист основаны на шаблоне D:\ITMO\ITMOlabs\opd\sem2\lab6\opd6.tex: Университет ИТМО, факультет ПИиКТ, название работы и дисциплины, сведения об исполнителе справа, город и год. Поля 30/15/20/20 мм, Times New Roman 14; таблицы и подписи меньшим кеглем. Для сборки нужны шрифты Times New Roman, Arial и Consolas из Windows. Последняя команда обновляет оглавление DOCX через установленный Microsoft Word; PDF имеет собственное оглавление.
+
+ФИО взято из шаблона. Текущую группу и преподавателя нужно заполнить в [report_data.json](docs/report_data.json) и пересобрать отчёты. Пароли SSH/БД не хранятся в репозитории. UI, REST API, SMTP и MinIO относятся к последующим этапам и пока не реализованы.

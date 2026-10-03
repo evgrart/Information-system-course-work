@@ -15,7 +15,8 @@ artifact "Статический frontend
 HTML / CSS / JS в JAR" as Frontend
 }
 database "PostgreSQL
-выделенный сервер / своя схема" as DB
+pg / studs / s465826
+таблицы lf_*" as DB
 node "Отдельный сервис" { database "MinIO
 закрытый бакет" as Files }
 component "Платёжный сервис

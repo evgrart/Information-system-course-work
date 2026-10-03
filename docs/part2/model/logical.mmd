@@ -1,0 +1,274 @@
+erDiagram
+    lf_auction_permissions {
+        bigint id PK
+        bigint listing_id FK
+        bigint applicant_id FK
+        varchar_20 basis
+        varchar_240 evidence_object_key
+        varchar_12 state
+        bigint moderator_id FK
+        timestamptz reviewed_at
+        text reason
+        timestamptz created_at
+    }
+    lf_users ||--o{ lf_auction_permissions : "applicant_id"
+    lf_listings ||--o{ lf_auction_permissions : "listing_id"
+    lf_users |o--o{ lf_auction_permissions : "moderator_id"
+    lf_auctions {
+        bigint id PK, FK
+        bigint listing_id FK
+        bigint seller_id FK
+        bigint permission_id FK
+        timestamptz starts_at
+        timestamptz ends_at
+        numeric_12_2 start_price
+        numeric_12_2 bid_step
+        varchar_12 state
+        bigint winner_bid_id FK
+        timestamptz closed_at
+    }
+    lf_listings ||--o{ lf_auctions : "listing_id"
+    lf_auction_permissions ||--o{ lf_auctions : "permission_id,listing_id,seller_id"
+    lf_users ||--o{ lf_auctions : "seller_id"
+    lf_bids |o--o| lf_auctions : "id,winner_bid_id"
+    lf_audit_entries {
+        bigint id PK
+        bigint actor_id FK
+        varchar_80 action
+        varchar_80 entity_table
+        bigint entity_id
+        jsonb details
+        timestamptz created_at
+    }
+    lf_users |o--o{ lf_audit_entries : "actor_id"
+    lf_bids {
+        bigint id PK
+        bigint auction_id FK
+        bigint bidder_id FK
+        uuid request_key
+        numeric_12_2 amount
+        timestamptz placed_at
+    }
+    lf_auctions ||--o{ lf_bids : "auction_id"
+    lf_users ||--o{ lf_bids : "bidder_id"
+    lf_categories {
+        bigint id PK
+        varchar_80 name
+        boolean auction_allowed
+    }
+    lf_claims {
+        bigint id PK
+        bigint listing_id FK
+        bigint claimant_id FK
+        text evidence
+        varchar_12 state
+        timestamptz created_at
+    }
+    lf_users ||--o{ lf_claims : "claimant_id"
+    lf_listings ||--o{ lf_claims : "listing_id"
+    lf_complaints {
+        bigint id PK
+        bigint reporter_id FK
+        bigint listing_id FK
+        bigint reported_user_id FK
+        text reason
+        varchar_12 state
+        bigint moderator_id FK
+        text resolution
+        timestamptz created_at
+    }
+    lf_listings |o--o{ lf_complaints : "listing_id"
+    lf_users |o--o{ lf_complaints : "moderator_id"
+    lf_users |o--o{ lf_complaints : "reported_user_id"
+    lf_users ||--o{ lf_complaints : "reporter_id"
+    lf_conversations {
+        bigint id PK
+        bigint claim_id FK
+        timestamptz created_at
+    }
+    lf_claims ||--o| lf_conversations : "claim_id"
+    lf_listing_images {
+        bigint id PK
+        bigint listing_id FK
+        varchar_240 object_key
+        varchar_20 media_type
+        integer size_bytes
+        smallint position
+    }
+    lf_listings ||--o{ lf_listing_images : "listing_id"
+    lf_listings {
+        bigint id PK
+        bigint author_id FK
+        bigint category_id FK
+        bigint location_id FK
+        varchar_5 kind
+        varchar_120 title
+        text description
+        timestamptz event_at
+        timestamptz event_until
+        varchar_12 state
+        bigint custodian_org_id FK
+        timestamptz official_reported_at
+        bigint moderator_id FK
+        timestamptz moderated_at
+        timestamptz created_at
+        tsvector search_vector
+    }
+    lf_users ||--o{ lf_listings : "author_id"
+    lf_categories ||--o{ lf_listings : "category_id"
+    lf_organizations |o--o{ lf_listings : "custodian_org_id"
+    lf_locations ||--o{ lf_listings : "location_id"
+    lf_users |o--o{ lf_listings : "moderator_id"
+    lf_locations {
+        bigint id PK
+        varchar_80 city
+        varchar_240 description
+        numeric_9_6 latitude
+        numeric_9_6 longitude
+        varchar_100 metro_station
+        bigint organization_id FK
+    }
+    lf_organizations |o--o{ lf_locations : "organization_id"
+    lf_messages {
+        bigint id PK
+        bigint conversation_id FK
+        bigint sender_id FK
+        text body
+        timestamptz sent_at
+    }
+    lf_conversations ||--o{ lf_messages : "conversation_id"
+    lf_users ||--o{ lf_messages : "sender_id"
+    lf_notifications {
+        bigint id PK
+        bigint user_id FK
+        varchar_40 kind
+        text body
+        timestamptz read_at
+        timestamptz created_at
+    }
+    lf_users ||--o{ lf_notifications : "user_id"
+    lf_organizations {
+        bigint id PK
+        varchar_160 name
+        varchar_40 phone
+        text address
+        text instructions
+        text source_url
+        date verified_on
+    }
+    lf_outbox_events {
+        bigint id PK
+        varchar_40 kind
+        bigint aggregate_id
+        jsonb payload
+        integer attempts
+        timestamptz next_attempt_at
+        timestamptz delivered_at
+        timestamptz created_at
+    }
+    lf_payment_events {
+        varchar_100 provider_event_id PK
+        bigint order_id FK
+        numeric_12_2 amount
+        char_3 currency
+        timestamptz received_at
+    }
+    lf_payment_orders ||--o{ lf_payment_events : "order_id"
+    lf_payment_orders {
+        bigint id PK
+        bigint user_id FK
+        bigint tariff_id FK
+        uuid request_key
+        numeric_12_2 amount
+        integer duration_days
+        char_3 currency
+        varchar_12 state
+        timestamptz created_at
+        timestamptz paid_at
+    }
+    lf_tariffs ||--o{ lf_payment_orders : "tariff_id"
+    lf_users ||--o{ lf_payment_orders : "user_id"
+    lf_private_attributes {
+        bigint id PK
+        bigint listing_id FK
+        varchar_80 name
+        text value
+    }
+    lf_listings ||--o{ lf_private_attributes : "listing_id"
+    lf_refresh_tokens {
+        bigint id PK
+        bigint user_id FK
+        varchar_64 token_hash
+        timestamptz expires_at
+        timestamptz revoked_at
+        timestamptz created_at
+    }
+    lf_users ||--o{ lf_refresh_tokens : "user_id"
+    lf_roles {
+        varchar_16 code PK
+        varchar_80 title
+    }
+    lf_subscriptions {
+        bigint id PK
+        bigint user_id FK
+        bigint payment_order_id FK
+        timestamptz starts_at
+        timestamptz ends_at
+    }
+    lf_payment_orders ||--o| lf_subscriptions : "payment_order_id"
+    lf_users ||--o{ lf_subscriptions : "user_id"
+    lf_tariffs {
+        bigint id PK
+        varchar_80 title
+        numeric_12_2 amount
+        integer duration_days
+        boolean active
+    }
+    lf_transfers {
+        bigint id PK
+        bigint claim_id FK
+        timestamptz finder_confirmed_at
+        timestamptz owner_confirmed_at
+        bigint moderator_id FK
+        text override_reason
+        timestamptz completed_at
+    }
+    lf_claims ||--o| lf_transfers : "claim_id"
+    lf_users |o--o{ lf_transfers : "moderator_id"
+    lf_user_roles {
+        bigint user_id PK, FK
+        varchar_16 role_code PK, FK
+    }
+    lf_roles ||--o{ lf_user_roles : "role_code"
+    lf_users ||--o{ lf_user_roles : "user_id"
+    lf_users {
+        bigint id PK
+        varchar_254 email
+        varchar_80 display_name
+        varchar_100 password_hash
+        varchar_12 state
+        timestamptz email_confirmed_at
+        integer token_version
+        timestamptz created_at
+    }
+    lf_verification_tokens {
+        bigint id PK
+        bigint user_id FK
+        varchar_16 purpose
+        varchar_64 token_hash
+        timestamptz expires_at
+        timestamptz consumed_at
+        timestamptz created_at
+    }
+    lf_users ||--o{ lf_verification_tokens : "user_id"
+    lf_verifications {
+        bigint id PK
+        bigint user_id FK
+        varchar_12 state
+        bigint reviewer_id FK
+        text reason
+        timestamptz created_at
+        timestamptz reviewed_at
+    }
+    lf_users |o--o{ lf_verifications : "reviewer_id"
+    lf_users ||--o{ lf_verifications : "user_id"

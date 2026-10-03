@@ -15,10 +15,10 @@ from docx.oxml.ns import qn
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-                               Image as PDFImage, PageBreak, KeepTogether)
+                               Image as PDFImage, PageBreak, KeepTogether, Preformatted)
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
+from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 
@@ -260,7 +260,7 @@ end note''')
     g.box(605,455,1245,640,'Прикладные сервисы\nАккаунты • Подписки • Объявления\nВозвраты • Аукционы • Модерация\nСправочник • Уведомления • Аудит\nРежим demo: тестовые адаптеры',BLUE,size=24)
     g.box(605,705,1245,805,'Hibernate / JPA / JDBC\nФункции PL/pgSQL',BLUE)
     g.box(570,985,920,1125,'Статический frontend\nHTML / CSS / JS\nВ составе JAR',BLUE,size=24)
-    g.box(1450,985,1660,1205,'PostgreSQL\nВыделенный\nсервер /\nсвоя схема',BLUE,size=25)
+    g.box(1450,985,1660,1205,'PostgreSQL\npg / studs\ns465826\nтаблицы lf_*',BLUE,size=25)
     g.box(1420,175,1675,370,'Платёжный сервис\nРеальная оплата\n(рабочий режим)',BLUE,size=23)
     g.box(1420,465,1675,650,'SMTP-сервис\nДоставка писем\n(рабочий режим)',BLUE,size=23)
     g.box(65,570,405,860,'MinIO\nФотографии и материалы\nЗакрытый бакет\nОтдельный сервис',BLUE,size=24)
@@ -288,7 +288,7 @@ component "Hibernate / JPA / JDBC / функции PL/pgSQL" as Repo
 }
 artifact "Статический frontend\nHTML / CSS / JS в JAR" as Frontend
 }
-database "PostgreSQL\nвыделенный сервер / своя схема" as DB
+database "PostgreSQL\npg / studs / s465826\nтаблицы lf_*" as DB
 node "Отдельный сервис" { database "MinIO\nзакрытый бакет" as Files }
 component "Платёжный сервис\nрабочий режим" as Pay
 component "SMTP-сервис\nрабочий режим" as Mail
@@ -309,6 +309,12 @@ def blocks(text):
     while i<len(lines):
         line=lines[i].strip()
         if not line:i+=1;continue
+        if line.startswith('```'):
+            code=[];i+=1
+            while i<len(lines) and not lines[i].strip().startswith('```'):
+                code.append(lines[i]);i+=1
+            yield 'code','\n'.join(code)
+            i+=1;continue
         if line.startswith('|'):
             rows=[]
             while i<len(lines) and lines[i].strip().startswith('|'):
@@ -342,11 +348,13 @@ def word_inline(p,s):
         if t:p.add_run(t).bold=bool(k%2)
 
 
-TITLE_FIELDS=['[Наименование образовательной организации]','[Факультет / кафедра]',
-              'КУРСОВАЯ РАБОТА','Создание информационной системы\nдля поиска и возврата потерянных вещей\n«Потеряшки»',
-              'Этап 1. Анализ предметной области\nи проектирование системы',
-              'Дисциплина: «Информационные системы»','Выполнил: [ФИО], группа [номер]',
-              'Преподаватель: [ФИО]','Санкт-Петербург — 2026']
+TITLE_FIELDS=['Университет ИТМО','Факультет программной инженерии и компьютерной техники\nОбразовательная программа\n«Системное и прикладное программное обеспечение»',
+              'Курсовая работа\nПо дисциплине «Информационные системы»',
+              'Информационная система для поиска\nи возврата потерянных вещей «Потеряшки»',
+              'Этап 1',
+              'Выполнил студент группы [номер группы]\nЕвграфов Артём Андреевич',
+              'Проверил:\n[ФИО преподавателя]', 'Санкт-Петербург 2026']
+REPORT_TITLE='ИС «Потеряшки». Отчёт по этапу 1'
 
 
 def build_docx(items):
@@ -357,6 +365,7 @@ def build_docx(items):
     sec.left_margin,sec.right_margin=Cm(3),Cm(1.5)
     sec.header_distance=sec.footer_distance=Cm(1)
     sec.different_first_page_header_footer=True
+    numbering=OxmlElement('w:pgNumType');numbering.set(qn('w:start'),'0');sec._sectPr.append(numbering)
     normal=doc.styles['Normal']
     normal.font.name='Times New Roman';normal.font.size=Pt(14)
     normal.paragraph_format.line_spacing=1.5
@@ -379,22 +388,29 @@ def build_docx(items):
     f=OxmlElement('w:fldSimple');f.set(qn('w:instr'),'PAGE');foot._p.append(f)
     for i,text in enumerate(TITLE_FIELDS):
         p=doc.add_paragraph();p.alignment=WD_ALIGN_PARAGRAPH.CENTER;p.paragraph_format.first_line_indent=Cm(0)
-        p.paragraph_format.space_after=Pt(18 if i<2 else 14)
-        if i==2:p.paragraph_format.space_before=Pt(45)
-        r=p.add_run(text);r.bold=i in [2,3];r.font.size=Pt(16 if i in [2,3] else 14)
-        if i==8:p.paragraph_format.space_before=Pt(32)
+        p.paragraph_format.line_spacing=1
+        p.paragraph_format.space_after=Pt(16)
+        if i==2:p.paragraph_format.space_before=Cm(4)
+        if i==5:p.paragraph_format.space_before=Cm(2)
+        if i in [5,6]:p.alignment=WD_ALIGN_PARAGRAPH.RIGHT
+        r=p.add_run(text);r.bold=i in [2,3];r.font.size=Pt(18 if i==0 else 16)
+        if i==7:p.paragraph_format.space_before=Cm(3.4)
     doc.add_page_break()
     p=doc.add_paragraph('Содержание');p.runs[0].bold=True;p.paragraph_format.first_line_indent=Cm(0)
-    for kind,val in items:
-        if kind=='heading' and val[0]==2:
-            p=doc.add_paragraph(val[1]);p.paragraph_format.first_line_indent=Cm(0)
-            p.paragraph_format.line_spacing=1.2;p.paragraph_format.space_after=Pt(6)
+    p=doc.add_paragraph();p.paragraph_format.first_line_indent=Cm(0)
+    toc=OxmlElement('w:fldSimple');toc.set(qn('w:instr'),'TOC \\o "1-1" \\h \\z \\u');p._p.append(toc)
+    update=OxmlElement('w:updateFields');update.set(qn('w:val'),'true');doc.settings.element.append(update)
     for kind,val in items:
         if kind=='heading':
             level,title=val
             if level==1:continue
             p=doc.add_heading(title,level=level-1)
             if title=='Задание':p.paragraph_format.page_break_before=True
+        elif kind=='code':
+            for line in val.splitlines():
+                p=doc.add_paragraph();p.paragraph_format.first_line_indent=Cm(0)
+                p.paragraph_format.line_spacing=1;p.paragraph_format.space_after=Pt(0)
+                r=p.add_run(line);r.font.name='Consolas';r.font.size=Pt(9)
         elif kind=='caption':
             p=doc.add_paragraph(val);p.alignment=WD_ALIGN_PARAGRAPH.CENTER
             p.paragraph_format.first_line_indent=Cm(0);p.paragraph_format.line_spacing=1
@@ -441,9 +457,9 @@ def build_docx(items):
                     if ri==0:
                         shade=OxmlElement('w:shd');shade.set(qn('w:fill'),'EDF3F8');cell._tc.get_or_add_tcPr().append(shade)
             if not is_case:doc.add_paragraph().paragraph_format.space_after=Pt(4)
-    doc.core_properties.title='ИС «Потеряшки». Отчёт по этапу 1'
+    doc.core_properties.title=REPORT_TITLE
     doc.core_properties.subject='Анализ предметной области, требования, прецеденты, архитектура'
-    doc.core_properties.author=''
+    doc.core_properties.author='Евграфов Артём Андреевич'
     doc.core_properties.comments=''
     doc.core_properties.last_modified_by=''
     doc.core_properties.created=datetime.now(timezone.utc)
@@ -494,6 +510,7 @@ def build_pdf(items, toc_pages=None):
     for name,file in [('TimesRU','times.ttf'),('TimesRU-Bold','timesbd.ttf'),('TimesRU-Italic','timesi.ttf'),('TimesRU-BoldItalic','timesbi.ttf')]:
         pdfmetrics.registerFont(TTFont(name,str(FONTS/file)))
     pdfmetrics.registerFontFamily('TimesRU',normal='TimesRU',bold='TimesRU-Bold',italic='TimesRU-Italic',boldItalic='TimesRU-BoldItalic')
+    pdfmetrics.registerFont(TTFont('MonoRU',str(FONTS/'consola.ttf')))
     base=ParagraphStyle('body',fontName='TimesRU',fontSize=14,leading=21,alignment=TA_JUSTIFY,firstLineIndent=12.5*mm,spaceAfter=3)
     h1=ParagraphStyle('h1',parent=base,fontName='TimesRU-Bold',firstLineIndent=0,alignment=TA_LEFT,spaceAfter=12,keepWithNext=True)
     h2=ParagraphStyle('h2',parent=h1,spaceBefore=12,spaceAfter=6)
@@ -504,9 +521,11 @@ def build_pdf(items, toc_pages=None):
     title=ParagraphStyle('title',parent=base,firstLineIndent=0,alignment=TA_CENTER,fontSize=14,leading=21,spaceAfter=16)
     story=[]
     for i,t in enumerate(TITLE_FIELDS):
-        if i==2:story.append(Spacer(1,35*mm))
-        if i==8:story.append(Spacer(1,12*mm))
-        story.append(Paragraph(('<b>'+html.escape(t)+'</b>' if i in [2,3] else html.escape(t)).replace('\n','<br/>'),title))
+        if i==2:story.append(Spacer(1,40*mm))
+        if i==5:story.append(Spacer(1,20*mm))
+        if i==7:story.append(Spacer(1,34*mm))
+        coverstyle=ParagraphStyle('cover'+str(i),parent=title,fontSize=18 if i==0 else 16,leading=22,alignment=TA_RIGHT if i in [5,6] else TA_CENTER)
+        story.append(Paragraph(('<b>'+html.escape(t)+'</b>' if i in [2,3] else html.escape(t)).replace('\n','<br/>'),coverstyle))
     story += [PageBreak(),Paragraph('Содержание',h1)]
     for kind,val in items:
         if kind=='heading' and val[0]==2:
@@ -524,6 +543,8 @@ def build_pdf(items, toc_pages=None):
             story.append(p)
         elif kind in ['paragraph','number','bullet']:
             story.append(Paragraph(pdf_inline(('• ' if kind=='bullet' else '')+val),liststyle if kind in ['number','bullet'] else base))
+        elif kind=='code':
+            story.append(Preformatted(val,ParagraphStyle('code',fontName='MonoRU',fontSize=9,leading=11,spaceAfter=8),maxLineLength=91))
         elif kind=='caption':story.append(Paragraph(pdf_inline(val),caption))
         elif kind=='image':
             capt,path=val
@@ -544,15 +565,15 @@ def build_pdf(items, toc_pages=None):
         canvas.setSubject('Анализ предметной области и проектирование информационной системы')
         canvas._doc.info.producer=''
         if doc.page>1:
-            canvas.saveState();canvas.setFont('TimesRU',12);canvas.drawCentredString(A4[0]/2,12*mm,str(doc.page));canvas.restoreState()
+            canvas.saveState();canvas.setFont('TimesRU',12);canvas.drawCentredString(A4[0]/2,12*mm,str(doc.page-1));canvas.restoreState()
     class ReportTemplate(SimpleDocTemplate):
         def afterFlowable(self, flowable):
             if hasattr(flowable, 'section_title'):
-                self.section_pages[flowable.section_title]=self.page
+                self.section_pages[flowable.section_title]=self.page-1
                 key='section_'+str(len(self.section_pages))
                 self.canv.bookmarkPage(key)
                 self.canv.addOutlineEntry(flowable.section_title,key,level=0)
-    doc=ReportTemplate(str(REPORT_DIR/'report.pdf'),pagesize=A4,leftMargin=30*mm,rightMargin=15*mm,topMargin=20*mm,bottomMargin=20*mm,title='ИС «Потеряшки». Отчёт по этапу 1',author='',allowSplitting=True)
+    doc=ReportTemplate(str(REPORT_DIR/'report.pdf'),pagesize=A4,leftMargin=30*mm,rightMargin=15*mm,topMargin=20*mm,bottomMargin=20*mm,title=REPORT_TITLE,author='Евграфов Артём Андреевич',allowSplitting=True)
     doc.section_pages={}
     doc.build(story,onFirstPage=footer,onLaterPages=footer)
     if toc_pages is None:build_pdf(items,doc.section_pages)
