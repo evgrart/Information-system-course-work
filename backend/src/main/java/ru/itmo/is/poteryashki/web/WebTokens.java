@@ -36,8 +36,9 @@ public class WebTokens {
     public void issue(HttpServletResponse response, WebSessions.Issued issued) {
         cookie(response, "LF_ACCESS", access(issued.identity()), 900);
         cookie(response, "LF_REFRESH", issued.refreshToken(), 30 * 86400);
+        cookie(response, "XSRF-TOKEN", "", 0);
     }
-    public void clear(HttpServletResponse response) { cookie(response, "LF_ACCESS", "", 0); cookie(response, "LF_REFRESH", "", 0); }
+    public void clear(HttpServletResponse response) { cookie(response, "LF_ACCESS", "", 0); cookie(response, "LF_REFRESH", "", 0); cookie(response, "XSRF-TOKEN", "", 0); }
     private void cookie(HttpServletResponse response, String name, String value, int age) {
         response.addHeader("Set-Cookie", ResponseCookie.from(name, value).httpOnly(true).secure(secure).sameSite("Lax").path("/").maxAge(age).build().toString());
     }

@@ -15,7 +15,8 @@ public class WebSecurity {
         var csrf = new CookieCsrfTokenRepository();
         csrf.setCookieCustomizer(c -> c.httpOnly(true).secure(secure).sameSite("Lax"));
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(c -> c.csrfTokenRepository(csrf))
+                // Cookie authentication runs on every request. Rotate CSRF only when a session is issued or cleared.
+                .csrf(c -> c.csrfTokenRepository(csrf).sessionAuthenticationStrategy(new org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy()))
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/", "/auth/**", "/assets/**", "/error", "/metro").permitAll()
                         .requestMatchers("/staff/**").hasAnyRole("MODERATOR", "ADMIN")
