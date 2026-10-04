@@ -90,7 +90,7 @@ final class Reports {
         fo.append("<fo:bookmark-tree>"); int heading = 0;
         for (var b : blocks) if (b.kind().equals("heading") && b.level() == 2)
             fo.append("<fo:bookmark internal-destination=\"h").append(++heading).append("\"><fo:bookmark-title>").append(Models.xml(b.text())).append("</fo:bookmark-title></fo:bookmark>");
-        fo.append("</fo:bookmark-tree><fo:page-sequence master-reference=\"cover\"><fo:flow flow-name=\"xsl-region-body\">");
+        fo.append("</fo:bookmark-tree><fo:page-sequence master-reference=\"cover\" force-page-count=\"no-force\"><fo:flow flow-name=\"xsl-region-body\">");
         String[] cover = {"Университет ИТМО", "Факультет программной инженерии и компьютерной техники\nОбразовательная программа\n«Системное и прикладное программное обеспечение»", "Курсовая работа\nПо дисциплине «Информационные системы»", "Информационная система для поиска\nи возврата потерянных вещей «Потеряшки»", label, "Выполнил студент группы " + group + "\n" + student, "Проверил:\n" + teacher, "Санкт-Петербург 2026"};
         for (int i = 0; i < cover.length; i++) {
             String space = i == 2 ? "40mm" : i == 5 ? "20mm" : i == 7 ? "34mm" : "0mm";
@@ -98,7 +98,7 @@ final class Reports {
             if (i == 2 || i == 3) fo.append(" font-weight=\"bold\"");
             fo.append('>'); for (String line : cover[i].split("\n")) fo.append("<fo:block>").append(Models.xml(line)).append("</fo:block>"); fo.append("</fo:block>");
         }
-        fo.append("</fo:flow></fo:page-sequence><fo:page-sequence master-reference=\"body\" initial-page-number=\"1\"><fo:static-content flow-name=\"xsl-region-after\"><fo:block text-align=\"center\" font-size=\"12pt\" padding-top=\"4mm\"><fo:page-number/></fo:block></fo:static-content><fo:flow flow-name=\"xsl-region-body\"><fo:block font-weight=\"bold\" space-after=\"12pt\">Содержание</fo:block>");
+        fo.append("</fo:flow></fo:page-sequence><fo:page-sequence master-reference=\"body\" initial-page-number=\"1\" force-page-count=\"no-force\"><fo:static-content flow-name=\"xsl-region-after\"><fo:block text-align=\"center\" font-size=\"12pt\" padding-top=\"4mm\"><fo:page-number/></fo:block></fo:static-content><fo:flow flow-name=\"xsl-region-body\"><fo:block font-weight=\"bold\" space-after=\"12pt\">Содержание</fo:block>");
         heading = 0;
         for (var b : blocks) if (b.kind().equals("heading") && b.level() == 2) {
             fo.append("<fo:block text-align-last=\"justify\" line-height=\"18pt\" space-after=\"5pt\"><fo:basic-link internal-destination=\"h").append(++heading).append("\">").append(inline(b.text(), false)).append("<fo:leader leader-pattern=\"dots\"/><fo:page-number-citation ref-id=\"h").append(heading).append("\"/></fo:basic-link></fo:block>");

@@ -9,6 +9,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
     implementation 'net.sourceforge.plantuml:plantuml:1.2025.10'
     implementation 'org.apache.xmlgraphics:fop:2.11'
+    implementation 'org.apache.pdfbox:pdfbox:3.0.8'
     runtimeOnly 'org.slf4j:slf4j-simple:2.0.17'
     testImplementation platform('org.junit:junit-bom:5.12.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
