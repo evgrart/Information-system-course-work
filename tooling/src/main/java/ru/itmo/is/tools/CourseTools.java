@@ -21,6 +21,9 @@ public final class CourseTools {
         switch (options.remove(0)) {
             case "launch" -> Launcher.run(root, options);
             case "db" -> DatabaseCommand.run(root, options);
+            case "verify" -> Verification.services(root);
+            case "verify-db" -> Verification.database(root);
+            case "entities" -> Entities.generate(root);
             default -> throw new IllegalArgumentException("Unknown command; use help");
         }
     }
