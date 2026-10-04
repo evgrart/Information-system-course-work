@@ -1,0 +1,30 @@
+[
+    {
+        "name":  "ru.itmo.is.tools.FixtureTest",
+        "tests":  "2",
+        "failures":  "0",
+        "errors":  "0",
+        "skipped":  "0"
+    },
+    {
+        "name":  "ru.itmo.is.tools.MarkdownTest",
+        "tests":  "3",
+        "failures":  "0",
+        "errors":  "0",
+        "skipped":  "0"
+    },
+    {
+        "name":  "ru.itmo.is.tools.PgPassTest",
+        "tests":  "2",
+        "failures":  "0",
+        "errors":  "0",
+        "skipped":  "0"
+    },
+    {
+        "name":  "ru.itmo.is.tools.WebServerTest",
+        "tests":  "1",
+        "failures":  "0",
+        "errors":  "0",
+        "skipped":  "0"
+    }
+]
