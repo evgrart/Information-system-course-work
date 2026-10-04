@@ -26,7 +26,7 @@ $env:JAVA_HOME='C:\Users\minec\.jdks\corretto-17.0.14'
 
 Для другой машины указывается её путь к JDK 17 или новее. Результат: backend/build/libs/poteryashki.jar и tooling/build/libs/course-tools.jar. В Linux/FreeBSD сборка выполняется командой ./backend/gradlew -p backend test bootJar :tooling:test :tooling:toolJar.
 
-[Java-модуль tooling](tooling) выполняет задачи прежних скриптов:
+[Модуль tooling](tooling) содержит команды сборки, запуска и проверки проекта:
 
 | Команда | Назначение |
 | --- | --- |
@@ -55,7 +55,7 @@ $env:JAVA_HOME='C:\Users\minec\.jdks\corretto-17.0.14'
 & "$env:JAVA_HOME\bin\java.exe" -Xmx512m -jar tooling/build/libs/course-tools.jar audit
 ```
 
-Данные титульного листа находятся в [report_data.json](docs/report_data.json). Оформление основано на шаблоне D:\ITMO\ITMOlabs\opd\sem2\lab6\opd6.tex: поля 30/15/20/20 мм, Times New Roman 14, таблицы и подписи меньшим кеглем. Для PDF нужны times.ttf, timesbd.ttf, timesi.ttf, timesbi.ttf и consola.ttf; каталог задаётся COURSE_FONTS, по умолчанию C:/Windows/Fonts. DOCX первых двух этапов сохранены как архив предыдущей редакции; актуальные материалы — PDF и Markdown. Новые Word-документы не создаются.
+Данные титульного листа находятся в [report_data.json](docs/report_data.json). Оформление основано на шаблоне D:\ITMO\ITMOlabs\opd\sem2\lab6\opd6.tex: поля 30/15/20/20 мм, Times New Roman 14, таблицы и подписи меньшим кеглем. Для PDF нужны times.ttf, timesbd.ttf, timesi.ttf, timesbi.ttf и consola.ttf; каталог задаётся COURSE_FONTS, по умолчанию C:/Windows/Fonts. Актуальные отчёты представлены в PDF и Markdown; файлы DOCX первых двух этапов оставлены в архиве.
 
 Проверка на helios запускается с машины разработчика:
 
@@ -78,7 +78,7 @@ java -Xmx256m -jar tooling/build/libs/course-tools.jar db explain
 
 JVM приложения ограничена 64–256 МиБ. Hibernate работает в validate. Команда launch --demo вызывает сервисы и завершает процесс без HTTP-порта; обычный запуск открывает веб-интерфейс. Первичная установка: команды db create, затем db seed; на helios она уже выполнена. Повторное создание останавливается. db drop удаляет только перечисленные lf_* после проверки маркера, без CASCADE. SQL create_database.sql/drop_database.sql предназначен для отдельной локальной БД, не для общей studs.
 
-Проверены 113 тестов приложения, 8 тестов Java-инструментов и 50 условий целостности PostgreSQL; проверки конкуренции используют два настоящих соединения. SQL и PL/pgSQL сохраняются согласно заданию. Python, Node.js и Microsoft Word для актуальной сборки не требуются. Gradle Wrapper содержит штатные загрузчики для Windows и Unix.
+Проверены 113 тестов приложения, 8 тестов Java-инструментов и 50 условий целостности PostgreSQL. Конкурентные операции проверяются через два соединения с базой. Для сборки приложения и отчётов используются JDK и Gradle Wrapper; SQL и PL/pgSQL реализуют операции базы данных.
 
 Группу и преподавателя нужно заполнить в report_data.json и пересобрать PDF.
 
