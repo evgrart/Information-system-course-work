@@ -10,5 +10,5 @@ Daemon will be stopped at the end of the build
 
 BrowserFlowTest > completeBusinessProcessesInRealBrowser() PASSED
 
-BUILD SUCCESSFUL in 1m 57s
+BUILD SUCCESSFUL in 2m 49s
 4 actionable tasks: 1 executed, 3 up-to-date

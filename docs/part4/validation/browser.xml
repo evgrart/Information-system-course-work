@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.itmo.is.poteryashki.BrowserFlowTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-04T11:22:59.246Z" hostname="LAPTOP-D5PQMQRM" time="106.466">
+<testsuite name="ru.itmo.is.poteryashki.BrowserFlowTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-04T13:54:57.393Z" hostname="LAPTOP-D5PQMQRM" time="157.935">
   <properties/>
-  <testcase name="completeBusinessProcessesInRealBrowser()" classname="ru.itmo.is.poteryashki.BrowserFlowTest" time="106.466"/>
+  <testcase name="completeBusinessProcessesInRealBrowser()" classname="ru.itmo.is.poteryashki.BrowserFlowTest" time="157.935"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -12,6 +12,8 @@ Daemon will be stopped at the end of the build
 
 > Task :test
 
+PrivateFilesTest > rejectsTruncatedImageWithoutCreatingStorageObject() PASSED
+
 PrivateFilesTest > rejectsTraversalAndOversize() PASSED
 
 PrivateFilesTest > rejectsSvgEvenWithImageMime() PASSED
@@ -22,6 +24,30 @@ PrivateFilesTest > rejectsFakePdfAndNamespace() PASSED
 
 
 > Task :test
+
+ReviewRegressionTest > rejectedProfileCanReadOwnDecisionAndMarkItRead() PASSED
+
+ReviewRegressionTest > forgedAuctionHandoverRejectedByDatabase() PASSED
+
+ReviewRegressionTest > messageNotificationDoesNotRepeatOrLeakEvidence() PASSED
+
+ReviewRegressionTest > winningBidRemainsValidAfterSubscriptionExpires() PASSED
+
+ReviewRegressionTest > expiryNotificationIsPersistentAndSentOnce() PASSED
+
+ReviewRegressionTest > renewedSubscriptionDoesNotReceiveFalseExpiry() PASSED
+
+ReviewRegressionTest > openComplaintDoesNotGiveOutsiderConversationAccess() PASSED
+
+ReviewRegressionTest > handoverCannotBeCancelledAfterOneConfirmation() PASSED
+
+ReviewRegressionTest > auctionWithoutBidsCreatesNoHandover() PASSED
+
+ReviewRegressionTest > moderatorConversationAccessEndsWithComplaint() PASSED
+
+ReviewRegressionTest > winnerCannotRepublishSoldThingByCancellingClaim() PASSED
+
+ReviewRegressionTest > winnerGetsOneConversationAndTwoPartyHandover() PASSED
 
 ServiceIntegrationTest > sellerCannotBid() PASSED
 
@@ -115,6 +141,8 @@ TransactionIntegrationTest > closingProcedureAndFinalizeFunctionSelectActualWinn
 
 WebIntegrationTest > loginSetsProtectedCookies() PASSED
 
+WebIntegrationTest > complainantSeesDecisionAndAnotherUserDoesNot() PASSED
+
 WebIntegrationTest > passwordResetImmediatelyInvalidatesAccess() PASSED
 
 WebIntegrationTest > malformedJwtCannotAuthenticate() PASSED
@@ -145,6 +173,8 @@ WebIntegrationTest > moderatorQueuesRender(String) > [5] tab=transfers PASSED
 
 WebIntegrationTest > moderatorQueuesRender(String) > [6] tab=audit PASSED
 
+WebIntegrationTest > closedAuctionCreatesActionableWinnerPages() PASSED
+
 WebIntegrationTest > publicPagesRender(String) > [1] path=/ PASSED
 
 WebIntegrationTest > publicPagesRender(String) > [2] path=/metro PASSED
@@ -167,13 +197,19 @@ WebIntegrationTest > publicListingEscapesMarkup() PASSED
 
 WebIntegrationTest > writeWithoutCsrfRejected() PASSED
 
+WebIntegrationTest > catalogHasTwentyCardsAndCursorWithoutDuplicates() PASSED
+
 WebIntegrationTest > currentRolesAreCheckedForEachRequest() PASSED
 
 WebIntegrationTest > forgottenPasswordDoesNotDiscloseToken() PASSED
 
+WebIntegrationTest > expiredParticipantCanComplainAboutExistingConversation() PASSED
+
 WebIntegrationTest > outsiderCannotReadConversation() PASSED
 
 WebIntegrationTest > bidPostedThroughMvcUsesDatabaseFunction() PASSED
+
+WebIntegrationTest > complaintPageGivesScopedStaffConversationAccess() PASSED
 
 WebIntegrationTest > subscriberPagesRenderWithoutSecrets(String) > [1] path=/account PASSED
 
@@ -197,17 +233,21 @@ WebIntegrationTest > subscriberPagesRenderWithoutSecrets(String) > [10] path=/au
 
 WebIntegrationTest > subscriberPagesRenderWithoutSecrets(String) > [11] path=/auctions/1 PASSED
 
+WebIntegrationTest > statusFilterReturnsOnlyPublicRequestedState() PASSED
+
 WebIntegrationTest > expiredSubscriptionCanConfirmTransferThroughPage() PASSED
+
+WebIntegrationTest > truncatedPhotoReturnsControlledClientError() PASSED
 
 WebIntegrationTest > logoutRevokesExistingAccess() PASSED
 
-2026-10-04T14:22:18.552+03:00  INFO 15412 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-10-04T14:22:18.553+03:00  INFO 15412 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-10-04T14:22:19.010+03:00  INFO 15412 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-10-04T14:22:19.013+03:00  INFO 15412 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-10-04T14:22:19.014+03:00  INFO 15412 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
-2026-10-04T14:22:19.430+03:00  INFO 15412 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-10-04T16:54:09.301+03:00  INFO 11820 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-04T16:54:09.302+03:00  INFO 11820 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-04T16:54:09.688+03:00  INFO 11820 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-10-04T16:54:09.694+03:00  INFO 11820 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-04T16:54:09.695+03:00  INFO 11820 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-10-04T16:54:10.201+03:00  INFO 11820 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
 
-BUILD SUCCESSFUL in 2m 53s
+BUILD SUCCESSFUL in 4m 11s
 7 actionable tasks: 7 executed
 OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
