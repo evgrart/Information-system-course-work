@@ -20,6 +20,7 @@ public final class CourseTools {
         }
         switch (options.remove(0)) {
             case "launch" -> Launcher.run(root, options);
+            case "db" -> DatabaseCommand.run(root, options);
             default -> throw new IllegalArgumentException("Unknown command; use help");
         }
     }
