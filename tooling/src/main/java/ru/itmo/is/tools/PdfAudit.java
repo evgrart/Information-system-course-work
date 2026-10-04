@@ -13,7 +13,7 @@ final class PdfAudit {
     static void run(Path root) throws Exception {
         Path previews = root.resolve(".tools/previews"); Files.createDirectories(previews);
         var log = new StringBuilder();
-        for (String name : List.of("part1", "part1-2", "part3", "part1-3")) {
+        for (String name : List.of("part1", "part1-2", "part3", "part1-3","part4","part1-4")) {
             try (var pdf = Loader.loadPDF(root.resolve("docs/" + name + "/report.pdf").toFile())) {
                 var stripper = new BoundsStripper(); var pages = new ArrayList<String>();
                 for (int i = 1; i <= pdf.getNumberOfPages(); i++) {

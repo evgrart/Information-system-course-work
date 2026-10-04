@@ -18,20 +18,24 @@ public final class CourseTools {
             System.out.println("""
                     Coursework tools, Java 17. Run from the project root or use --root PATH.
                       launch [--demo] [--jar PATH]  start the Spring application
+                      web start|stop|status        manage only the coursework web server
                       db create|seed|test|drop|explain|catalog  run PostgreSQL scripts
                       verify                       run service tests through SSH
                       verify-db                    check PostgreSQL integrity and races through SSH
                       entities                     generate JPA projections from the catalog
                       models                       generate dictionary and ER models
                       diagrams                     render editable PlantUML sources to PNG/SVG
-                      reports                      build PDF reports for stages 1, 1–2, 3, 1–3
+                      reports                      build PDF reports through stages 1–4
+                      demo-assets                  generate labelled private fixture files
+                      verify-web                   run browser scenarios using a disposable database
+                      presentation                 build presentation HTML and PDF
                       audit                        check PDF text, bookmarks and page bounds
                       deploy                       upload the coursework and check its demo on helios
                     """);
             return;
         }
         String command = options.remove(0);
-        if (!Set.of("launch", "db").contains(command) && !options.isEmpty())
+        if (!Set.of("launch", "db","web").contains(command) && !options.isEmpty())
             throw new IllegalArgumentException("Unexpected arguments; use help");
         switch (command) {
             case "launch" -> Launcher.run(root, options);
@@ -44,6 +48,10 @@ public final class CourseTools {
             case "reports" -> Reports.build(root);
             case "audit" -> PdfAudit.run(root);
             case "deploy" -> Deployment.run(root);
+            case "demo-assets" -> DemoAssets.generate(root);
+            case "verify-web" -> WebVerification.run(root);
+            case "web" -> WebServer.run(root,options);
+            case "presentation" -> Presentation.build(root);
             default -> throw new IllegalArgumentException("Unknown command; use help");
         }
     }

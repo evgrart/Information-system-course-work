@@ -7,7 +7,7 @@ import java.util.*;
 final class Diagrams {
     static void render(Path root) throws Exception {
         int count = 0;
-        for (String folder : List.of("docs/part1/uml", "docs/part3/uml", "docs/part2/model")) {
+        for (String folder : List.of("docs/part1/uml", "docs/part3/uml", "docs/part4/uml", "docs/part2/model")) {
             try (var files = Files.list(root.resolve(folder))) {
                 for (Path file : files.filter(p -> p.toString().endsWith(".puml")).sorted().toList()) {
                     renderFile(file); count++;

@@ -43,9 +43,14 @@ final class Reports {
         Files.writeString(root.resolve("docs/part1-3/report.md"),
                 combined.replaceFirst("Отчёт по этапам 1–2 курсовой работы:", "Отчёт по этапам 1–3 курсовой работы:")
                         + "\n" + skipTitle(third).replace("(uml/", "(../part3/uml/") + "\n");
+        String fourth=Files.readString(root.resolve("docs/part4/report.md"));
+        Files.createDirectories(root.resolve("docs/part1-4"));
+        Files.writeString(root.resolve("docs/part1-4/report.md"),Files.readString(root.resolve("docs/part1-3/report.md"))
+                .replaceFirst("Отчёт по этапам 1–3 курсовой работы:[^\\n]+","Итоговый отчёт по этапам 1–4 курсовой работы: анализ предметной области, реализация базы данных, уровней хранения, бизнес-логики и представления.")
+                + "\n" + skipTitle(fourth).replace("(uml/","(../part4/uml/").replace("(screenshots/","(../part4/screenshots/")+"\n");
         var data = Catalog.JSON.readTree(root.resolve("docs/report_data.json").toFile());
         var factory = factory(root);
-        for (var entry : Map.of("part1", "Этап 1", "part1-2", "Этапы 1–2", "part3", "Этап 3", "part1-3", "Этапы 1–3").entrySet()) {
+        for (var entry : Map.of("part1", "Этап 1", "part1-2", "Этапы 1–2", "part3", "Этап 3", "part1-3", "Этапы 1–3","part4","Этап 4","part1-4","Этапы 1–4").entrySet()) {
             Path folder = root.resolve("docs/" + entry.getKey());
             String fo = document(folder, entry.getValue(), data.path("student").asText(), data.path("group").asText(), data.path("teacher").asText());
             try (var out = Files.newOutputStream(folder.resolve("report.pdf"))) {
@@ -65,7 +70,7 @@ final class Reports {
         }
     }
     static String skipTitle(String text) { return String.join("\n", text.lines().skip(2).toList()); }
-    private static FopFactory factory(Path root) throws Exception {
+    static FopFactory factory(Path root) throws Exception {
         Path fonts = Path.of(System.getenv().getOrDefault("COURSE_FONTS", "C:/Windows/Fonts"));
         var config = new StringBuilder("<fop version=\"1.0\"><strict-validation>true</strict-validation><renderers><renderer mime=\"application/pdf\"><fonts>");
         String[][] specs = {{"times.ttf", "Times New Roman", "normal", "normal"}, {"timesbd.ttf", "Times New Roman", "normal", "bold"}, {"timesi.ttf", "Times New Roman", "italic", "normal"}, {"timesbi.ttf", "Times New Roman", "italic", "bold"}, {"consola.ttf", "Consolas", "normal", "normal"}};
