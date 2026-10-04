@@ -14,7 +14,7 @@ final class Deployment {
             try (var paths = Files.walk(root.resolve(folder))) {
                 for (Path path : paths.filter(Files::isRegularFile).sorted().toList()) {
                     String relative = root.relativize(path).toString().replace('\\', '/');
-                    if (relative.contains("/build/") || relative.contains("/.gradle/") || relative.contains("/.idea/") || relative.endsWith(".local.env")) continue;
+                    if (relative.contains("/build/") || relative.contains("/data/") || relative.contains("/.gradle/") || relative.contains("/.idea/") || relative.endsWith(".local.env")) continue;
                     Verification.require(path.toRealPath().startsWith(root.toRealPath()), "Local file outside coursework"); files.add(path);
                 }
             }
@@ -25,15 +25,16 @@ final class Deployment {
         try (var remote = new Remote(); var sftp = remote.ssh.newSFTPClient()) {
             String base = "/home/studs/" + remote.user + "/poteryashki-course";
             Verification.require(sftp.canonicalize(base).equals(base), "Remote coursework directory is not canonical");
+            var checkedDirectories=new HashSet<String>();
             int uploaded = 0;
             for (Path file : files) {
                 String target = base + "/" + root.relativize(file).toString().replace('\\', '/');
-                String parent = target.substring(0, target.lastIndexOf('/')); ensureDirectory(sftp, base, parent);
+                String parent = target.substring(0, target.lastIndexOf('/')); if(checkedDirectories.add(parent))ensureDirectory(sftp, base, parent);
                 verifyTarget(sftp, base, target);
                 Path relative = root.relativize(file);
-                // Reuse large JARs only after checking the entire content hash.
+                // Reuse unchanged files only after checking their entire content hash.
                 String sha = checksum(file);
-                if (sftp.statExistence(target) != null && file.toString().endsWith(".jar")
+                if (sftp.statExistence(target) != null
                         && remote.run("sha256 -q " + Remote.quote(target)).strip().equals(sha)) continue;
                 String temporary = target + ".upload"; verifyTarget(sftp, base, temporary);
                 System.out.println("Uploading " + relative);
@@ -54,6 +55,12 @@ final class Deployment {
             Files.writeString(root.resolve("docs/part3/validation/deployment.txt"), evidence);
             for (String name : List.of("helios.txt", "deployment.txt")) sftp.put(root.resolve("docs/part3/validation/" + name).toString(), base + "/docs/part3/validation/" + name);
             System.out.println("PASS: Java tools and application installed; helios demo completed");
+            remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web stop");
+            String web=remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web start");
+            Files.createDirectories(root.resolve("docs/part4/validation"));
+            Files.writeString(root.resolve("docs/part4/validation/helios.txt"),web);
+            sftp.put(root.resolve("docs/part4/validation/helios.txt").toString(),base+"/docs/part4/validation/helios.txt");
+            System.out.println(web.strip());
         }
     }
     private static void ensureDirectory(SFTPClient sftp, String base, String parent) throws Exception {
