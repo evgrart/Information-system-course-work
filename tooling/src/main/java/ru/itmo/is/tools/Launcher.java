@@ -17,7 +17,7 @@ final class Launcher {
         if (!Files.isRegularFile(jar)) throw new IllegalStateException("Build bootJar first");
         var command = new ArrayList<>(List.of(javaExecutable(), "-Xms64m", "-Xmx256m",
                 "-Dfile.encoding=UTF-8", "-jar", jar.toAbsolutePath().toString()));
-        if (demo) command.add("--app.demo=true");
+        if (demo) { command.add("--app.demo=true"); command.add("--spring.main.web-application-type=none"); }
         var process = new ProcessBuilder(command).directory(root.toFile()).inheritIO();
         var env = process.environment();
         env.putIfAbsent("DB_URL", "jdbc:postgresql://pg:5432/studs?currentSchema=s465826");

@@ -1,0 +1,13 @@
+<!doctype html><html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: shell('Доступ к аккаунту', ~{::main})}"><main class="auth-panel panel">
+<span class="eyebrow">Потеряшки</span><h1 th:text="${page == 'login' ? 'С возвращением' : page == 'register' ? 'Создать аккаунт' : page == 'forgot' ? 'Восстановить доступ' : page == 'confirm' ? 'Подтвердить почту' : 'Новый пароль'}"></h1>
+<div class="notice" th:if="${param.sent != null}">Если аккаунт существует, письмо отправлено. В учебном режиме оно доступно получателю в разделе «Письма»; для восстановления без входа нужен настроенный почтовый сервер.</div>
+<p th:if="${page == 'register'}">После регистрации подтвердите почту. Модератор проверит профиль, затем можно оформить подписку.</p>
+<form method="post" th:action="@{'/auth/' + ${page}}" class="stack">
+<label th:if="${page == 'login' or page == 'register' or page == 'forgot'}">Электронная почта<input name="email" type="email" maxlength="254" autocomplete="email" required></label>
+<label th:if="${page == 'register'}">Имя<input name="name" maxlength="80" autocomplete="name" required></label>
+<label th:if="${page == 'login' or page == 'register' or page == 'reset'}">Пароль<input name="password" type="password" th:attr="minlength=${page == 'login' ? null : 12},autocomplete=${page == 'login' ? 'current-password' : 'new-password'}" required><span th:if="${page != 'login'}" class="hint">От 12 символов, не более 72 байт.</span></label>
+<input th:if="${page == 'confirm' or page == 'reset'}" type="hidden" name="token" th:value="${token}">
+<button type="submit" th:text="${page == 'login' ? 'Войти' : page == 'register' ? 'Зарегистрироваться' : page == 'forgot' ? 'Отправить письмо' : page == 'confirm' ? 'Подтвердить' : 'Сохранить пароль'}"></button>
+</form><div class="actions auth-links"><a th:href="@{/auth/register}">Регистрация</a><a th:href="@{/auth/login}">Вход</a><a th:href="@{/auth/forgot}">Забыли пароль?</a></div>
+<form th:if="${page == 'login' and refreshAvailable}" method="post" th:action="@{/auth/refresh}"><button class="secondary">Продолжить сохранённый сеанс</button></form>
+</main></html>
