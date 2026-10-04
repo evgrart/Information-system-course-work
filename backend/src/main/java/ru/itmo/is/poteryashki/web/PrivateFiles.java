@@ -47,6 +47,10 @@ public class PrivateFiles {
         Path target=root.resolve(key).normalize();if(!target.startsWith(root))throw new FileNotFoundException();ensureParents(target);return target;
     }
     private void ensureParents(Path target)throws IOException{for(Path p=target;p!=null&&p.startsWith(root);p=p.getParent())if(Files.isSymbolicLink(p))throw new IOException("Symlink storage path");}
-    public byte[] read(String key)throws IOException{return Files.readAllBytes(path(key));}
+    public byte[] read(String key)throws IOException{
+        String demo=switch(key){case "demo/listings/1/umbrella.jpg"->"umbrella.jpg";case "demo/permissions/1.pdf"->"permission1.pdf";case "demo/permissions/2.pdf"->"permission2.pdf";default->null;};
+        if(demo!=null){try(var in=getClass().getResourceAsStream("/private-demo/"+demo)){if(in==null)throw new FileNotFoundException();return in.readAllBytes();}}
+        return Files.readAllBytes(path(key));
+    }
     public void delete(String key)throws IOException{Files.deleteIfExists(path(key));}
 }
