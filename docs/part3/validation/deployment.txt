@@ -1,5 +1,5 @@
 Java tooling deployment
-Uploaded files: 156
-Application SHA-256: 0e7eb34bd5ead5402bb6fc2bb2ab98c37e0dcb8b8a2ebd10abef40edca3d609b
-Tools SHA-256: 515f2259e4db689d3da2c9ef8ca5a74a3625cfb1e21d8df7eabd2d2ef13be150
+Uploaded files: 101
+Application SHA-256: 031294d81e3f6efb2d27d15cebbc1e75d7568633c34746e764cf05bce00421b3
+Tools SHA-256: 042c9c13e61ca22d8d75ca920568c6eb12d0ab09b310a25df24cc8bec22cc843
 Demo completed on helios

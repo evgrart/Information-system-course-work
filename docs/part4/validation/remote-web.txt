@@ -1,0 +1,27 @@
+Helios stage four HTTP verification
+Checked at: 2026-10-04T12:05:44.537268Z
+PASS: deployed home page returns HTTP 200
+PASS: deployed metro contacts return HTTP 200
+PASS: login form for finder@example.invalid
+PASS: authenticated cookie session for finder@example.invalid
+PASS: finder@example.invalid reads /account
+PASS: finder@example.invalid reads /catalog
+PASS: finder@example.invalid reads /listings/1
+PASS: finder@example.invalid reads /claims
+PASS: finder@example.invalid reads /auctions
+PASS: logout revokes session for finder@example.invalid
+PASS: private account inaccessible after logout for finder@example.invalid
+PASS: login form for moderator@example.invalid
+PASS: authenticated cookie session for moderator@example.invalid
+PASS: moderator@example.invalid reads /account
+PASS: moderator@example.invalid reads /staff
+PASS: logout revokes session for moderator@example.invalid
+PASS: private account inaccessible after logout for moderator@example.invalid
+PASS: login form for admin@example.invalid
+PASS: authenticated cookie session for admin@example.invalid
+PASS: admin@example.invalid reads /account
+PASS: admin@example.invalid reads /admin
+PASS: logout revokes session for admin@example.invalid
+PASS: private account inaccessible after logout for admin@example.invalid
+PASS: own PID is identified by exact application JAR argument
+PASS: no disposable test objects remain on helios
