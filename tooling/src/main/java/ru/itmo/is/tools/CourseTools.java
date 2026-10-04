@@ -24,6 +24,9 @@ public final class CourseTools {
             case "verify" -> Verification.services(root);
             case "verify-db" -> Verification.database(root);
             case "entities" -> Entities.generate(root);
+            case "models" -> Models.generate(root);
+            case "diagrams" -> Diagrams.render(root);
+            case "reports" -> Reports.build(root);
             default -> throw new IllegalArgumentException("Unknown command; use help");
         }
     }
