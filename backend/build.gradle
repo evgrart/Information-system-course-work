@@ -22,12 +22,22 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.microsoft.playwright:playwright:1.63.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
 tasks.named('test') {
     useJUnitPlatform()
+    exclude '**/BrowserFlowTest.class'
     maxHeapSize = '256m'
     testLogging { events 'passed', 'skipped', 'failed'; exceptionFormat = 'full' }
+}
+tasks.register('browserTest', Test) {
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    include '**/BrowserFlowTest.class'
+    maxHeapSize = '256m'
+    testLogging { events 'passed', 'failed'; exceptionFormat = 'full' }
 }
 tasks.named('bootJar') { archiveFileName = 'poteryashki.jar' }
