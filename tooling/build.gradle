@@ -7,6 +7,8 @@ application { mainClass = 'ru.itmo.is.tools.CourseTools' }
 dependencies {
     implementation 'com.hierynomus:sshj:0.40.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
+    implementation 'net.sourceforge.plantuml:plantuml:1.2025.10'
+    implementation 'org.apache.xmlgraphics:fop:2.11'
     runtimeOnly 'org.slf4j:slf4j-simple:2.0.17'
     testImplementation platform('org.junit:junit-bom:5.12.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -14,12 +16,37 @@ dependencies {
 }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
 test { useJUnitPlatform() }
+def serviceDirectory = layout.buildDirectory.dir('generated/services')
+tasks.register('mergeServices') {
+    inputs.files configurations.runtimeClasspath
+    outputs.dir serviceDirectory
+    doLast {
+        def providers = [:].withDefault { new LinkedHashSet<String>() }
+        configurations.runtimeClasspath.files.findAll { it.name.endsWith('.jar') }.each { archive ->
+            new java.util.jar.JarFile(archive).withCloseable { jar ->
+                jar.entries().each { entry ->
+                    if (!entry.directory && entry.name.startsWith('META-INF/services/')) {
+                        jar.getInputStream(entry).withCloseable { stream ->
+                            stream.getText('UTF-8').readLines().findAll { it.trim() && !it.startsWith('#') }.each { providers[entry.name].add(it.trim()) }
+                        }
+                    }
+                }
+            }
+        }
+        providers.each { name, lines ->
+            def target = new File(serviceDirectory.get().asFile, name)
+            target.parentFile.mkdirs()
+            target.setText(lines.join('\n') + '\n', 'UTF-8')
+        }
+    }
+}
 tasks.register('toolJar', Jar) {
     archiveFileName = 'course-tools.jar'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest { attributes 'Main-Class': application.mainClass.get() }
     from sourceSets.main.output
-    dependsOn configurations.runtimeClasspath
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    dependsOn configurations.runtimeClasspath, tasks.named('mergeServices')
+    from({ configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }) { exclude 'META-INF/services/**' }
+    from serviceDirectory
     exclude 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.DSA', 'module-info.class'
 }

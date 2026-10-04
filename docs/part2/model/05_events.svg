@@ -1,20 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="940" viewBox="0 0 1260 940">
-<rect width="100%" height="100%" fill="white"/>
-<text x="630.0" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Уведомления, доставка и аудит</text>
-<polyline points="630,278 630,335.0 220,335.0 220,392" fill="none" stroke="#263746" stroke-width="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="940" viewBox="0 0 1260 940"><rect width="100%" height="100%" fill="white"/>
+<text x="630" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Уведомления, доставка и аудит</text>
+<polyline points="630,278 630,335 220,335 220,392 " fill="none" stroke="#263746" stroke-width="3"/>
 <text x="658" y="298.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
 <text x="248" y="372.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<polyline points="630,278 630,392" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="630,278 630,335 630,335 630,392 " fill="none" stroke="#263746" stroke-width="3"/>
 <text x="658" y="298.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..1</text>
 <text x="658" y="372.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<rect x="455" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="630" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Пользователь</text>
-<text x="630" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_users</text>
-<text x="630" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
-<rect x="45" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="220" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Уведомление</text>
-<text x="220" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_notifications</text>
-<text x="220" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
 <rect x="455" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
 <text x="630" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Запись аудита</text>
 <text x="630" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_audit_entries</text>
@@ -23,5 +14,13 @@
 <text x="1040" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Событие доставки</text>
 <text x="1040" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_outbox_events</text>
 <text x="1040" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="455" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="630" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Пользователь</text>
+<text x="630" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_users</text>
+<text x="630" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="45" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="220" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Уведомление</text>
+<text x="220" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_notifications</text>
+<text x="220" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
 <text x="630" y="900.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1 — один; 0..1 — необязательный; 0..N — множество</text>
 </svg>

@@ -2,29 +2,24 @@
 left to right direction
 skinparam shadowing false
 skinparam defaultFontName Arial
-node "Рабочее место" { component "Браузер
-Next.js / TypeScript / Redux" as Browser }
+node "Рабочее место" {
+component "Браузер\nNext.js / TypeScript / Redux" as Browser
+}
 node "helios: учётная запись студента" {
 node "Одна JVM Spring Boot" {
 component "REST API / Spring MVC / Spring Security / JWT" as Web
-component "Прикладные сервисы
-Режим demo: тестовые адаптеры" as Services
+component "Прикладные сервисы\nРежим demo: тестовые адаптеры" as Services
 component "Hibernate / JPA / JDBC / функции PL/pgSQL" as Repo
 }
-artifact "Статический frontend
-HTML / CSS / JS в JAR" as Frontend
+artifact "Статический frontend\nHTML / CSS / JS в JAR" as Frontend
 }
-database "PostgreSQL
-pg / studs / s465826
-таблицы lf_*" as DB
-node "Отдельный сервис" { database "MinIO
-закрытый бакет" as Files }
-component "Платёжный сервис
-рабочий режим" as Pay
-component "SMTP-сервис
-рабочий режим" as Mail
-component "Официальный сайт метро
-источник справочника" as Metro
+database "PostgreSQL\npg / studs / s465826\nтаблицы lf_*" as DB
+node "Отдельный сервис" {
+database "MinIO\nзакрытый бакет" as Files
+}
+component "Платёжный сервис\nрабочий режим" as Pay
+component "SMTP-сервис\nрабочий режим" as Mail
+component "Официальный сайт метро\nисточник справочника" as Metro
 Browser --> Web : HTTP через SSH-туннель
 Web --> Services
 Services --> Repo
