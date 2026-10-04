@@ -1,0 +1,4 @@
+part1: 40 pages, 11 bookmarks, text within page bounds
+part1-2: 73 pages, 22 bookmarks, text within page bounds
+part3: 17 pages, 7 bookmarks, text within page bounds
+part1-3: 88 pages, 29 bookmarks, text within page bounds

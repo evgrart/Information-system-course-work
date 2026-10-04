@@ -1,17 +1,19 @@
 @startuml
-left to right direction
+top to bottom direction
+skinparam dpi 130
+skinparam defaultFontSize 18
 skinparam shadowing false
 skinparam defaultFontName Arial
 node "Рабочее место" {
-component "Браузер\nNext.js / TypeScript / Redux" as Browser
+component "Браузер\nHTML-страницы / формы" as Browser
 }
 node "helios: учётная запись студента" {
 node "Одна JVM Spring Boot" {
-component "REST API / Spring MVC / Spring Security / JWT" as Web
+component "Spring MVC / Thymeleaf\nSpring Security / JWT" as Web
 component "Прикладные сервисы\nРежим demo: тестовые адаптеры" as Services
 component "Hibernate / JPA / JDBC / функции PL/pgSQL" as Repo
 }
-artifact "Статический frontend\nHTML / CSS / JS в JAR" as Frontend
+artifact "Шаблоны Thymeleaf\nHTML / CSS в JAR" as Frontend
 }
 database "PostgreSQL\npg / studs / s465826\nтаблицы lf_*" as DB
 node "Отдельный сервис" {
@@ -22,6 +24,7 @@ component "SMTP-сервис\nрабочий режим" as Mail
 component "Официальный сайт метро\nисточник справочника" as Metro
 Browser --> Web : HTTP через SSH-туннель
 Web --> Services
+Frontend ..> Web : представления
 Services --> Repo
 Repo --> DB : JDBC
 Services --> Files : S3 API
