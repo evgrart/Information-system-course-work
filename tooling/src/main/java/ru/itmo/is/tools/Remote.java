@@ -16,17 +16,19 @@ final class Remote implements AutoCloseable {
     Remote() throws Exception {
         user = System.getenv().getOrDefault("COURSE_SSH_USER", "s465826");
         if (!user.matches("[A-Za-z_][A-Za-z0-9_]*")) throw new IllegalArgumentException("Invalid SSH user");
-        ssh.loadKnownHosts();
-        ssh.setConnectTimeout(20000); ssh.setTimeout(120000);
-        ssh.connect(System.getenv().getOrDefault("COURSE_SSH_HOST", "helios.cs.ifmo.ru"),
-                Integer.parseInt(System.getenv().getOrDefault("COURSE_SSH_PORT", "2222")));
         String password = System.getenv("COURSE_SSH_PASSWORD");
         if (password == null) {
             if (System.console() == null) throw new IllegalStateException("Set COURSE_SSH_PASSWORD or run from a terminal");
             char[] chars = System.console().readPassword("SSH password: ");
             password = new String(chars); Arrays.fill(chars, '\0');
         }
-        try { ssh.authPassword(user, password); }
+        try {
+            ssh.loadKnownHosts();
+            ssh.setConnectTimeout(20000); ssh.setTimeout(120000);
+            ssh.connect(System.getenv().getOrDefault("COURSE_SSH_HOST", "helios.cs.ifmo.ru"),
+                    Integer.parseInt(System.getenv().getOrDefault("COURSE_SSH_PORT", "2222")));
+            ssh.authPassword(user, password);
+        }
         catch (Exception e) { ssh.close(); throw e; }
     }
     static String quote(String value) { return "'" + value.replace("'", "'\"'\"'") + "'"; }

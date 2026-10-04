@@ -31,7 +31,10 @@ final class PdfAudit {
                 Verification.require(bookmarks >= 5, "Incomplete bookmarks");
                 var renderer = new PDFRenderer(pdf);
                 // Covers, table of contents and representative content pages for visual review.
-                for (int index : new TreeSet<>(List.of(0, 1, Math.min(5, pdf.getNumberOfPages() - 1), pdf.getNumberOfPages() - 1)))
+                var reviewPages = new TreeSet<>(List.of(0, 1, Math.min(5, pdf.getNumberOfPages() - 1), pdf.getNumberOfPages() - 1));
+                for (String marker : List.of("FR-01", "Рисунок 4 —", "Рисунок 11 —"))
+                    for (int i = 2; i < pages.size(); i++) if (pages.get(i).contains(marker)) { reviewPages.add(i); break; }
+                for (int index : reviewPages)
                     ImageIO.write(renderer.renderImageWithDPI(index, 90), "PNG", previews.resolve(name + "-" + (index + 1) + ".png").toFile());
                 String line = name + ": " + pages.size() + " pages, " + bookmarks + " bookmarks, text within page bounds";
                 System.out.println(line); log.append(line).append('\n');

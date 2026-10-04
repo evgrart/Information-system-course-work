@@ -25,7 +25,9 @@ final class Verification {
                 System.out.println("Running Java service tests against isolated lf3check_* tables");
                 var result = Processes.capture(List.of(wrapper, ":clean", ":test", ":bootJar", "--console=plain"),
                         root.resolve("backend"), env, null, Duration.ofMinutes(10));
-                Files.writeString(output.resolve("integration.txt"), result.out() + result.error());
+                String transcript = (result.out() + result.error()).lines().map(String::stripTrailing)
+                        .collect(java.util.stream.Collectors.joining("\n", "", "\n"));
+                Files.writeString(output.resolve("integration.txt"), transcript);
                 result.checked();
                 var factory = DocumentBuilderFactory.newInstance();
                 factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
