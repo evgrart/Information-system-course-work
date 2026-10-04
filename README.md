@@ -8,8 +8,11 @@
 | Этапы 1–2 | [Общий отчёт](docs/part1-2/report.pdf) | [Markdown](docs/part1-2/report.md) |
 | Этап 3 | [Отчёт](docs/part3/report.pdf) | [Markdown](docs/part3/report.md) |
 | Этапы 1–3 | [Общий отчёт](docs/part1-3/report.pdf) | [Markdown](docs/part1-3/report.md) |
+| Этап 4 | [Отчёт](docs/part4/report.pdf) | [Markdown](docs/part4/report.md) |
+| Этапы 1–4 | [Итоговый отчёт](docs/part1-4/report.pdf) | [Markdown](docs/part1-4/report.md) |
+| Презентация | [PDF](docs/part4/presentation/presentation.pdf) | [HTML](docs/part4/presentation/presentation.html), [сценарий защиты](docs/part4/presentation/defense.md) |
 
-Приложение и средства сопровождения написаны на **Java 17**. Backend: Spring Boot 3.5.16, Spring Data JPA/Hibernate, JdbcTemplate, Jakarta Validation, BCrypt, Lombok. PostgreSQL хранит предметную модель; критичные переходы выполняются функциями PL/pgSQL. Сборка — Gradle Wrapper 8.14.3. Для будущих веб-страниц выбран Spring MVC с Thymeleaf.
+Приложение и средства сопровождения написаны на **Java 17**. Spring Boot 3.5.16, Spring MVC, Thymeleaf, Spring Security, Spring Data JPA/Hibernate, JdbcTemplate, Jakarta Validation, BCrypt, Lombok. Веб-страницы — HTML/CSS без прикладного JavaScript. PostgreSQL хранит предметную модель; критичные переходы выполняются функциями PL/pgSQL. Сборка — Gradle Wrapper 8.14.3.
 
 Первый этап содержит описание предметной области, требования, 16 прецедентов и архитектуру. Второй — 27 таблиц, 41 внешний ключ, связь пользователей и ролей M:N, ограничения, триггеры, индексы и функции. Третий — 27 JPA-сущностей, вызовы 11 функций и процедур PostgreSQL, семь предметных сервисов, транзакции и внутренние уведомления. [Backend](backend), [SQL](database), [модели](docs/part2/model), [диаграммы классов](docs/part3/uml).
 
@@ -28,15 +31,20 @@ $env:JAVA_HOME='C:\Users\minec\.jdks\corretto-17.0.14'
 | Команда | Назначение |
 | --- | --- |
 | launch --demo | Запуск приложения; пароль БД из окружения или .pgpass |
+| launch | Веб-приложение в текущем терминале, 127.0.0.1:18081 |
+| web start/stop/status | Фоновый сервер курсовой с проверкой принадлежности PID |
 | db create/seed/test/drop/explain/catalog | Запуск канонических SQL-скриптов через psql |
-| verify | Все 45 тестов приложения на изолированном PostgreSQL через SSH |
+| verify | Тесты сервисов и веб-страниц на изолированном PostgreSQL через SSH |
+| verify-web | Сценарии в Microsoft Edge через Playwright for Java; снимки desktop и mobile |
 | verify-db | 50 проверок целостности, конкуренция и цикл установки/удаления |
 | entities | Генерация JPA-сущностей из каталога PostgreSQL |
 | models | Словарь, две Mermaid-модели и шесть ER-схем |
 | diagrams | Пересборка PNG/SVG из PlantUML средствами Java |
-| reports | PDF для этапов 1, 1–2, 3 и 1–3 |
+| reports | PDF для этапов 1, 1–2, 3, 1–3, 4 и 1–4 |
+| presentation | 13 слайдов в HTML и PDF из общего Markdown |
+| demo-assets | Учебные изображения и документы для начального набора |
 | audit | Проверка текста, границ страниц и закладок PDF |
-| deploy | Установка только курсовой на helios, проверка SHA-256 и запуск demo |
+| deploy | Установка курсовой на helios, проверка SHA-256, demo и запуск веб-сервера |
 
 Например, пересборка материалов:
 
@@ -68,8 +76,31 @@ java -Xmx256m -jar tooling/build/libs/course-tools.jar db test
 java -Xmx256m -jar tooling/build/libs/course-tools.jar db explain
 ```
 
-JVM приложения ограничена 64–256 МиБ. Hibernate работает в validate; HTTP-порт не открывается. Демонстрация вызывает сервисы, выполняет поиск PL/pgSQL и читает контакты метро. Первичная установка: команды db create, затем db seed; на helios она уже выполнена. Повторное создание останавливается. db drop удаляет только перечисленные lf_* после проверки маркера, без CASCADE. SQL create_database.sql/drop_database.sql предназначен для отдельной локальной БД, не для общей studs.
+JVM приложения ограничена 64–256 МиБ. Hibernate работает в validate. Команда launch --demo вызывает сервисы и завершает процесс без HTTP-порта; обычный запуск открывает веб-интерфейс. Первичная установка: команды db create, затем db seed; на helios она уже выполнена. Повторное создание останавливается. db drop удаляет только перечисленные lf_* после проверки маркера, без CASCADE. SQL create_database.sql/drop_database.sql предназначен для отдельной локальной БД, не для общей studs.
 
-Проверены 45 тестов приложения, 7 тестов Java-инструментов и 50 условий целостности PostgreSQL; проверки конкуренции используют два настоящих соединения. SQL и PL/pgSQL сохраняются согласно заданию. Python, Node.js и Microsoft Word для актуальной сборки не требуются. Gradle Wrapper содержит штатные загрузчики для Windows и Unix.
+Проверены 93 теста приложения, 8 тестов Java-инструментов и 50 условий целостности PostgreSQL; проверки конкуренции используют два настоящих соединения. SQL и PL/pgSQL сохраняются согласно заданию. Python, Node.js и Microsoft Word для актуальной сборки не требуются. Gradle Wrapper содержит штатные загрузчики для Windows и Unix.
 
-Группу и преподавателя нужно заполнить в report_data.json и пересобрать PDF. UI, REST-контроллеры, выпуск JWT, SMTP и двоичный MinIO-адаптер относятся к последующим этапам.
+Группу и преподавателя нужно заполнить в report_data.json и пересобрать PDF.
+
+Для работы с веб-интерфейсом на helios:
+
+```text
+cd ~/poteryashki-course
+java -Xmx256m -jar tooling/build/libs/course-tools.jar web start
+```
+
+В отдельном локальном терминале:
+
+```text
+ssh -p 2222 -L 18081:127.0.0.1:18081 s465826@helios.cs.ifmo.ru
+```
+
+Открыть http://127.0.0.1:18081. Начальные аккаунты: finder@example.invalid, owner@example.invalid, buyer@example.invalid, moderator@example.invalid, admin@example.invalid. Учебный пароль: DemoCourse2026! Начальные подписки действуют 30 суток с заполнения базы, аукцион — сутки; новый учебный заказ оформляется в кабинете. Запуск не пересоздаёт данные.
+
+Четвёртый этап содержит каталог и редактор с фотографиями, проверку профиля, подписку, заявки и диалоги, два подтверждения передачи, аукционы, справочник метро, рабочие страницы сотрудников и аудит. JWT передаются в HttpOnly cookie, формы защищены CSRF. [Материалы и протоколы](docs/part4).
+
+Переменные окружения: DB_URL, DB_USER, DB_PASSWORD, DB_PREFIX; APP_PORT, STORAGE_ROOT; JWT_SECRET (Base64, минимум 32 случайных байта), COOKIE_SECURE; MAIL_MODE, MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASSWORD, MAIL_FROM, PUBLIC_URL; DEMO_PAYMENTS и JOBS_ENABLED. Пароли и секреты не помещать в репозиторий. По умолчанию сервер слушает loopback; публичное размещение требует HTTPS и COOKIE_SECURE=true.
+
+MAIL_MODE=demo показывает письма только авторизованному получателю в /account/mail и хранит их до перезапуска. Для восстановления без доступа к аккаунту нужен настроенный SMTP (MAIL_MODE=smtp, STARTTLS). DEMO_PAYMENTS=true включает учебную оплату без списания средств. MinIO и реальный платёжный провайдер не подключены; файлы хранятся в закрытом каталоге STORAGE_ROOT.
+
+Для браузерной проверки сначала собрать bootJar и toolJar, затем запустить `verify-web` с машины разработчика. Нужен установленный Microsoft Edge; браузерная зависимость включена только в тесты. При обычной сборке тесты PostgreSQL пропускаются без RUN_DB_TESTS=true; полную проверку выполняет команда verify. Python и отдельная frontend-сборка не нужны. Playwright использует свой штатный драйвер только при браузерных тестах.

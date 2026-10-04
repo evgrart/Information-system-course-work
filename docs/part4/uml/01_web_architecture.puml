@@ -1,0 +1,68 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+title Уровень представления ИС «Потеряшки»
+package "Представление · Spring MVC" {
+ class AccountPages
+ class MainPages
+ class ListingPages
+ class ReturnPages
+ class AuctionPages
+ class StaffPages
+ class MediaPages
+ class WebQueries
+ class "HTML-шаблоны Thymeleaf" as Templates
+}
+package "Доступ и внешние адаптеры" {
+ class WebSecurity
+ class CookieAuthentication
+ class WebTokens
+ class WebSessions
+ class PrivateFiles
+ class PrivateMailbox
+ class WebJobs
+}
+package "Бизнес-логика · транзакции" {
+ class AccountService
+ class ListingService
+ class ReturnService
+ class AuctionService
+ class SubscriptionService
+ class AdministrationService
+ class OutboxService
+}
+class "SqlStore / JPA" as Storage
+class DatabaseFunctions
+class "PostgreSQL · функции PL/pgSQL" as PG <<database>>
+AccountPages --> AccountService
+AccountPages --> WebSessions
+AccountPages --> PrivateMailbox
+MainPages --> SubscriptionService
+MainPages --> AdministrationService
+ListingPages --> ListingService
+ListingPages --> PrivateFiles
+ReturnPages --> ReturnService
+AuctionPages --> AuctionService
+StaffPages --> AdministrationService
+StaffPages --> AccountService
+MediaPages --> PrivateFiles
+MediaPages --> WebQueries
+WebQueries --> Storage
+WebQueries --> ListingService
+WebSecurity --> CookieAuthentication
+CookieAuthentication --> WebTokens
+CookieAuthentication --> WebSessions
+WebSessions --> Storage
+WebJobs --> AuctionService
+WebJobs --> OutboxService
+ListingPages ..> Templates
+ReturnPages ..> Templates
+AccountPages ..> Templates
+ReturnService --> DatabaseFunctions
+AuctionService --> DatabaseFunctions
+SubscriptionService --> DatabaseFunctions
+DatabaseFunctions --> PG
+Storage --> PG
+@enduml
