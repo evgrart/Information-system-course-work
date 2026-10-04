@@ -9,7 +9,6 @@ Daemon will be stopped at the end of the build
 > Task :compileTestJava
 > Task :processTestResources NO-SOURCE
 > Task :testClasses
-OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
 
 > Task :test
 
@@ -103,9 +102,10 @@ TransactionIntegrationTest > concurrentCallbackCreatesSingleSubscription() PASSE
 
 TransactionIntegrationTest > closingProcedureAndFinalizeFunctionSelectActualWinner() PASSED
 
-2026-10-04T02:47:12.608+03:00  INFO 4040 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-10-04T02:47:12.614+03:00  INFO 4040 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-10-04T02:47:12.620+03:00  INFO 4040 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-10-04T12:03:50.560+03:00  INFO 1308 --- [poteryashki] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-04T12:03:50.564+03:00  INFO 1308 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-04T12:03:50.741+03:00  INFO 1308 --- [poteryashki] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
 
-BUILD SUCCESSFUL in 1m 40s
+BUILD SUCCESSFUL in 1m 43s
 7 actionable tasks: 7 executed
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
