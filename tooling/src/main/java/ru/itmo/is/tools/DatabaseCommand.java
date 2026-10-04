@@ -10,7 +10,7 @@ final class DatabaseCommand {
         return schema;
     }
     static void run(Path root, List<String> args) throws Exception {
-        if (args.size() != 1 || !Set.of("create", "seed", "test", "drop", "explain", "catalog").contains(args.get(0)))
+        if (args.size() != 1 || !Set.of("create", "seed", "test", "drop", "explain", "catalog","upgrade_web").contains(args.get(0)))
             throw new IllegalArgumentException("db create|seed|test|drop|explain|catalog");
         var builder = new ProcessBuilder("psql", "-X", "-w", "-v", "ON_ERROR_STOP=1",
                 "-v", "schema=" + schema(), "-f", root.resolve("database/" + args.get(0) + ".sql").toString())

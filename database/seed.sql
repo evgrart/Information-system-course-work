@@ -49,7 +49,7 @@ INSERT INTO lf_listing_images(listing_id,object_key,media_type,size_bytes,positi
 INSERT INTO lf_private_attributes(listing_id,name,value) VALUES (1,'Надпись на ручке','Тестовая надпись'),(7,'Цвет вышивки','Зелёный');
 INSERT INTO lf_claims(id,listing_id,claimant_id,evidence) VALUES
  (1,1,4,'На ручке есть тестовая надпись.'),(2,1,5,'Мой зонт пропал в саду.'),(3,7,4,'На шарфе зелёная вышивка.');
-INSERT INTO lf_conversations(claim_id) VALUES (1);
+INSERT INTO lf_conversations(claim_id) VALUES (1),(2),(3);
 INSERT INTO lf_messages(conversation_id,sender_id,body) VALUES (1,3,'Уточните время, когда вы оставили зонт.');
 SELECT lf_reserve_found(3,3);
 SELECT lf_confirm_transfer(1,3);

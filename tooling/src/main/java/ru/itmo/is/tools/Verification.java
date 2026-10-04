@@ -13,6 +13,7 @@ final class Verification {
         try (var remote = new Remote()) {
             Fixture fixture = new Fixture(remote, root, "lf3check_");
             try (fixture; var tunnel = remote.new Tunnel()) {
+                fixture.file("upgrade_web");fixture.file("upgrade_web");
                 String password = PgPass.find(remote.run("cat ~/.pgpass"), "pg", 5432, "studs", remote.user);
                 var env = new HashMap<String, String>();
                 env.put("DB_URL", "jdbc:postgresql://127.0.0.1:" + tunnel.port() + "/studs?currentSchema=" + fixture.schema);

@@ -56,6 +56,7 @@ final class Deployment {
             for (String name : List.of("helios.txt", "deployment.txt")) sftp.put(root.resolve("docs/part3/validation/" + name).toString(), base + "/docs/part3/validation/" + name);
             System.out.println("PASS: Java tools and application installed; helios demo completed");
             remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web stop");
+            remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar db upgrade_web");
             String web=remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web start");
             Files.createDirectories(root.resolve("docs/part4/validation"));
             Files.writeString(root.resolve("docs/part4/validation/helios.txt"),web);
