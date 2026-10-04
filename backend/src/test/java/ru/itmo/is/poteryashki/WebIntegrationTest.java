@@ -22,14 +22,67 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(properties="app.jobs-enabled=false") @AutoConfigureMockMvc @Transactional
 @EnabledIfEnvironmentVariable(named="RUN_DB_TESTS",matches="true")
+@SuppressWarnings("unchecked")
 class WebIntegrationTest {
     @Autowired MockMvc mvc;@Autowired WebSessions sessions;@Autowired WebTokens tokens;@Autowired SqlStore store;
     @Autowired ListingService listings;@Autowired AccountService accounts;@Autowired ReturnService returns;
     @Autowired SubscriptionService subscriptions;
+    @Autowired AdministrationService administration;
+    @Autowired AuctionService auctions;
     private static final String PASS="DemoCourse2026!";
     @BeforeAll static void guard(){assertEquals("lf3check_",System.getenv("DB_PREFIX"));}
     Cookie login(String email){return new Cookie("LF_ACCESS",tokens.access(sessions.login(email,PASS).identity()));}
     Cookie finder(){return login("finder@example.invalid");}
+    @Test void catalogHasTwentyCardsAndCursorWithoutDuplicates()throws Exception{
+        for(int i=0;i<23;i++)store.update("insert into lf_listings(author_id,category_id,location_id,kind,title,description,event_at,state,moderator_id,moderated_at) values (3,1,1,'found',?,'Учебный предмет',clock_timestamp()-interval '1 hour','published',1,clock_timestamp())","Страница "+i);
+        var response=mvc.perform(get("/catalog").cookie(finder())).andExpect(status().isOk()).andExpect(model().attribute("listings",hasSize(20))).andReturn();
+        var rows=(java.util.List<java.util.Map<String,Object>>)response.getModelAndView().getModel().get("listings");
+        long cursor=((Number)response.getModelAndView().getModel().get("next")).longValue();
+        var second=mvc.perform(get("/catalog").param("cursor",Long.toString(cursor)).cookie(finder())).andExpect(status().isOk()).andReturn();
+        var nextRows=(java.util.List<java.util.Map<String,Object>>)second.getModelAndView().getModel().get("listings");
+        assertFalse(nextRows.isEmpty());assertTrue(nextRows.size()<=20);
+        assertTrue(nextRows.stream().allMatch(r->((Number)r.get("id")).longValue()<cursor));
+        assertTrue(rows.stream().noneMatch(r->nextRows.stream().anyMatch(n->n.get("id").equals(r.get("id")))));
+    }
+    @Test void complainantSeesDecisionAndAnotherUserDoesNot()throws Exception{
+        long id=administration.complain(4,1L,null,"Проверить описание");administration.reviewComplaint(1,id,true,"Частное решение по жалобе");
+        mvc.perform(get("/account").cookie(login("owner@example.invalid"))).andExpect(status().isOk()).andExpect(content().string(containsString("Частное решение по жалобе")));
+        mvc.perform(get("/account").cookie(login("buyer@example.invalid"))).andExpect(status().isOk()).andExpect(content().string(not(containsString("Частное решение по жалобе"))));
+    }
+    @Test void complaintPageGivesScopedStaffConversationAccess()throws Exception{
+        long id=administration.complain(4,1L,null,"Проверить описание");
+        mvc.perform(get("/staff/complaints/"+id+"/conversations").cookie(login("moderator@example.invalid"))).andExpect(status().isOk()).andExpect(content().string(containsString("/conversations/1")));
+        mvc.perform(get("/conversations/1").cookie(login("moderator@example.invalid"))).andExpect(status().isOk());
+        administration.reviewComplaint(1,id,true,"Проверено");
+        mvc.perform(get("/conversations/1").cookie(login("moderator@example.invalid"))).andExpect(status().isForbidden());
+    }
+    @Test void expiredParticipantCanComplainAboutExistingConversation()throws Exception{
+        var cookie=login("owner@example.invalid");
+        store.update("update lf_subscriptions set starts_at=starts_at-interval '60 days',ends_at=ends_at-interval '60 days' where user_id=4");
+        mvc.perform(get("/conversations/1").cookie(cookie)).andExpect(status().isOk()).andExpect(content().string(containsString("name=\"listing\" value=\"1\"")));
+        mvc.perform(post("/complaints").cookie(cookie).with(csrf()).param("listing","1").param("reason","Спор по встрече")).andExpect(redirectedUrl("/account"));
+    }
+    @Test void closedAuctionCreatesActionableWinnerPages()throws Exception{
+        auctions.reviewPermission(1,2,true,"Допуск проверен");
+        long auction=auctions.create(3,6,2,java.time.OffsetDateTime.now().minusSeconds(1),java.time.OffsetDateTime.now().plusSeconds(3),new java.math.BigDecimal("100"),java.math.BigDecimal.TEN);
+        auctions.bid(4,auction,new java.math.BigDecimal("100"),UUID.randomUUID());Thread.sleep(3100);auctions.finalizeAuction(1,auction);
+        var owner=login("owner@example.invalid");
+        mvc.perform(get("/auctions/"+auction).cookie(owner)).andExpect(status().isOk()).andExpect(content().string(containsString("Согласовать передачу")));
+        mvc.perform(get("/claims").cookie(owner)).andExpect(status().isOk()).andExpect(content().string(containsString("Передача по результатам аукциона №"+auction)));
+        long transfer=store.id("select t.id from lf_transfers t join lf_claims c on c.id=t.claim_id where c.auction_id=?",auction);
+        mvc.perform(post("/transfers/"+transfer+"/confirm").cookie(owner).with(csrf())).andExpect(redirectedUrl("/claims"));
+        mvc.perform(post("/transfers/"+transfer+"/confirm").cookie(finder()).with(csrf())).andExpect(redirectedUrl("/claims"));
+        assertEquals("returned",store.one("select state from lf_listings where id=6").get("state"));
+    }
+    @Test void statusFilterReturnsOnlyPublicRequestedState()throws Exception{
+        var result=mvc.perform(get("/catalog").param("state","returned").cookie(finder())).andExpect(status().isOk()).andReturn();
+        var rows=(java.util.List<java.util.Map<String,Object>>)result.getModelAndView().getModel().get("listings");
+        assertFalse(rows.isEmpty());assertTrue(rows.stream().allMatch(r->r.get("state").equals("returned")));
+        mvc.perform(get("/catalog").param("state","draft").cookie(finder())).andExpect(status().is4xxClientError());
+    }
+    @Test void truncatedPhotoReturnsControlledClientError()throws Exception{
+        mvc.perform(multipart("/listings/1/photos").file(new org.springframework.mock.web.MockMultipartFile("file","broken.png","image/png",new byte[]{(byte)137,80,78,71,13,10,26,10})).param("position","1").cookie(finder()).with(csrf())).andExpect(status().isBadRequest());
+    }
     @ParameterizedTest @ValueSource(strings={"/","/metro","/auth/login","/auth/register","/auth/forgot","/auth/reset","/auth/confirm"})
     void publicPagesRender(String path)throws Exception{mvc.perform(get(path)).andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith("text/html"));}
     @ParameterizedTest @ValueSource(strings={"/account","/account/mail","/subscriptions","/catalog","/listings/new","/listings/1","/listings/1/edit","/claims","/conversations/1","/auctions","/auctions/1"})

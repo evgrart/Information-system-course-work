@@ -19,4 +19,10 @@ class PrivateFilesTest {
     @Test void rejectsSvgEvenWithImageMime()throws Exception{var f=new PrivateFiles(root.toString());assertThrows(IllegalArgumentException.class,()->f.image(new MockMultipartFile("file","a.png","image/png","<svg onload='alert(1)'/>".getBytes()),"listings/1"));}
     @Test void rejectsTraversalAndOversize()throws Exception{var f=new PrivateFiles(root.toString());assertThrows(java.io.IOException.class,()->f.read("../secret"));assertThrows(IllegalArgumentException.class,()->f.image(new MockMultipartFile("file",new byte[5*1024*1024+1]),"listings/1"));}
     @Test void rejectsFakePdfAndNamespace()throws Exception{var f=new PrivateFiles(root.toString());assertThrows(IllegalArgumentException.class,()->f.evidence(new MockMultipartFile("file","<html>fake</html>".getBytes()),1));}
+    @Test void rejectsTruncatedImageWithoutCreatingStorageObject()throws Exception{
+        var files=new PrivateFiles(root.toString());
+        for(byte[] raw:java.util.List.of(new byte[]{(byte)137,80,78,71,13,10,26,10},new byte[]{(byte)255,(byte)216,(byte)255}))
+            assertThrows(IllegalArgumentException.class,()->files.image(new MockMultipartFile("file","broken.png","image/png",raw),"listings/1"));
+        try(var paths=java.nio.file.Files.walk(root)){assertEquals(0,paths.filter(java.nio.file.Files::isRegularFile).count());}
+    }
 }
