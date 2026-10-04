@@ -2,49 +2,40 @@
 
 Java 17, Spring Boot 3.5.16, Spring Data JPA/Hibernate, JdbcTemplate, Jakarta Validation, BCrypt, Lombok. PostgreSQL — модель второго этапа. Gradle Wrapper 8.14.3.
 
-Третий этап реализует сервисы и слой хранения. HTTP-сервер и frontend здесь не запускаются. Классы сервисов вызываются через Spring-контекст; actor — доверенный идентификатор текущего пользователя, который будущий контроллер получит из проверенной сессии.
+Третий этап реализует сервисы и слой хранения. Сервисы вызываются через Spring-контекст; actor — доверенный идентификатор, который будущий контроллер получит из проверенной сессии. HTTP-сервер на этом этапе не запускается.
+
+Из каталога backend:
 
 ```powershell
 $env:JAVA_HOME='C:\Users\minec\.jdks\corretto-17.0.14'
-.\gradlew.bat test bootJar
+.\gradlew.bat test bootJar :tooling:test :tooling:toolJar
 ```
 
-Обычная команда test проверяет локальные правила именования; интеграционные тесты требуют PostgreSQL и RUN_DB_TESTS=true. Полный воспроизводимый прогон из корня проекта:
+Обычная команда test выполняет локальный тест именования и пропускает интеграционные сценарии. Для всех 45 тестов с PostgreSQL из корня курсовой:
 
 ```powershell
-.venv\Scripts\python.exe scripts\verify_stage3.py `
-  --java-home 'C:\Users\minec\.jdks\corretto-17.0.14'
+& "$env:JAVA_HOME\bin\java.exe" -Xmx256m -jar tooling/build/libs/course-tools.jar verify
 ```
 
-Для скрипта нужен paramiko из requirements-remote.txt. SSH-пароль вводится скрыто. Скрипт создаёт и удаляет только собственный одноразовый набор lf3check_*, использует SSH-туннель и проверяет сохранность исходных объектов и последовательностей. Существующий набор с таким именем автоматически не удаляется.
+Команда создаёт одноразовый набор lf3check_*, подключает PostgreSQL по SSH-туннелю и проверяет сохранность исходных объектов и последовательностей. SSH-пароль вводится скрыто; ключ сервера проверяется по known_hosts. Требуется предварительно собрать toolJar. [Средства сопровождения](../tooling).
 
-Переменные приложения:
-
-| Имя | Назначение |
+| Переменная | Назначение |
 | --- | --- |
 | DB_URL | JDBC URL; по умолчанию pg/studs, currentSchema=s465826 |
 | DB_USER | PostgreSQL role; по умолчанию s465826 |
-| DB_PASSWORD | Пароль PostgreSQL; launcher может взять его из .pgpass |
-| DB_PREFIX | lf_ для курсовой; lf3check_ только для одноразового тестирования |
-| APP_DEMO | true для безопасной демонстрации чтения через сервисы |
-| RUN_DB_TESTS | true включает тесты PostgreSQL; никогда не включать их на рабочем lf_* |
+| DB_PASSWORD | Пароль PostgreSQL; Java-launcher может прочитать .pgpass |
+| DB_PREFIX | lf_ для курсовой; lf3check_ для одноразовой проверки |
+| APP_DEMO | true для демонстрации чтения через сервисы |
+| RUN_DB_TESTS | true включает тесты БД; допустимо только с lf3check_* |
 
-JAR: build/libs/poteryashki.jar. На helios:
+JAR: build/libs/poteryashki.jar. На helios из каталога курсовой:
 
 ```sh
-cd ~/poteryashki-course
-python3.11 scripts/run_backend.py --demo
+java -Xmx256m -jar tooling/build/libs/course-tools.jar launch --demo
 ```
 
-Launcher использует память JVM 64–256 МиБ. Работа демонстрации не требует HTTP-порта, Docker или фонового процесса. Hibernate запускается в validate, без создания таблиц или доступа к истории миграций другой лабораторной.
+Launcher передаёт пароль только в окружение дочернего процесса и ограничивает JVM приложения параметрами -Xms64m -Xmx256m. Hibernate работает в validate, без изменения таблиц и истории миграций другой лабораторной.
 
-Слой хранения:
+Слой хранения содержит 27 неизменяемых JPA-проекций с составным UserRoleKey, UserRepository и ListingRepository для чтения, параметризованный SqlStore и DatabaseFunctions с вызовами всех 11 прикладных функций/процедур второго этапа. JPA и JDBC используют одну транзакцию; автор аудита задаётся локально, кэш JPA очищается после записи.
 
-- 27 неизменяемых JPA-проекций таблиц, включая составной ключ UserRoleKey.
-- UserRepository и ListingRepository для чтения; SqlStore для параметризованного CRUD.
-- DatabaseFunctions вызывает все 11 прикладных функций/процедур второго этапа.
-- Общая транзакция JPA/JDBC, локальный автор аудита, очистка JPA-кэша после записи.
-
-Сервисы: AccountService, SubscriptionService, ListingService, ReturnService, AuctionService, AdministrationService, OutboxService. Основные операции покрыты реальными транзакциями PostgreSQL. Внешние адаптеры JWT/HTTP, SMTP и двоичного MinIO-хранилища добавляются на следующем этапе. attachImage сохраняет метаданные уже проверенного объекта; payDemo выполняет учебную оплату владельца заказа без настоящего списания.
-
-Для тестовых аккаунтов из seed.sql используется открытый демонстрационный пароль DemoCourse2026!. Это не пароль SSH или базы данных.
+Сервисы: AccountService, SubscriptionService, ListingService, ReturnService, AuctionService, AdministrationService, OutboxService. Внешние адаптеры HTTP/JWT, SMTP, MinIO и страницы Thymeleaf добавляются после третьего этапа. attachImage сохраняет метаданные проверенного объекта; payDemo выполняет учебную оплату владельца заказа без настоящего списания. Тестовые аккаунты seed.sql имеют открытый демонстрационный пароль DemoCourse2026!.
