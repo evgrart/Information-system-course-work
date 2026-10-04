@@ -29,6 +29,7 @@ public class AdministrationService {
         require(reason!=null && !reason.isBlank(),"Resolution required");
         store.update("update lf_complaints set state=?,moderator_id=?,resolution=? where id=?",resolved?"resolved":"rejected",moderator,reason,complaint);
         access.record(moderator,"complaint.reviewed","lf_complaints",complaint,reason);
+        store.update("insert into lf_notifications(user_id,kind,body) values (?,'complaint.reviewed',?)",owner(row,"reporter_id"),"Жалоба №"+complaint+": "+reason);
     }
     public void block(long moderator,long user,String reason) {
         access.moderator(moderator);require(moderator!=user,"Cannot block yourself");
@@ -73,10 +74,10 @@ public class AdministrationService {
         return store.rows("select id,actor_id,action,entity_table,entity_id,details,created_at from lf_audit_entries where (?::bigint is null or id<?) order by id desc limit ?",before,before,limit);
     }
     public List<Map<String,Object>> notifications(long actor) {
-        access.actor(actor,false);return store.rows("select id,kind,body,read_at,created_at from lf_notifications where user_id=? order by id desc limit 100",actor);
+        access.account(actor);return store.rows("select id,kind,body,read_at,created_at from lf_notifications where user_id=? order by id desc limit 100",actor);
     }
     public void markRead(long actor,long notification) {
-        access.actor(actor,false);require(store.update("update lf_notifications set read_at=coalesce(read_at,clock_timestamp()) where id=? and user_id=?",notification,actor)==1,"Not your notification");
+        access.account(actor);require(store.update("update lf_notifications set read_at=coalesce(read_at,clock_timestamp()) where id=? and user_id=?",notification,actor)==1,"Not your notification");
     }
     private boolean hasPaid(long actor) { return store.exists("select exists(select 1 from lf_subscriptions where user_id=? and starts_at<=clock_timestamp() and ends_at>clock_timestamp())",actor); }
 }

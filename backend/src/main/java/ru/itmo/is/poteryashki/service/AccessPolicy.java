@@ -12,6 +12,8 @@ public class AccessPolicy {
     private final DatabaseFunctions functions;
     private final SqlNames names;
     public void actor(long user,boolean paid) { audit(user); functions.assertUser(user,paid); }
+    /** Own account information remains available while independent verification is pending. */
+    public void account(long user) { audit(user);require(store.exists("select exists(select 1 from lf_users where id=? and state<>'blocked')",user),"Account unavailable"); }
     public void moderator(long user) { audit(user); functions.assertModerator(user); }
     public void admin(long user) {
         actor(user,false);

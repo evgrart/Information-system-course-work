@@ -36,6 +36,8 @@ public class ReturnService {
         require(owner(row,"claimant_id")==actor,"Not your claim");
         require(Set.of("pending","accepted").contains(row.get("state")),"Claim already closed");
         if (row.get("state").equals("accepted"))
+            require(row.get("auction_id")==null && !store.exists("select exists(select 1 from lf_transfers where claim_id=? and (finder_confirmed_at is not null or owner_confirmed_at is not null or completed_at is not null))",claim),"Confirmed handover requires moderator review");
+        if (row.get("state").equals("accepted"))
             store.update("update lf_listings set state='published' where id=?",owner(row,"listing_id"));
         store.update("update lf_claims set state='cancelled' where id=?",claim);
     }
@@ -44,19 +46,23 @@ public class ReturnService {
         access.actor(actor,false);participant(actor,conversation);
         require(body!=null && !body.isBlank() && body.length()<=4000,"Invalid message");
         require(!store.exists("select count(*)>=30 from lf_messages where sender_id=? and sent_at>clock_timestamp()-interval '1 minute'",actor),"Message rate exceeded");
-        return store.id("insert into lf_messages(conversation_id,sender_id,body) values (?,?,?) returning id",conversation,actor,body);
+        long id=store.id("insert into lf_messages(conversation_id,sender_id,body) values (?,?,?) returning id",conversation,actor,body);
+        store.update("insert into lf_outbox_events(kind,aggregate_id,payload) values ('message.sent',?,jsonb_build_object('conversation_id',?::bigint))",id,conversation);
+        return id;
     }
     public List<Map<String,Object>> messages(long actor,long conversation) {
         access.actor(actor,false);participant(actor,conversation);
         return store.rows("select id,sender_id,body,sent_at from lf_messages where conversation_id=? order by id",conversation);
     }
     private void participant(long actor,long conversation) {
-        require(store.exists("select exists(select 1 from lf_conversations d join lf_claims c on c.id=d.claim_id join lf_listings l on l.id=c.listing_id where d.id=? and ? in(c.claimant_id,l.author_id))",conversation,actor),"Private conversation");
+        if(store.exists("select exists(select 1 from lf_conversations d join lf_claims c on c.id=d.claim_id join lf_listings l on l.id=c.listing_id where d.id=? and ? in(c.claimant_id,l.author_id))",conversation,actor))return;
+        require(store.exists("select exists(select 1 from lf_conversations d join lf_claims c on c.id=d.claim_id join lf_complaints p on p.listing_id=c.listing_id where d.id=? and p.state='pending')",conversation),"Private conversation");
+        access.moderator(actor);
     }
     private Map<String,Object> claimRow(long claim) {
         // Same lock order as PL/pgSQL: listing first, claim second.
         var row=store.one("select c.listing_id from lf_claims c where c.id=?",claim);
         store.one("select id from lf_listings where id=? for update",owner(row,"listing_id"));
-        return store.one("select c.listing_id,c.claimant_id,c.state,l.author_id from lf_claims c join lf_listings l on l.id=c.listing_id where c.id=? for update of c",claim);
+        return store.one("select c.listing_id,c.claimant_id,c.state,c.auction_id,l.author_id from lf_claims c join lf_listings l on l.id=c.listing_id where c.id=? for update of c",claim);
     }
 }

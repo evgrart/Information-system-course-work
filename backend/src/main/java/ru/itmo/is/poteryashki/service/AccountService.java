@@ -63,6 +63,7 @@ public class AccountService {
                 approve?"approved":"rejected",moderator,reason,verification);
         require(n==1,"Pending verification required");
         access.record(moderator,"profile.reviewed","lf_verifications",verification,reason==null?"Профиль одобрен":reason);
+        store.update("insert into lf_notifications(user_id,kind,body) select user_id,'profile.reviewed',? from lf_verifications where id=?",approve?"Профиль одобрен":("Профиль отклонён: "+reason),verification);
     }
     public long submitProfile(long user) {
         access.audit(user);

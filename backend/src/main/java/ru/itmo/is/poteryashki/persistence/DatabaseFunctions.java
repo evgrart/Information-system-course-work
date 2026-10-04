@@ -36,5 +36,8 @@ public class DatabaseFunctions {
                 text,kind,category,location,from,to,before,limit);
     }
     private Long number(String sql,Object... args) { Long result=jdbc.queryForObject(names.sql(sql),Long.class,args);entities.clear();return result; }
+    public List<Map<String,Object>> searchByState(String text,String kind,Long category,Long location,OffsetDateTime from,OffsetDateTime to,Long before,int limit,String state) {
+        return jdbc.queryForList(names.sql("select * from lf_search_listings_state(?,?::varchar,?,?,?,?,?,?,?::varchar)"),text,kind,category,location,from,to,before,limit,state);
+    }
     private void call(String sql,Object... args) { jdbc.query(names.sql(sql),rs -> { },args);entities.clear(); }
 }

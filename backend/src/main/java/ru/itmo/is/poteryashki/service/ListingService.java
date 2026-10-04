@@ -58,8 +58,10 @@ public class ListingService {
     }
     public Map<String,Object> detail(long actor,long listing) {
         access.actor(actor,true);
-        // Explicit projection: no JPA entity with secrets is returned to a caller.
         return store.one("select id,title,description,kind,event_at,event_until,state,category,city,place,metro_station,custodian,phone,instructions,source_url,verified_on from lf_public_listings where id=?",listing);
+    }
+    public List<Map<String,Object>> searchByState(long actor,String text,String kind,Long category,Long location,OffsetDateTime from,OffsetDateTime to,Long cursor,int limit,String state) {
+        access.actor(actor,true);return functions.searchByState(text,kind,category,location,from,to,cursor,limit,state);
     }
     public List<Map<String,Object>> privateAttributes(long actor,long listing) {
         access.actor(actor,false);var row=owned(actor,listing);
