@@ -1,1 +1,3 @@
 rootProject.name = 'poteryashki'
+include 'tooling'
+project(':tooling').projectDir = file('../tooling')

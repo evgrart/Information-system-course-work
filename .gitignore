@@ -3,6 +3,8 @@ __pycache__/
 ~$*
 backend/.gradle/
 backend/build/
+tooling/build/
+.tools/
 backend/.idea/
 *.local.properties
 *.local.env
