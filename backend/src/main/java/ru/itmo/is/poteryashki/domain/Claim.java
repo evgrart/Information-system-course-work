@@ -25,4 +25,6 @@ public class Claim {
     private String state;
     @Column(name = "created_at", columnDefinition = "timestamp with time zone")
     private OffsetDateTime createdAt;
+    @Column(name = "auction_id", columnDefinition = "bigint")
+    private Long auctionId;
 }

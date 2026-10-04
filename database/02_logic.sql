@@ -179,34 +179,7 @@ BEGIN
 END $$;
 CREATE TRIGGER lf_listing_guard BEFORE INSERT OR UPDATE ON lf_listings FOR EACH ROW EXECUTE FUNCTION lf_listing_guard();
 
-CREATE FUNCTION lf_claim_guard() RETURNS trigger LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
-DECLARE v_listing lf_listings%ROWTYPE;
-BEGIN
-    SELECT * INTO STRICT v_listing FROM lf_listings WHERE id=NEW.listing_id FOR UPDATE;
-    IF TG_OP='INSERT' THEN
-      PERFORM lf_assert_user(NEW.claimant_id);
-      IF NEW.state<>'pending' OR v_listing.kind<>'found' OR v_listing.state<>'published' OR NEW.claimant_id=v_listing.author_id THEN
-        RAISE EXCEPTION 'Нельзя подать заявку на эту находку';
-      END IF;
-      UPDATE lf_auctions SET state='suspended' WHERE listing_id=NEW.listing_id AND state IN ('scheduled','active');
-    ELSE
-      IF (NEW.listing_id,NEW.claimant_id) IS DISTINCT FROM (OLD.listing_id,OLD.claimant_id) THEN
-        RAISE EXCEPTION 'Участники заявки неизменяемы';
-      END IF;
-      IF NEW.state<>OLD.state AND NOT
-        ((OLD.state='pending' AND NEW.state IN ('accepted','rejected','cancelled')) OR
-         (OLD.state='accepted' AND NEW.state IN ('fulfilled','cancelled'))) THEN
-        RAISE EXCEPTION 'Недопустимый переход статуса заявки';
-      END IF;
-      IF NEW.state='accepted' AND OLD.state<>'accepted' THEN
-        IF OLD.state<>'pending' OR v_listing.state<>'published' OR
-          EXISTS (SELECT 1 FROM lf_auctions WHERE listing_id=NEW.listing_id AND state IN ('scheduled','active','suspended')) THEN
-          RAISE EXCEPTION 'Находка недоступна для резервирования';
-        END IF;
-      END IF;
-    END IF;
-    RETURN NEW;
-END $$;
+-- Определение lf_claim_guard находится в 04_handover.sql и используется также при обновлении.
 CREATE TRIGGER lf_claim_guard BEFORE INSERT OR UPDATE ON lf_claims FOR EACH ROW EXECUTE FUNCTION lf_claim_guard();
 CREATE FUNCTION lf_reserved_integrity() RETURNS trigger LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
 DECLARE v_id bigint; v_state varchar; v_count integer;
@@ -274,15 +247,7 @@ BEGIN
       completed_at=v_transfer.completed_at WHERE id=p_transfer;
     RETURN v_transfer.completed_at IS NOT NULL;
 END $$;
-CREATE FUNCTION lf_message_guard() RETURNS trigger LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
-BEGIN
-    PERFORM lf_assert_user(NEW.sender_id,false);
-    IF NOT EXISTS (SELECT 1 FROM lf_conversations d JOIN lf_claims c ON c.id=d.claim_id JOIN lf_listings l ON l.id=c.listing_id
-      WHERE d.id=NEW.conversation_id AND NEW.sender_id IN (c.claimant_id,l.author_id)) THEN
-      RAISE EXCEPTION 'Отправитель не участвует в диалоге';
-    END IF;
-    RETURN NEW;
-END $$;
+-- Определение lf_message_guard находится в 04_handover.sql.
 CREATE TRIGGER lf_message_guard BEFORE INSERT OR UPDATE ON lf_messages FOR EACH ROW EXECUTE FUNCTION lf_message_guard();
 CREATE FUNCTION lf_transfer_guard() RETURNS trigger LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
 BEGIN
@@ -429,23 +394,7 @@ BEGIN
     INSERT INTO lf_outbox_events(kind,aggregate_id,payload) VALUES ('auction.bid',p_auction,jsonb_build_object('bid_id',v_id));
     RETURN v_id;
 END $$;
-CREATE FUNCTION lf_finalize_auction(p_auction bigint) RETURNS bigint
-LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
-DECLARE v_auction lf_auctions%ROWTYPE; v_listing bigint; v_winner bigint;
-BEGIN
-    SELECT listing_id INTO STRICT v_listing FROM lf_auctions WHERE id=p_auction;
-    PERFORM 1 FROM lf_listings WHERE id=v_listing FOR UPDATE;
-    SELECT * INTO STRICT v_auction FROM lf_auctions WHERE id=p_auction FOR UPDATE;
-    IF v_auction.state='finished' THEN RETURN v_auction.winner_bid_id; END IF;
-    IF v_auction.state NOT IN ('active','scheduled') OR v_auction.ends_at>clock_timestamp() THEN
-      RAISE EXCEPTION 'Аукцион ещё не завершён или приостановлен';
-    END IF;
-    SELECT id INTO v_winner FROM lf_bids WHERE auction_id=p_auction ORDER BY amount DESC,id LIMIT 1;
-    UPDATE lf_auctions SET state='finished',winner_bid_id=v_winner,closed_at=clock_timestamp() WHERE id=p_auction;
-    IF v_winner IS NOT NULL THEN UPDATE lf_listings SET state='auctioned' WHERE id=v_listing; END IF;
-    INSERT INTO lf_outbox_events(kind,aggregate_id,payload) VALUES ('auction.finished',p_auction,jsonb_build_object('winner_bid_id',v_winner));
-    RETURN v_winner;
-END $$;
+-- Определение lf_finalize_auction находится в 04_handover.sql.
 CREATE PROCEDURE lf_close_due_auctions(p_limit integer DEFAULT 100)
 LANGUAGE plpgsql SET search_path FROM CURRENT AS $$
 DECLARE v_id bigint;
@@ -456,22 +405,7 @@ BEGIN
       PERFORM lf_finalize_auction(v_id);
     END LOOP;
 END $$;
-CREATE FUNCTION lf_search_listings(p_text text DEFAULT NULL,p_kind varchar DEFAULT NULL,p_category bigint DEFAULT NULL,
-    p_location bigint DEFAULT NULL,p_from timestamptz DEFAULT NULL,p_to timestamptz DEFAULT NULL,
-    p_before bigint DEFAULT NULL,p_limit integer DEFAULT 20)
-RETURNS TABLE(id bigint,title varchar,kind varchar,event_at timestamptz,location_id bigint)
-LANGUAGE plpgsql STABLE SET search_path FROM CURRENT AS $$
-BEGIN
-    IF p_limit IS NULL OR p_limit NOT BETWEEN 1 AND 100 OR (p_from IS NOT NULL AND p_to IS NOT NULL AND p_from>p_to) THEN
-      RAISE EXCEPTION 'Некорректные параметры поиска';
-    END IF;
-    RETURN QUERY SELECT l.id,l.title,l.kind,l.event_at,l.location_id FROM lf_listings l
-      WHERE l.state='published' AND (p_text IS NULL OR l.search_vector @@ plainto_tsquery('russian',p_text))
-        AND (p_kind IS NULL OR l.kind=p_kind) AND (p_category IS NULL OR l.category_id=p_category)
-        AND (p_location IS NULL OR l.location_id=p_location) AND (p_from IS NULL OR l.event_at>=p_from)
-        AND (p_to IS NULL OR l.event_at<=p_to) AND (p_before IS NULL OR l.id<p_before)
-      ORDER BY l.id DESC LIMIT p_limit;
-END $$;
+-- Поиск и совместимый контракт определены в 05_search.sql.
 -- Без закрытых признаков и персональных реквизитов аккаунта.
 CREATE VIEW lf_public_listings AS SELECT l.id,l.kind,l.title,l.description,l.event_at,l.event_until,l.state,c.name AS category,
     p.city,p.description AS place,p.metro_station,o.name AS custodian,o.phone,o.instructions,o.source_url,o.verified_on
