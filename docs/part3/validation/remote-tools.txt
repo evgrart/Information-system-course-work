@@ -1,0 +1,4 @@
+PASS: deployed Java launcher completed demo
+PASS: deployed Java db command read catalog
+PASS: no fixture objects remain
+PASS: obsolete Python scripts removed
