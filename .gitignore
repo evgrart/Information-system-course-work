@@ -4,6 +4,7 @@ __pycache__/
 backend/.gradle/
 backend/build/
 tooling/build/
+tooling/.gradle/
 .tools/
 backend/data/
 data/

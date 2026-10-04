@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 final class Models {
     private static final String[] NAMES = {"users", "roles", "user_roles", "refresh_tokens", "verifications", "verification_tokens", "tariffs", "payment_orders", "payment_events", "subscriptions", "organizations", "locations", "categories", "listings", "listing_images", "private_attributes", "claims", "conversations", "messages", "transfers", "complaints", "auction_permissions", "auctions", "bids", "notifications", "outbox_events", "audit_entries"};
-    private static final String[] LABELS = {"Пользователь", "Роль", "Назначение роли", "Токен обновления", "Проверка профиля", "Одноразовый токен", "Тариф", "Заказ оплаты", "Событие оплаты", "Период подписки", "Организация", "Место", "Категория", "Объявление", "Изображение", "Контрольный признак", "Заявка владельца", "Диалог", "Сообщение", "Передача", "Жалоба", "Допуск к продаже", "Аукцион", "Ставка", "Уведомление", "Событие доставки", "Запись аудита"};
+    private static final String[] LABELS = {"Пользователь", "Роль", "Назначение роли", "Токен обновления", "Проверка профиля", "Одноразовый токен", "Тариф", "Заказ оплаты", "Событие оплаты", "Период подписки", "Организация", "Место", "Категория", "Объявление", "Изображение", "Контрольный признак", "Заявка на передачу", "Диалог", "Сообщение", "Передача", "Жалоба", "Допуск к продаже", "Аукцион", "Ставка", "Уведомление", "Событие доставки", "Запись аудита"};
     static String label(String name) { return LABELS[Arrays.asList(NAMES).indexOf(name.replaceFirst("^lf_", ""))]; }
     static void generate(Path root) throws Exception {
         var catalog = new Catalog(root); Path output = root.resolve("docs/part2/model");
@@ -58,7 +58,7 @@ final class Models {
             {"01_accounts", "Аккаунты и подписка", "roles,user_roles,users,verifications,refresh_tokens,subscriptions,tariffs,payment_orders,payment_events", "roles:user_roles:1:0..N,users:user_roles:1:0..N,users:refresh_tokens:1:0..N,users:subscriptions:1:0..N,users:verifications:1:0..N,tariffs:payment_orders:1:0..N,payment_orders:payment_events:1:0..N,payment_orders:subscriptions:1:0..1"},
             {"02_listings", "Объявления и справочники", "organizations,locations,categories,users,listings,listing_images,,private_attributes,", "organizations:locations:0..1:0..N,locations:listings:1:0..N,categories:listings:1:0..N,users:listings:1:0..N,listings:listing_images:1:0..5,listings:private_attributes:1:0..N"},
             {"03_returns", "Возврат и обращения", "users,listings,complaints,messages,claims,transfers,,conversations,", "listings:claims:1:0..N,users:claims:1:0..N,claims:transfers:1:0..1,claims:conversations:1:0..1,conversations:messages:1:0..N,listings:complaints:0..1:0..N"},
-            {"04_auctions", "Допуск к продаже и аукцион", "categories,listings,users,,auction_permissions,,bids,auctions,", "categories:listings:1:0..N,users:auction_permissions:1:0..N,listings:auction_permissions:1:0..N,auction_permissions:auctions:1:0..N,auctions:bids:1:0..N,users:bids:1:0..N"},
+            {"04_auctions", "Допуск к продаже и аукцион", "users,categories,listings,bids,auctions,auction_permissions,,claims,", "categories:listings:1:0..N,users:auction_permissions:1:0..N,listings:auction_permissions:1:0..N,auction_permissions:auctions:1:0..N,auctions:bids:1:0..N,users:bids:1:0..N,auctions:claims:0..1:0..1"},
             {"05_events", "Уведомления, доставка и аудит", ",users,,notifications,audit_entries,outbox_events", "users:notifications:1:0..N,users:audit_entries:0..1:0..N"},
             {"06_tokens", "Верификация и восстановление доступа", ",users,,verifications,verification_tokens,refresh_tokens", "users:verifications:1:0..N,users:verification_tokens:1:0..N,users:refresh_tokens:1:0..N"}};
         for (String[] group : groups) draw(output, group, byName);
@@ -71,7 +71,11 @@ final class Models {
         for (String edge : group[3].split(",")) {
             String[] e = edge.split(":"); Point a = coords.get(e[0]), b = coords.get(e[1]);
             int sx, sy, ex, ey;
-            if (a.y == b.y) {
+            if (group[0].equals("04_auctions") && e[0].equals("users") && e[1].equals("auction_permissions")) {
+                // Route the distant applicant relation around the other entities.
+                canvas.line(395,150,420,150,420,80,1240,80,1240,360,1100,360,1100,392);
+                canvas.text(413,174,e[2],20,false);canvas.text(1136,373,e[3],20,false);
+            } else if (a.y == b.y) {
                 int sign = Integer.signum(b.x - a.x); sx = a.x + sign * 175; sy = a.y; ex = b.x - sign * 175; ey = b.y;
                 canvas.line(sx, sy, ex, ey); canvas.text(sx + sign * 20, sy - 23, e[2], 20, false); canvas.text(ex - sign * 20, ey + 23, e[3], 20, false);
             } else {

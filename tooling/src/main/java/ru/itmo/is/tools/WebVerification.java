@@ -30,7 +30,7 @@ final class WebVerification {
                     Verification.require(ready,"Web server did not start; see docs/part4/validation/server.txt");
                     String wrapper=root.resolve("backend/"+(Launcher.windows()?"gradlew.bat":"gradlew")).toString();
                     var result=Processes.capture(List.of(wrapper,":browserTest","--console=plain"),root.resolve("backend"),env,null,Duration.ofMinutes(10));
-                    Files.writeString(output.resolve("browser.txt"),result.out()+result.error());result.checked();
+                    Files.writeString(output.resolve("browser.txt"),(result.out()+result.error()).lines().map(String::stripTrailing).collect(java.util.stream.Collectors.joining("\n","","\n")));result.checked();
                     System.out.println("PASS: browser workflows completed against disposable tables");
                 }finally{app.destroy();if(!app.waitFor(20,java.util.concurrent.TimeUnit.SECONDS))app.destroyForcibly();}
             }finally{if(fixture.evidence!=null)Files.writeString(output.resolve("isolation.txt"),fixture.evidence);}

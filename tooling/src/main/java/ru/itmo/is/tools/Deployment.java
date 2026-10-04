@@ -46,6 +46,9 @@ final class Deployment {
             // Remove only known superseded scripts, after all replacements are installed.
             for (String name : LEGACY) remove(sftp, base, base + "/scripts/" + name);
             for (String name : List.of("requirements.txt", "requirements-remote.txt")) remove(sftp, base, base + "/" + name);
+            // Apply the owned schema migration before Hibernate validates the new application.
+            remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web stop");
+            remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar db upgrade_web");
             String demo = remote.run("cd " + Remote.quote(base) + " && java -Xms64m -Xmx256m -Dfile.encoding=UTF-8 -jar tooling/build/libs/course-tools.jar launch --demo");
             Verification.require(demo.contains("Потеряшки") || demo.contains("DEMO") || demo.contains("Demo"), "Missing demo output");
             Files.writeString(root.resolve("docs/part3/validation/helios.txt"), demo);
@@ -55,8 +58,6 @@ final class Deployment {
             Files.writeString(root.resolve("docs/part3/validation/deployment.txt"), evidence);
             for (String name : List.of("helios.txt", "deployment.txt")) sftp.put(root.resolve("docs/part3/validation/" + name).toString(), base + "/docs/part3/validation/" + name);
             System.out.println("PASS: Java tools and application installed; helios demo completed");
-            remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web stop");
-            remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar db upgrade_web");
             String web=remote.run("cd "+Remote.quote(base)+" && java -Xms64m -Xmx256m -jar tooling/build/libs/course-tools.jar web start");
             Files.createDirectories(root.resolve("docs/part4/validation"));
             Files.writeString(root.resolve("docs/part4/validation/helios.txt"),web);

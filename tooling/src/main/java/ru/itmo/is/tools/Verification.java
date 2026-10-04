@@ -63,13 +63,14 @@ final class Verification {
             var race = race(fixture,
                     "BEGIN; SELECT 1 FROM lf_listings WHERE id=1 FOR UPDATE; SELECT pg_sleep(0.7); SELECT lf_reserve_found(1,3); COMMIT;",
                     "BEGIN; SELECT lf_reserve_found(2,3); COMMIT;");
-            require(race.get(0).code() == 0 && race.get(1).code() != 0 && race.get(1).error().contains("Находка недоступна"), "Reservation race failed");
+            require(race.stream().filter(r->r.code()==0).count()==1 && race.stream().filter(r->r.code()!=0).allMatch(r->r.error().contains("Находка недоступна")), "Reservation race failed: outcomes "+race.stream().map(Processes.Result::code).toList());
             require(fixture.sql("SELECT count(*) FROM lf_claims WHERE listing_id=1 AND state='accepted';").equals("1"), "Duplicate reservation");
             pass(log, "Concurrent reservations: exactly one accepted");
             race = race(fixture,
                     "BEGIN; SELECT 1 FROM lf_listings WHERE id=2 FOR UPDATE; SELECT pg_sleep(0.7); SELECT lf_place_bid(1,4,1200,'40000000-0000-0000-0000-000000000001'); COMMIT;",
                     "BEGIN; SELECT lf_place_bid(1,5,1200,'40000000-0000-0000-0000-000000000002'); COMMIT;");
-            require(race.get(0).code() == 0 && race.get(1).code() != 0 && race.get(1).error().contains("Ставка ниже"), "Bid race failed");
+            require(race.stream().filter(r->r.code()==0).count()==1 && race.stream().filter(r->r.code()!=0).allMatch(r->r.error().contains("Ставка ниже")), "Bid race failed: outcomes "+race.stream().map(Processes.Result::code).toList());
+            require(fixture.sql("SELECT count(*) FROM lf_bids WHERE auction_id=1 AND amount=1200;").equals("1"), "Duplicate competing bid");
             pass(log, "Concurrent bids: exactly one accepted");
             fixture.sql("INSERT INTO lf_payment_orders(id,user_id,tariff_id,request_key,amount,duration_days) VALUES (50,5,1,'40000000-0000-0000-0000-000000000050',149,30);");
             race = race(fixture,

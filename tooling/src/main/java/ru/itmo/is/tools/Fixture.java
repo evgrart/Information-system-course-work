@@ -53,8 +53,13 @@ final class Fixture implements AutoCloseable {
             sftp.rmdir(folder);
         }
         String after = remote.sql(schema, fingerprint()), sequencesAfter = remote.sql(schema, sequences()), remains = count();
+        var mapper=new com.fasterxml.jackson.databind.ObjectMapper();
+        var original=mapper.readTree(sequencesBefore);var current=mapper.readTree(sequencesAfter);
+        var changed=new java.util.TreeSet<String>();
+        original.fieldNames().forEachRemaining(name->{if(!original.get(name).equals(current.get(name)))changed.add(name);});
+        current.fieldNames().forEachRemaining(name->{if(!current.get(name).equals(original.get(name)))changed.add(name);});
         evidence = "Existing objects before: " + before + "\nExisting objects after: " + after
-                + "\nOriginal sequence values preserved: " + sequencesBefore.equals(sequencesAfter) + "\nRemaining fixture objects: " + remains + "\n";
+                + "\nOriginal sequence values preserved: " + sequencesBefore.equals(sequencesAfter) + "\nChanged original sequences: " + changed + "\nRemaining fixture objects: " + remains + "\n";
         if (!before.equals(after) || !sequencesBefore.equals(sequencesAfter) || !remains.equals("0"))
             throw new IllegalStateException("Fixture isolation verification failed");
     }
