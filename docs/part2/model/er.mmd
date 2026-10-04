@@ -9,6 +9,7 @@ erDiagram
     users |o--o{ audit_entries : "actor_id"
     auctions ||--o{ bids : "auction_id"
     users ||--o{ bids : "bidder_id"
+    auctions |o--o| claims : "auction_id"
     users ||--o{ claims : "claimant_id"
     listings ||--o{ claims : "listing_id"
     listings |o--o{ complaints : "listing_id"

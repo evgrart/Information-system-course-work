@@ -18,6 +18,7 @@ ReturnService ..> SqlStore
 class Claim <<immutable entity>> {
 - listingId: Long
 - claimantId: Long
+- auctionId: Long
 - state: String
 }
 class Transfer <<immutable entity>> {

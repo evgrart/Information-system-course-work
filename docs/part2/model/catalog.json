@@ -1,1 +1,2188 @@
-[{"name": "lf_auction_permissions", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "listing_id", "type": "bigint", "default": null, "nullable": false}, {"name": "applicant_id", "type": "bigint", "default": null, "nullable": false}, {"name": "basis", "type": "character varying(20)", "default": null, "nullable": false}, {"name": "evidence_object_key", "type": "character varying(240)", "default": null, "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'pending'::character varying", "nullable": false}, {"name": "moderator_id", "type": "bigint", "default": null, "nullable": true}, {"name": "reviewed_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "reason", "type": "text", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_auction_permissions_applicant_id_fkey", "type": "f", "definition": "FOREIGN KEY (applicant_id) REFERENCES lf_users(id)"}, {"name": "lf_auction_permissions_applicant_id_not_null", "type": "n", "definition": "NOT NULL applicant_id"}, {"name": "lf_auction_permissions_basis_check", "type": "c", "definition": "CHECK (((basis)::text = ANY ((ARRAY['six_months'::character varying, 'other_title'::character varying])::text[])))"}, {"name": "lf_auction_permissions_basis_not_null", "type": "n", "definition": "NOT NULL basis"}, {"name": "lf_auction_permissions_check", "type": "c", "definition": "CHECK ((((state)::text = 'pending'::text) OR ((moderator_id IS NOT NULL) AND (reviewed_at IS NOT NULL))))"}, {"name": "lf_auction_permissions_check1", "type": "c", "definition": "CHECK ((((state)::text <> 'rejected'::text) OR ((reason IS NOT NULL) AND (length(TRIM(BOTH FROM reason)) > 0))))"}, {"name": "lf_auction_permissions_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_auction_permissions_evidence_object_key_not_null", "type": "n", "definition": "NOT NULL evidence_object_key"}, {"name": "lf_auction_permissions_id_listing_id_applicant_id_key", "type": "u", "definition": "UNIQUE (id, listing_id, applicant_id)"}, {"name": "lf_auction_permissions_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_auction_permissions_listing_id_fkey", "type": "f", "definition": "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"}, {"name": "lf_auction_permissions_listing_id_not_null", "type": "n", "definition": "NOT NULL listing_id"}, {"name": "lf_auction_permissions_moderator_id_fkey", "type": "f", "definition": "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"}, {"name": "lf_auction_permissions_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_auction_permissions_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'approved'::character varying, 'rejected'::character varying])::text[])))"}, {"name": "lf_auction_permissions_state_not_null", "type": "n", "definition": "NOT NULL state"}]}, {"name": "lf_auctions", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "listing_id", "type": "bigint", "default": null, "nullable": false}, {"name": "seller_id", "type": "bigint", "default": null, "nullable": false}, {"name": "permission_id", "type": "bigint", "default": null, "nullable": false}, {"name": "starts_at", "type": "timestamp with time zone", "default": null, "nullable": false}, {"name": "ends_at", "type": "timestamp with time zone", "default": null, "nullable": false}, {"name": "start_price", "type": "numeric(12,2)", "default": null, "nullable": false}, {"name": "bid_step", "type": "numeric(12,2)", "default": null, "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'scheduled'::character varying", "nullable": false}, {"name": "winner_bid_id", "type": "bigint", "default": null, "nullable": true}, {"name": "closed_at", "type": "timestamp with time zone", "default": null, "nullable": true}], "constraints": [{"name": "lf_auctions_bid_step_check", "type": "c", "definition": "CHECK (((bid_step > (0)::numeric) AND (bid_step <> 'NaN'::numeric)))"}, {"name": "lf_auctions_bid_step_not_null", "type": "n", "definition": "NOT NULL bid_step"}, {"name": "lf_auctions_check", "type": "c", "definition": "CHECK ((ends_at > starts_at))"}, {"name": "lf_auctions_check1", "type": "c", "definition": "CHECK (((winner_bid_id IS NULL) OR ((state)::text = 'finished'::text)))"}, {"name": "lf_auctions_check2", "type": "c", "definition": "CHECK ((((state)::text = ANY ((ARRAY['finished'::character varying, 'cancelled'::character varying])::text[])) = (closed_at IS NOT NULL)))"}, {"name": "lf_auctions_ends_at_not_null", "type": "n", "definition": "NOT NULL ends_at"}, {"name": "lf_auctions_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_auctions_listing_id_fkey", "type": "f", "definition": "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"}, {"name": "lf_auctions_listing_id_not_null", "type": "n", "definition": "NOT NULL listing_id"}, {"name": "lf_auctions_permission_id_listing_id_seller_id_fkey", "type": "f", "definition": "FOREIGN KEY (permission_id, listing_id, seller_id) REFERENCES lf_auction_permissions(id, listing_id, applicant_id)"}, {"name": "lf_auctions_permission_id_not_null", "type": "n", "definition": "NOT NULL permission_id"}, {"name": "lf_auctions_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_auctions_seller_id_fkey", "type": "f", "definition": "FOREIGN KEY (seller_id) REFERENCES lf_users(id)"}, {"name": "lf_auctions_seller_id_not_null", "type": "n", "definition": "NOT NULL seller_id"}, {"name": "lf_auctions_start_price_check", "type": "c", "definition": "CHECK (((start_price > (0)::numeric) AND (start_price <> 'NaN'::numeric)))"}, {"name": "lf_auctions_start_price_not_null", "type": "n", "definition": "NOT NULL start_price"}, {"name": "lf_auctions_starts_at_not_null", "type": "n", "definition": "NOT NULL starts_at"}, {"name": "lf_auctions_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['scheduled'::character varying, 'active'::character varying, 'suspended'::character varying, 'finished'::character varying, 'cancelled'::character varying])::text[])))"}, {"name": "lf_auctions_state_not_null", "type": "n", "definition": "NOT NULL state"}, {"name": "lf_winner_same_auction", "type": "f", "definition": "FOREIGN KEY (id, winner_bid_id) REFERENCES lf_bids(auction_id, id) DEFERRABLE INITIALLY DEFERRED"}]}, {"name": "lf_audit_entries", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "actor_id", "type": "bigint", "default": null, "nullable": true}, {"name": "action", "type": "character varying(80)", "default": null, "nullable": false}, {"name": "entity_table", "type": "character varying(80)", "default": null, "nullable": false}, {"name": "entity_id", "type": "bigint", "default": null, "nullable": false}, {"name": "details", "type": "jsonb", "default": "'{}'::jsonb", "nullable": false}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_audit_entries_action_not_null", "type": "n", "definition": "NOT NULL action"}, {"name": "lf_audit_entries_actor_id_fkey", "type": "f", "definition": "FOREIGN KEY (actor_id) REFERENCES lf_users(id)"}, {"name": "lf_audit_entries_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_audit_entries_details_not_null", "type": "n", "definition": "NOT NULL details"}, {"name": "lf_audit_entries_entity_id_not_null", "type": "n", "definition": "NOT NULL entity_id"}, {"name": "lf_audit_entries_entity_table_not_null", "type": "n", "definition": "NOT NULL entity_table"}, {"name": "lf_audit_entries_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_audit_entries_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}]}, {"name": "lf_bids", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "auction_id", "type": "bigint", "default": null, "nullable": false}, {"name": "bidder_id", "type": "bigint", "default": null, "nullable": false}, {"name": "request_key", "type": "uuid", "default": null, "nullable": false}, {"name": "amount", "type": "numeric(12,2)", "default": null, "nullable": false}, {"name": "placed_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_bids_amount_check", "type": "c", "definition": "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"}, {"name": "lf_bids_amount_not_null", "type": "n", "definition": "NOT NULL amount"}, {"name": "lf_bids_auction_id_fkey", "type": "f", "definition": "FOREIGN KEY (auction_id) REFERENCES lf_auctions(id)"}, {"name": "lf_bids_auction_id_id_key", "type": "u", "definition": "UNIQUE (auction_id, id)"}, {"name": "lf_bids_auction_id_not_null", "type": "n", "definition": "NOT NULL auction_id"}, {"name": "lf_bids_bidder_id_fkey", "type": "f", "definition": "FOREIGN KEY (bidder_id) REFERENCES lf_users(id)"}, {"name": "lf_bids_bidder_id_not_null", "type": "n", "definition": "NOT NULL bidder_id"}, {"name": "lf_bids_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_bids_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_bids_placed_at_not_null", "type": "n", "definition": "NOT NULL placed_at"}, {"name": "lf_bids_request_key_key", "type": "u", "definition": "UNIQUE (request_key)"}, {"name": "lf_bids_request_key_not_null", "type": "n", "definition": "NOT NULL request_key"}]}, {"name": "lf_categories", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "name", "type": "character varying(80)", "default": null, "nullable": false}, {"name": "auction_allowed", "type": "boolean", "default": "true", "nullable": false}], "constraints": [{"name": "lf_categories_auction_allowed_not_null", "type": "n", "definition": "NOT NULL auction_allowed"}, {"name": "lf_categories_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_categories_name_key", "type": "u", "definition": "UNIQUE (name)"}, {"name": "lf_categories_name_not_null", "type": "n", "definition": "NOT NULL name"}, {"name": "lf_categories_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}]}, {"name": "lf_claims", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "listing_id", "type": "bigint", "default": null, "nullable": false}, {"name": "claimant_id", "type": "bigint", "default": null, "nullable": false}, {"name": "evidence", "type": "text", "default": null, "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'pending'::character varying", "nullable": false}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_claim_reserved", "type": "t", "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"}, {"name": "lf_claims_claimant_id_fkey", "type": "f", "definition": "FOREIGN KEY (claimant_id) REFERENCES lf_users(id)"}, {"name": "lf_claims_claimant_id_not_null", "type": "n", "definition": "NOT NULL claimant_id"}, {"name": "lf_claims_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_claims_evidence_check", "type": "c", "definition": "CHECK ((length(TRIM(BOTH FROM evidence)) > 0))"}, {"name": "lf_claims_evidence_not_null", "type": "n", "definition": "NOT NULL evidence"}, {"name": "lf_claims_id_listing_id_key", "type": "u", "definition": "UNIQUE (id, listing_id)"}, {"name": "lf_claims_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_claims_listing_id_fkey", "type": "f", "definition": "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"}, {"name": "lf_claims_listing_id_not_null", "type": "n", "definition": "NOT NULL listing_id"}, {"name": "lf_claims_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_claims_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'accepted'::character varying, 'rejected'::character varying, 'cancelled'::character varying, 'fulfilled'::character varying])::text[])))"}, {"name": "lf_claims_state_not_null", "type": "n", "definition": "NOT NULL state"}]}, {"name": "lf_complaints", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "reporter_id", "type": "bigint", "default": null, "nullable": false}, {"name": "listing_id", "type": "bigint", "default": null, "nullable": true}, {"name": "reported_user_id", "type": "bigint", "default": null, "nullable": true}, {"name": "reason", "type": "text", "default": null, "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'pending'::character varying", "nullable": false}, {"name": "moderator_id", "type": "bigint", "default": null, "nullable": true}, {"name": "resolution", "type": "text", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_complaints_check", "type": "c", "definition": "CHECK ((num_nonnulls(listing_id, reported_user_id) = 1))"}, {"name": "lf_complaints_check1", "type": "c", "definition": "CHECK ((((state)::text = 'pending'::text) OR ((moderator_id IS NOT NULL) AND (resolution IS NOT NULL) AND (length(TRIM(BOTH FROM resolution)) > 0))))"}, {"name": "lf_complaints_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_complaints_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_complaints_listing_id_fkey", "type": "f", "definition": "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"}, {"name": "lf_complaints_moderator_id_fkey", "type": "f", "definition": "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"}, {"name": "lf_complaints_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_complaints_reason_check", "type": "c", "definition": "CHECK ((length(TRIM(BOTH FROM reason)) > 0))"}, {"name": "lf_complaints_reason_not_null", "type": "n", "definition": "NOT NULL reason"}, {"name": "lf_complaints_reported_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (reported_user_id) REFERENCES lf_users(id)"}, {"name": "lf_complaints_reporter_id_fkey", "type": "f", "definition": "FOREIGN KEY (reporter_id) REFERENCES lf_users(id)"}, {"name": "lf_complaints_reporter_id_not_null", "type": "n", "definition": "NOT NULL reporter_id"}, {"name": "lf_complaints_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'resolved'::character varying, 'rejected'::character varying])::text[])))"}, {"name": "lf_complaints_state_not_null", "type": "n", "definition": "NOT NULL state"}]}, {"name": "lf_conversations", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "claim_id", "type": "bigint", "default": null, "nullable": false}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_conversations_claim_id_fkey", "type": "f", "definition": "FOREIGN KEY (claim_id) REFERENCES lf_claims(id)"}, {"name": "lf_conversations_claim_id_key", "type": "u", "definition": "UNIQUE (claim_id)"}, {"name": "lf_conversations_claim_id_not_null", "type": "n", "definition": "NOT NULL claim_id"}, {"name": "lf_conversations_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_conversations_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_conversations_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}]}, {"name": "lf_listing_images", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "listing_id", "type": "bigint", "default": null, "nullable": false}, {"name": "object_key", "type": "character varying(240)", "default": null, "nullable": false}, {"name": "media_type", "type": "character varying(20)", "default": null, "nullable": false}, {"name": "size_bytes", "type": "integer", "default": null, "nullable": false}, {"name": "position", "type": "smallint", "default": null, "nullable": false}], "constraints": [{"name": "lf_listing_images_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_listing_images_listing_id_fkey", "type": "f", "definition": "FOREIGN KEY (listing_id) REFERENCES lf_listings(id) ON DELETE CASCADE"}, {"name": "lf_listing_images_listing_id_not_null", "type": "n", "definition": "NOT NULL listing_id"}, {"name": "lf_listing_images_listing_id_position_key", "type": "u", "definition": "UNIQUE (listing_id, \"position\")"}, {"name": "lf_listing_images_media_type_check", "type": "c", "definition": "CHECK (((media_type)::text = ANY ((ARRAY['image/jpeg'::character varying, 'image/png'::character varying, 'image/webp'::character varying])::text[])))"}, {"name": "lf_listing_images_media_type_not_null", "type": "n", "definition": "NOT NULL media_type"}, {"name": "lf_listing_images_object_key_key", "type": "u", "definition": "UNIQUE (object_key)"}, {"name": "lf_listing_images_object_key_not_null", "type": "n", "definition": "NOT NULL object_key"}, {"name": "lf_listing_images_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_listing_images_position_check", "type": "c", "definition": "CHECK (((\"position\" >= 1) AND (\"position\" <= 5)))"}, {"name": "lf_listing_images_position_not_null", "type": "n", "definition": "NOT NULL \"position\""}, {"name": "lf_listing_images_size_bytes_check", "type": "c", "definition": "CHECK (((size_bytes >= 1) AND (size_bytes <= 5242880)))"}, {"name": "lf_listing_images_size_bytes_not_null", "type": "n", "definition": "NOT NULL size_bytes"}]}, {"name": "lf_listings", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "author_id", "type": "bigint", "default": null, "nullable": false}, {"name": "category_id", "type": "bigint", "default": null, "nullable": false}, {"name": "location_id", "type": "bigint", "default": null, "nullable": false}, {"name": "kind", "type": "character varying(5)", "default": null, "nullable": false}, {"name": "title", "type": "character varying(120)", "default": null, "nullable": false}, {"name": "description", "type": "text", "default": null, "nullable": false}, {"name": "event_at", "type": "timestamp with time zone", "default": null, "nullable": false}, {"name": "event_until", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "state", "type": "character varying(12)", "default": "'draft'::character varying", "nullable": false}, {"name": "custodian_org_id", "type": "bigint", "default": null, "nullable": true}, {"name": "official_reported_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "moderator_id", "type": "bigint", "default": null, "nullable": true}, {"name": "moderated_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}, {"name": "search_vector", "type": "tsvector", "default": "to_tsvector('russian'::regconfig, (((COALESCE(title, ''::character varying))::text || ' '::text) || COALESCE(description, ''::text)))", "nullable": true}], "constraints": [{"name": "lf_listing_reserved", "type": "t", "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"}, {"name": "lf_listings_author_id_fkey", "type": "f", "definition": "FOREIGN KEY (author_id) REFERENCES lf_users(id)"}, {"name": "lf_listings_author_id_not_null", "type": "n", "definition": "NOT NULL author_id"}, {"name": "lf_listings_category_id_fkey", "type": "f", "definition": "FOREIGN KEY (category_id) REFERENCES lf_categories(id)"}, {"name": "lf_listings_category_id_not_null", "type": "n", "definition": "NOT NULL category_id"}, {"name": "lf_listings_check", "type": "c", "definition": "CHECK (((official_reported_at IS NULL) OR (official_reported_at >= event_at)))"}, {"name": "lf_listings_check1", "type": "c", "definition": "CHECK (((event_until IS NULL) OR (((kind)::text = 'lost'::text) AND (event_until >= event_at))))"}, {"name": "lf_listings_check2", "type": "c", "definition": "CHECK ((((kind)::text = 'found'::text) OR ((custodian_org_id IS NULL) AND (official_reported_at IS NULL))))"}, {"name": "lf_listings_check3", "type": "c", "definition": "CHECK ((((state)::text <> ALL ((ARRAY['reserved'::character varying, 'returned'::character varying, 'auctioned'::character varying])::text[])) OR ((kind)::text = 'found'::text)))"}, {"name": "lf_listings_check4", "type": "c", "definition": "CHECK ((((state)::text <> ALL ((ARRAY['published'::character varying, 'reserved'::character varying, 'returned'::character varying, 'auctioned'::character varying])::text[])) OR ((moderator_id IS NOT NULL) AND (moderated_at IS NOT NULL))))"}, {"name": "lf_listings_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_listings_custodian_org_id_fkey", "type": "f", "definition": "FOREIGN KEY (custodian_org_id) REFERENCES lf_organizations(id)"}, {"name": "lf_listings_description_check", "type": "c", "definition": "CHECK ((length(TRIM(BOTH FROM description)) > 0))"}, {"name": "lf_listings_description_not_null", "type": "n", "definition": "NOT NULL description"}, {"name": "lf_listings_event_at_not_null", "type": "n", "definition": "NOT NULL event_at"}, {"name": "lf_listings_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_listings_kind_check", "type": "c", "definition": "CHECK (((kind)::text = ANY ((ARRAY['lost'::character varying, 'found'::character varying])::text[])))"}, {"name": "lf_listings_kind_not_null", "type": "n", "definition": "NOT NULL kind"}, {"name": "lf_listings_location_id_fkey", "type": "f", "definition": "FOREIGN KEY (location_id) REFERENCES lf_locations(id)"}, {"name": "lf_listings_location_id_not_null", "type": "n", "definition": "NOT NULL location_id"}, {"name": "lf_listings_moderator_id_fkey", "type": "f", "definition": "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"}, {"name": "lf_listings_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_listings_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['draft'::character varying, 'pending'::character varying, 'published'::character varying, 'reserved'::character varying, 'returned'::character varying, 'auctioned'::character varying, 'archived'::character varying, 'rejected'::character varying])::text[])))"}, {"name": "lf_listings_state_not_null", "type": "n", "definition": "NOT NULL state"}, {"name": "lf_listings_title_check", "type": "c", "definition": "CHECK ((length(TRIM(BOTH FROM title)) > 0))"}, {"name": "lf_listings_title_not_null", "type": "n", "definition": "NOT NULL title"}]}, {"name": "lf_locations", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "city", "type": "character varying(80)", "default": "'Санкт-Петербург'::character varying", "nullable": false}, {"name": "description", "type": "character varying(240)", "default": null, "nullable": false}, {"name": "latitude", "type": "numeric(9,6)", "default": null, "nullable": true}, {"name": "longitude", "type": "numeric(9,6)", "default": null, "nullable": true}, {"name": "metro_station", "type": "character varying(100)", "default": null, "nullable": true}, {"name": "organization_id", "type": "bigint", "default": null, "nullable": true}], "constraints": [{"name": "lf_locations_check", "type": "c", "definition": "CHECK (((latitude IS NULL) = (longitude IS NULL)))"}, {"name": "lf_locations_city_not_null", "type": "n", "definition": "NOT NULL city"}, {"name": "lf_locations_description_not_null", "type": "n", "definition": "NOT NULL description"}, {"name": "lf_locations_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_locations_latitude_check", "type": "c", "definition": "CHECK (((latitude >= ('-90'::integer)::numeric) AND (latitude <= (90)::numeric)))"}, {"name": "lf_locations_longitude_check", "type": "c", "definition": "CHECK (((longitude >= ('-180'::integer)::numeric) AND (longitude <= (180)::numeric)))"}, {"name": "lf_locations_organization_id_fkey", "type": "f", "definition": "FOREIGN KEY (organization_id) REFERENCES lf_organizations(id)"}, {"name": "lf_locations_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}]}, {"name": "lf_messages", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "conversation_id", "type": "bigint", "default": null, "nullable": false}, {"name": "sender_id", "type": "bigint", "default": null, "nullable": false}, {"name": "body", "type": "text", "default": null, "nullable": false}, {"name": "sent_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_messages_body_check", "type": "c", "definition": "CHECK (((length(TRIM(BOTH FROM body)) >= 1) AND (length(TRIM(BOTH FROM body)) <= 4000)))"}, {"name": "lf_messages_body_not_null", "type": "n", "definition": "NOT NULL body"}, {"name": "lf_messages_conversation_id_fkey", "type": "f", "definition": "FOREIGN KEY (conversation_id) REFERENCES lf_conversations(id)"}, {"name": "lf_messages_conversation_id_not_null", "type": "n", "definition": "NOT NULL conversation_id"}, {"name": "lf_messages_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_messages_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_messages_sender_id_fkey", "type": "f", "definition": "FOREIGN KEY (sender_id) REFERENCES lf_users(id)"}, {"name": "lf_messages_sender_id_not_null", "type": "n", "definition": "NOT NULL sender_id"}, {"name": "lf_messages_sent_at_not_null", "type": "n", "definition": "NOT NULL sent_at"}]}, {"name": "lf_notifications", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "kind", "type": "character varying(40)", "default": null, "nullable": false}, {"name": "body", "type": "text", "default": null, "nullable": false}, {"name": "read_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_notifications_body_not_null", "type": "n", "definition": "NOT NULL body"}, {"name": "lf_notifications_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_notifications_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_notifications_kind_not_null", "type": "n", "definition": "NOT NULL kind"}, {"name": "lf_notifications_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_notifications_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id)"}, {"name": "lf_notifications_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}, {"name": "lf_organizations", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "name", "type": "character varying(160)", "default": null, "nullable": false}, {"name": "phone", "type": "character varying(40)", "default": null, "nullable": false}, {"name": "address", "type": "text", "default": null, "nullable": true}, {"name": "instructions", "type": "text", "default": null, "nullable": false}, {"name": "source_url", "type": "text", "default": null, "nullable": false}, {"name": "verified_on", "type": "date", "default": null, "nullable": false}], "constraints": [{"name": "lf_organizations_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_organizations_instructions_not_null", "type": "n", "definition": "NOT NULL instructions"}, {"name": "lf_organizations_name_key", "type": "u", "definition": "UNIQUE (name)"}, {"name": "lf_organizations_name_not_null", "type": "n", "definition": "NOT NULL name"}, {"name": "lf_organizations_phone_not_null", "type": "n", "definition": "NOT NULL phone"}, {"name": "lf_organizations_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_organizations_source_url_check", "type": "c", "definition": "CHECK ((source_url ~~ 'https://%'::text))"}, {"name": "lf_organizations_source_url_not_null", "type": "n", "definition": "NOT NULL source_url"}, {"name": "lf_organizations_verified_on_not_null", "type": "n", "definition": "NOT NULL verified_on"}]}, {"name": "lf_outbox_events", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "kind", "type": "character varying(40)", "default": null, "nullable": false}, {"name": "aggregate_id", "type": "bigint", "default": null, "nullable": false}, {"name": "payload", "type": "jsonb", "default": null, "nullable": false}, {"name": "attempts", "type": "integer", "default": "0", "nullable": false}, {"name": "next_attempt_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}, {"name": "delivered_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_outbox_events_aggregate_id_not_null", "type": "n", "definition": "NOT NULL aggregate_id"}, {"name": "lf_outbox_events_attempts_check", "type": "c", "definition": "CHECK ((attempts >= 0))"}, {"name": "lf_outbox_events_attempts_not_null", "type": "n", "definition": "NOT NULL attempts"}, {"name": "lf_outbox_events_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_outbox_events_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_outbox_events_kind_not_null", "type": "n", "definition": "NOT NULL kind"}, {"name": "lf_outbox_events_next_attempt_at_not_null", "type": "n", "definition": "NOT NULL next_attempt_at"}, {"name": "lf_outbox_events_payload_check", "type": "c", "definition": "CHECK ((jsonb_typeof(payload) = 'object'::text))"}, {"name": "lf_outbox_events_payload_not_null", "type": "n", "definition": "NOT NULL payload"}, {"name": "lf_outbox_events_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}]}, {"name": "lf_payment_events", "columns": [{"name": "provider_event_id", "type": "character varying(100)", "default": null, "nullable": false}, {"name": "order_id", "type": "bigint", "default": null, "nullable": false}, {"name": "amount", "type": "numeric(12,2)", "default": null, "nullable": false}, {"name": "currency", "type": "character(3)", "default": null, "nullable": false}, {"name": "received_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_payment_events_amount_check", "type": "c", "definition": "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"}, {"name": "lf_payment_events_amount_not_null", "type": "n", "definition": "NOT NULL amount"}, {"name": "lf_payment_events_currency_check", "type": "c", "definition": "CHECK ((currency = 'RUB'::bpchar))"}, {"name": "lf_payment_events_currency_not_null", "type": "n", "definition": "NOT NULL currency"}, {"name": "lf_payment_events_order_id_fkey", "type": "f", "definition": "FOREIGN KEY (order_id) REFERENCES lf_payment_orders(id)"}, {"name": "lf_payment_events_order_id_not_null", "type": "n", "definition": "NOT NULL order_id"}, {"name": "lf_payment_events_pkey", "type": "p", "definition": "PRIMARY KEY (provider_event_id)"}, {"name": "lf_payment_events_provider_event_id_not_null", "type": "n", "definition": "NOT NULL provider_event_id"}, {"name": "lf_payment_events_received_at_not_null", "type": "n", "definition": "NOT NULL received_at"}]}, {"name": "lf_payment_orders", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "tariff_id", "type": "bigint", "default": null, "nullable": false}, {"name": "request_key", "type": "uuid", "default": null, "nullable": false}, {"name": "amount", "type": "numeric(12,2)", "default": null, "nullable": false}, {"name": "duration_days", "type": "integer", "default": null, "nullable": false}, {"name": "currency", "type": "character(3)", "default": "'RUB'::bpchar", "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'pending'::character varying", "nullable": false}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}, {"name": "paid_at", "type": "timestamp with time zone", "default": null, "nullable": true}], "constraints": [{"name": "lf_payment_orders_amount_check", "type": "c", "definition": "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"}, {"name": "lf_payment_orders_amount_not_null", "type": "n", "definition": "NOT NULL amount"}, {"name": "lf_payment_orders_check", "type": "c", "definition": "CHECK ((((state)::text = 'paid'::text) = (paid_at IS NOT NULL)))"}, {"name": "lf_payment_orders_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_payment_orders_currency_check", "type": "c", "definition": "CHECK ((currency = 'RUB'::bpchar))"}, {"name": "lf_payment_orders_currency_not_null", "type": "n", "definition": "NOT NULL currency"}, {"name": "lf_payment_orders_duration_days_check", "type": "c", "definition": "CHECK (((duration_days >= 1) AND (duration_days <= 365)))"}, {"name": "lf_payment_orders_duration_days_not_null", "type": "n", "definition": "NOT NULL duration_days"}, {"name": "lf_payment_orders_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_payment_orders_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_payment_orders_request_key_key", "type": "u", "definition": "UNIQUE (request_key)"}, {"name": "lf_payment_orders_request_key_not_null", "type": "n", "definition": "NOT NULL request_key"}, {"name": "lf_payment_orders_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'paid'::character varying, 'cancelled'::character varying])::text[])))"}, {"name": "lf_payment_orders_state_not_null", "type": "n", "definition": "NOT NULL state"}, {"name": "lf_payment_orders_tariff_id_fkey", "type": "f", "definition": "FOREIGN KEY (tariff_id) REFERENCES lf_tariffs(id)"}, {"name": "lf_payment_orders_tariff_id_not_null", "type": "n", "definition": "NOT NULL tariff_id"}, {"name": "lf_payment_orders_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id)"}, {"name": "lf_payment_orders_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}, {"name": "lf_private_attributes", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "listing_id", "type": "bigint", "default": null, "nullable": false}, {"name": "name", "type": "character varying(80)", "default": null, "nullable": false}, {"name": "value", "type": "text", "default": null, "nullable": false}], "constraints": [{"name": "lf_private_attributes_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_private_attributes_listing_id_fkey", "type": "f", "definition": "FOREIGN KEY (listing_id) REFERENCES lf_listings(id) ON DELETE CASCADE"}, {"name": "lf_private_attributes_listing_id_name_key", "type": "u", "definition": "UNIQUE (listing_id, name)"}, {"name": "lf_private_attributes_listing_id_not_null", "type": "n", "definition": "NOT NULL listing_id"}, {"name": "lf_private_attributes_name_not_null", "type": "n", "definition": "NOT NULL name"}, {"name": "lf_private_attributes_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_private_attributes_value_not_null", "type": "n", "definition": "NOT NULL value"}]}, {"name": "lf_refresh_tokens", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "token_hash", "type": "character varying(64)", "default": null, "nullable": false}, {"name": "expires_at", "type": "timestamp with time zone", "default": null, "nullable": false}, {"name": "revoked_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_refresh_tokens_check", "type": "c", "definition": "CHECK ((expires_at > created_at))"}, {"name": "lf_refresh_tokens_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_refresh_tokens_expires_at_not_null", "type": "n", "definition": "NOT NULL expires_at"}, {"name": "lf_refresh_tokens_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_refresh_tokens_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_refresh_tokens_token_hash_check", "type": "c", "definition": "CHECK (((token_hash)::text ~ '^[0-9a-f]{64}$'::text))"}, {"name": "lf_refresh_tokens_token_hash_key", "type": "u", "definition": "UNIQUE (token_hash)"}, {"name": "lf_refresh_tokens_token_hash_not_null", "type": "n", "definition": "NOT NULL token_hash"}, {"name": "lf_refresh_tokens_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id)"}, {"name": "lf_refresh_tokens_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}, {"name": "lf_roles", "columns": [{"name": "code", "type": "character varying(16)", "default": null, "nullable": false}, {"name": "title", "type": "character varying(80)", "default": null, "nullable": false}], "constraints": [{"name": "lf_roles_code_check", "type": "c", "definition": "CHECK (((code)::text = ANY ((ARRAY['user'::character varying, 'moderator'::character varying, 'admin'::character varying])::text[])))"}, {"name": "lf_roles_code_not_null", "type": "n", "definition": "NOT NULL code"}, {"name": "lf_roles_pkey", "type": "p", "definition": "PRIMARY KEY (code)"}, {"name": "lf_roles_title_not_null", "type": "n", "definition": "NOT NULL title"}]}, {"name": "lf_subscriptions", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "payment_order_id", "type": "bigint", "default": null, "nullable": false}, {"name": "starts_at", "type": "timestamp with time zone", "default": null, "nullable": false}, {"name": "ends_at", "type": "timestamp with time zone", "default": null, "nullable": false}], "constraints": [{"name": "lf_subscriptions_check", "type": "c", "definition": "CHECK ((ends_at > starts_at))"}, {"name": "lf_subscriptions_ends_at_not_null", "type": "n", "definition": "NOT NULL ends_at"}, {"name": "lf_subscriptions_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_subscriptions_payment_order_id_fkey", "type": "f", "definition": "FOREIGN KEY (payment_order_id) REFERENCES lf_payment_orders(id)"}, {"name": "lf_subscriptions_payment_order_id_key", "type": "u", "definition": "UNIQUE (payment_order_id)"}, {"name": "lf_subscriptions_payment_order_id_not_null", "type": "n", "definition": "NOT NULL payment_order_id"}, {"name": "lf_subscriptions_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_subscriptions_starts_at_not_null", "type": "n", "definition": "NOT NULL starts_at"}, {"name": "lf_subscriptions_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id)"}, {"name": "lf_subscriptions_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}, {"name": "lf_tariffs", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "title", "type": "character varying(80)", "default": null, "nullable": false}, {"name": "amount", "type": "numeric(12,2)", "default": null, "nullable": false}, {"name": "duration_days", "type": "integer", "default": "30", "nullable": false}, {"name": "active", "type": "boolean", "default": "true", "nullable": false}], "constraints": [{"name": "lf_tariffs_active_not_null", "type": "n", "definition": "NOT NULL active"}, {"name": "lf_tariffs_amount_check", "type": "c", "definition": "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"}, {"name": "lf_tariffs_amount_not_null", "type": "n", "definition": "NOT NULL amount"}, {"name": "lf_tariffs_duration_days_check", "type": "c", "definition": "CHECK (((duration_days >= 1) AND (duration_days <= 365)))"}, {"name": "lf_tariffs_duration_days_not_null", "type": "n", "definition": "NOT NULL duration_days"}, {"name": "lf_tariffs_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_tariffs_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_tariffs_title_not_null", "type": "n", "definition": "NOT NULL title"}]}, {"name": "lf_transfers", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "claim_id", "type": "bigint", "default": null, "nullable": false}, {"name": "finder_confirmed_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "owner_confirmed_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "moderator_id", "type": "bigint", "default": null, "nullable": true}, {"name": "override_reason", "type": "text", "default": null, "nullable": true}, {"name": "completed_at", "type": "timestamp with time zone", "default": null, "nullable": true}], "constraints": [{"name": "lf_transfers_check", "type": "c", "definition": "CHECK (((moderator_id IS NULL) = (override_reason IS NULL)))"}, {"name": "lf_transfers_check1", "type": "c", "definition": "CHECK (((completed_at IS NOT NULL) = (((finder_confirmed_at IS NOT NULL) AND (owner_confirmed_at IS NOT NULL)) OR (moderator_id IS NOT NULL))))"}, {"name": "lf_transfers_claim_id_fkey", "type": "f", "definition": "FOREIGN KEY (claim_id) REFERENCES lf_claims(id)"}, {"name": "lf_transfers_claim_id_key", "type": "u", "definition": "UNIQUE (claim_id)"}, {"name": "lf_transfers_claim_id_not_null", "type": "n", "definition": "NOT NULL claim_id"}, {"name": "lf_transfers_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_transfers_moderator_id_fkey", "type": "f", "definition": "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"}, {"name": "lf_transfers_override_reason_check", "type": "c", "definition": "CHECK (((override_reason IS NULL) OR (length(TRIM(BOTH FROM override_reason)) > 0)))"}, {"name": "lf_transfers_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}]}, {"name": "lf_user_roles", "columns": [{"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "role_code", "type": "character varying(16)", "default": null, "nullable": false}], "constraints": [{"name": "lf_user_roles_pkey", "type": "p", "definition": "PRIMARY KEY (user_id, role_code)"}, {"name": "lf_user_roles_role_code_fkey", "type": "f", "definition": "FOREIGN KEY (role_code) REFERENCES lf_roles(code) ON DELETE RESTRICT"}, {"name": "lf_user_roles_role_code_not_null", "type": "n", "definition": "NOT NULL role_code"}, {"name": "lf_user_roles_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id) ON DELETE RESTRICT"}, {"name": "lf_user_roles_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}, {"name": "lf_users", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "email", "type": "character varying(254)", "default": null, "nullable": false}, {"name": "display_name", "type": "character varying(80)", "default": null, "nullable": false}, {"name": "password_hash", "type": "character varying(100)", "default": null, "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'pending'::character varying", "nullable": false}, {"name": "email_confirmed_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "token_version", "type": "integer", "default": "0", "nullable": false}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_users_check", "type": "c", "definition": "CHECK ((((state)::text <> 'verified'::text) OR (email_confirmed_at IS NOT NULL)))"}, {"name": "lf_users_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_users_display_name_check", "type": "c", "definition": "CHECK ((length(TRIM(BOTH FROM display_name)) > 0))"}, {"name": "lf_users_display_name_not_null", "type": "n", "definition": "NOT NULL display_name"}, {"name": "lf_users_email_check", "type": "c", "definition": "CHECK ((((email)::text = lower((email)::text)) AND ((email)::text ~~ '%_@_%._%'::text)))"}, {"name": "lf_users_email_key", "type": "u", "definition": "UNIQUE (email)"}, {"name": "lf_users_email_not_null", "type": "n", "definition": "NOT NULL email"}, {"name": "lf_users_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_users_password_hash_not_null", "type": "n", "definition": "NOT NULL password_hash"}, {"name": "lf_users_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_users_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'verified'::character varying, 'blocked'::character varying])::text[])))"}, {"name": "lf_users_state_not_null", "type": "n", "definition": "NOT NULL state"}, {"name": "lf_users_token_version_check", "type": "c", "definition": "CHECK ((token_version >= 0))"}, {"name": "lf_users_token_version_not_null", "type": "n", "definition": "NOT NULL token_version"}]}, {"name": "lf_verification_tokens", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "purpose", "type": "character varying(16)", "default": null, "nullable": false}, {"name": "token_hash", "type": "character varying(64)", "default": null, "nullable": false}, {"name": "expires_at", "type": "timestamp with time zone", "default": null, "nullable": false}, {"name": "consumed_at", "type": "timestamp with time zone", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}], "constraints": [{"name": "lf_verification_tokens_check", "type": "c", "definition": "CHECK ((expires_at > created_at))"}, {"name": "lf_verification_tokens_check1", "type": "c", "definition": "CHECK (((consumed_at IS NULL) OR (consumed_at >= created_at)))"}, {"name": "lf_verification_tokens_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_verification_tokens_expires_at_not_null", "type": "n", "definition": "NOT NULL expires_at"}, {"name": "lf_verification_tokens_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_verification_tokens_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_verification_tokens_purpose_check", "type": "c", "definition": "CHECK (((purpose)::text = ANY ((ARRAY['email_confirm'::character varying, 'password_reset'::character varying])::text[])))"}, {"name": "lf_verification_tokens_purpose_not_null", "type": "n", "definition": "NOT NULL purpose"}, {"name": "lf_verification_tokens_token_hash_check", "type": "c", "definition": "CHECK (((token_hash)::text ~ '^[0-9a-f]{64}$'::text))"}, {"name": "lf_verification_tokens_token_hash_key", "type": "u", "definition": "UNIQUE (token_hash)"}, {"name": "lf_verification_tokens_token_hash_not_null", "type": "n", "definition": "NOT NULL token_hash"}, {"name": "lf_verification_tokens_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id)"}, {"name": "lf_verification_tokens_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}, {"name": "lf_verifications", "columns": [{"name": "id", "type": "bigint", "default": null, "nullable": false}, {"name": "user_id", "type": "bigint", "default": null, "nullable": false}, {"name": "state", "type": "character varying(12)", "default": "'pending'::character varying", "nullable": false}, {"name": "reviewer_id", "type": "bigint", "default": null, "nullable": true}, {"name": "reason", "type": "text", "default": null, "nullable": true}, {"name": "created_at", "type": "timestamp with time zone", "default": "clock_timestamp()", "nullable": false}, {"name": "reviewed_at", "type": "timestamp with time zone", "default": null, "nullable": true}], "constraints": [{"name": "lf_verifications_check", "type": "c", "definition": "CHECK (((((state)::text = 'pending'::text) AND (reviewer_id IS NULL) AND (reviewed_at IS NULL)) OR (((state)::text <> 'pending'::text) AND (reviewer_id IS NOT NULL) AND (reviewed_at IS NOT NULL))))"}, {"name": "lf_verifications_check1", "type": "c", "definition": "CHECK (((reviewer_id IS NULL) OR (reviewer_id <> user_id)))"}, {"name": "lf_verifications_check2", "type": "c", "definition": "CHECK ((((state)::text <> 'rejected'::text) OR ((reason IS NOT NULL) AND (length(TRIM(BOTH FROM reason)) > 0))))"}, {"name": "lf_verifications_created_at_not_null", "type": "n", "definition": "NOT NULL created_at"}, {"name": "lf_verifications_id_not_null", "type": "n", "definition": "NOT NULL id"}, {"name": "lf_verifications_pkey", "type": "p", "definition": "PRIMARY KEY (id)"}, {"name": "lf_verifications_reviewer_id_fkey", "type": "f", "definition": "FOREIGN KEY (reviewer_id) REFERENCES lf_users(id)"}, {"name": "lf_verifications_state_check", "type": "c", "definition": "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'approved'::character varying, 'rejected'::character varying])::text[])))"}, {"name": "lf_verifications_state_not_null", "type": "n", "definition": "NOT NULL state"}, {"name": "lf_verifications_user_id_fkey", "type": "f", "definition": "FOREIGN KEY (user_id) REFERENCES lf_users(id)"}, {"name": "lf_verifications_user_id_not_null", "type": "n", "definition": "NOT NULL user_id"}]}]
+[ {
+  "name" : "lf_auction_permissions",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "listing_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "applicant_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "basis",
+    "type" : "character varying(20)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "evidence_object_key",
+    "type" : "character varying(240)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'pending'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "moderator_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "reviewed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "reason",
+    "type" : "text",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_auction_permissions_applicant_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (applicant_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_auction_permissions_applicant_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL applicant_id"
+  }, {
+    "name" : "lf_auction_permissions_basis_check",
+    "type" : "c",
+    "definition" : "CHECK (((basis)::text = ANY ((ARRAY['six_months'::character varying, 'other_title'::character varying])::text[])))"
+  }, {
+    "name" : "lf_auction_permissions_basis_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL basis"
+  }, {
+    "name" : "lf_auction_permissions_check",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text = 'pending'::text) OR ((moderator_id IS NOT NULL) AND (reviewed_at IS NOT NULL))))"
+  }, {
+    "name" : "lf_auction_permissions_check1",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text <> 'rejected'::text) OR ((reason IS NOT NULL) AND (length(TRIM(BOTH FROM reason)) > 0))))"
+  }, {
+    "name" : "lf_auction_permissions_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_auction_permissions_evidence_object_key_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL evidence_object_key"
+  }, {
+    "name" : "lf_auction_permissions_id_listing_id_applicant_id_key",
+    "type" : "u",
+    "definition" : "UNIQUE (id, listing_id, applicant_id)"
+  }, {
+    "name" : "lf_auction_permissions_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_auction_permissions_listing_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"
+  }, {
+    "name" : "lf_auction_permissions_listing_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL listing_id"
+  }, {
+    "name" : "lf_auction_permissions_moderator_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_auction_permissions_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_auction_permissions_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'approved'::character varying, 'rejected'::character varying])::text[])))"
+  }, {
+    "name" : "lf_auction_permissions_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  } ]
+}, {
+  "name" : "lf_auctions",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "listing_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "seller_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "permission_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "starts_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "ends_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "start_price",
+    "type" : "numeric(12,2)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "bid_step",
+    "type" : "numeric(12,2)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'scheduled'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "winner_bid_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "closed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_auctions_bid_step_check",
+    "type" : "c",
+    "definition" : "CHECK (((bid_step > (0)::numeric) AND (bid_step <> 'NaN'::numeric)))"
+  }, {
+    "name" : "lf_auctions_bid_step_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL bid_step"
+  }, {
+    "name" : "lf_auctions_check",
+    "type" : "c",
+    "definition" : "CHECK ((ends_at > starts_at))"
+  }, {
+    "name" : "lf_auctions_check1",
+    "type" : "c",
+    "definition" : "CHECK (((winner_bid_id IS NULL) OR ((state)::text = 'finished'::text)))"
+  }, {
+    "name" : "lf_auctions_check2",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text = ANY ((ARRAY['finished'::character varying, 'cancelled'::character varying])::text[])) = (closed_at IS NOT NULL)))"
+  }, {
+    "name" : "lf_auctions_ends_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL ends_at"
+  }, {
+    "name" : "lf_auctions_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_auctions_listing_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"
+  }, {
+    "name" : "lf_auctions_listing_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL listing_id"
+  }, {
+    "name" : "lf_auctions_permission_id_listing_id_seller_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (permission_id, listing_id, seller_id) REFERENCES lf_auction_permissions(id, listing_id, applicant_id)"
+  }, {
+    "name" : "lf_auctions_permission_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL permission_id"
+  }, {
+    "name" : "lf_auctions_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_auctions_seller_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (seller_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_auctions_seller_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL seller_id"
+  }, {
+    "name" : "lf_auctions_start_price_check",
+    "type" : "c",
+    "definition" : "CHECK (((start_price > (0)::numeric) AND (start_price <> 'NaN'::numeric)))"
+  }, {
+    "name" : "lf_auctions_start_price_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL start_price"
+  }, {
+    "name" : "lf_auctions_starts_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL starts_at"
+  }, {
+    "name" : "lf_auctions_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['scheduled'::character varying, 'active'::character varying, 'suspended'::character varying, 'finished'::character varying, 'cancelled'::character varying])::text[])))"
+  }, {
+    "name" : "lf_auctions_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  }, {
+    "name" : "lf_winner_same_auction",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (id, winner_bid_id) REFERENCES lf_bids(auction_id, id) DEFERRABLE INITIALLY DEFERRED"
+  } ]
+}, {
+  "name" : "lf_audit_entries",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "actor_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "action",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "entity_table",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "entity_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "details",
+    "type" : "jsonb",
+    "default" : "'{}'::jsonb",
+    "nullable" : false
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_audit_entries_action_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL action"
+  }, {
+    "name" : "lf_audit_entries_actor_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (actor_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_audit_entries_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_audit_entries_details_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL details"
+  }, {
+    "name" : "lf_audit_entries_entity_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL entity_id"
+  }, {
+    "name" : "lf_audit_entries_entity_table_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL entity_table"
+  }, {
+    "name" : "lf_audit_entries_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_audit_entries_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  } ]
+}, {
+  "name" : "lf_bids",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "auction_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "bidder_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "request_key",
+    "type" : "uuid",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "amount",
+    "type" : "numeric(12,2)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "placed_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_bids_amount_check",
+    "type" : "c",
+    "definition" : "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"
+  }, {
+    "name" : "lf_bids_amount_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL amount"
+  }, {
+    "name" : "lf_bids_auction_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (auction_id) REFERENCES lf_auctions(id)"
+  }, {
+    "name" : "lf_bids_auction_id_id_key",
+    "type" : "u",
+    "definition" : "UNIQUE (auction_id, id)"
+  }, {
+    "name" : "lf_bids_auction_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL auction_id"
+  }, {
+    "name" : "lf_bids_bidder_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (bidder_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_bids_bidder_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL bidder_id"
+  }, {
+    "name" : "lf_bids_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_bids_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_bids_placed_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL placed_at"
+  }, {
+    "name" : "lf_bids_request_key_key",
+    "type" : "u",
+    "definition" : "UNIQUE (request_key)"
+  }, {
+    "name" : "lf_bids_request_key_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL request_key"
+  } ]
+}, {
+  "name" : "lf_categories",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "name",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "auction_allowed",
+    "type" : "boolean",
+    "default" : "true",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_categories_auction_allowed_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL auction_allowed"
+  }, {
+    "name" : "lf_categories_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_categories_name_key",
+    "type" : "u",
+    "definition" : "UNIQUE (name)"
+  }, {
+    "name" : "lf_categories_name_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL name"
+  }, {
+    "name" : "lf_categories_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  } ]
+}, {
+  "name" : "lf_claims",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "listing_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "claimant_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "evidence",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'pending'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  }, {
+    "name" : "auction_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_claim_auction_fk",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (auction_id) REFERENCES lf_auctions(id)"
+  }, {
+    "name" : "lf_claim_auction_unique",
+    "type" : "u",
+    "definition" : "UNIQUE (auction_id)"
+  }, {
+    "name" : "lf_claim_reserved",
+    "type" : "t",
+    "definition" : "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+  }, {
+    "name" : "lf_claims_claimant_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (claimant_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_claims_claimant_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL claimant_id"
+  }, {
+    "name" : "lf_claims_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_claims_evidence_check",
+    "type" : "c",
+    "definition" : "CHECK ((length(TRIM(BOTH FROM evidence)) > 0))"
+  }, {
+    "name" : "lf_claims_evidence_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL evidence"
+  }, {
+    "name" : "lf_claims_id_listing_id_key",
+    "type" : "u",
+    "definition" : "UNIQUE (id, listing_id)"
+  }, {
+    "name" : "lf_claims_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_claims_listing_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"
+  }, {
+    "name" : "lf_claims_listing_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL listing_id"
+  }, {
+    "name" : "lf_claims_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_claims_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'accepted'::character varying, 'rejected'::character varying, 'cancelled'::character varying, 'fulfilled'::character varying])::text[])))"
+  }, {
+    "name" : "lf_claims_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  } ]
+}, {
+  "name" : "lf_complaints",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "reporter_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "listing_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "reported_user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "reason",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'pending'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "moderator_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "resolution",
+    "type" : "text",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_complaints_check",
+    "type" : "c",
+    "definition" : "CHECK ((num_nonnulls(listing_id, reported_user_id) = 1))"
+  }, {
+    "name" : "lf_complaints_check1",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text = 'pending'::text) OR ((moderator_id IS NOT NULL) AND (resolution IS NOT NULL) AND (length(TRIM(BOTH FROM resolution)) > 0))))"
+  }, {
+    "name" : "lf_complaints_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_complaints_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_complaints_listing_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (listing_id) REFERENCES lf_listings(id)"
+  }, {
+    "name" : "lf_complaints_moderator_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_complaints_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_complaints_reason_check",
+    "type" : "c",
+    "definition" : "CHECK ((length(TRIM(BOTH FROM reason)) > 0))"
+  }, {
+    "name" : "lf_complaints_reason_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL reason"
+  }, {
+    "name" : "lf_complaints_reported_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (reported_user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_complaints_reporter_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (reporter_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_complaints_reporter_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL reporter_id"
+  }, {
+    "name" : "lf_complaints_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'resolved'::character varying, 'rejected'::character varying])::text[])))"
+  }, {
+    "name" : "lf_complaints_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  } ]
+}, {
+  "name" : "lf_conversations",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "claim_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_conversations_claim_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (claim_id) REFERENCES lf_claims(id)"
+  }, {
+    "name" : "lf_conversations_claim_id_key",
+    "type" : "u",
+    "definition" : "UNIQUE (claim_id)"
+  }, {
+    "name" : "lf_conversations_claim_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL claim_id"
+  }, {
+    "name" : "lf_conversations_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_conversations_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_conversations_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  } ]
+}, {
+  "name" : "lf_listing_images",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "listing_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "object_key",
+    "type" : "character varying(240)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "media_type",
+    "type" : "character varying(20)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "size_bytes",
+    "type" : "integer",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "position",
+    "type" : "smallint",
+    "default" : null,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_listing_images_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_listing_images_listing_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (listing_id) REFERENCES lf_listings(id) ON DELETE CASCADE"
+  }, {
+    "name" : "lf_listing_images_listing_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL listing_id"
+  }, {
+    "name" : "lf_listing_images_listing_id_position_key",
+    "type" : "u",
+    "definition" : "UNIQUE (listing_id, \"position\")"
+  }, {
+    "name" : "lf_listing_images_media_type_check",
+    "type" : "c",
+    "definition" : "CHECK (((media_type)::text = ANY ((ARRAY['image/jpeg'::character varying, 'image/png'::character varying, 'image/webp'::character varying])::text[])))"
+  }, {
+    "name" : "lf_listing_images_media_type_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL media_type"
+  }, {
+    "name" : "lf_listing_images_object_key_key",
+    "type" : "u",
+    "definition" : "UNIQUE (object_key)"
+  }, {
+    "name" : "lf_listing_images_object_key_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL object_key"
+  }, {
+    "name" : "lf_listing_images_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_listing_images_position_check",
+    "type" : "c",
+    "definition" : "CHECK (((\"position\" >= 1) AND (\"position\" <= 5)))"
+  }, {
+    "name" : "lf_listing_images_position_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL \"position\""
+  }, {
+    "name" : "lf_listing_images_size_bytes_check",
+    "type" : "c",
+    "definition" : "CHECK (((size_bytes >= 1) AND (size_bytes <= 5242880)))"
+  }, {
+    "name" : "lf_listing_images_size_bytes_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL size_bytes"
+  } ]
+}, {
+  "name" : "lf_listings",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "author_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "category_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "location_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "kind",
+    "type" : "character varying(5)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "title",
+    "type" : "character varying(120)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "description",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "event_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "event_until",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'draft'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "custodian_org_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "official_reported_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "moderator_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "moderated_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  }, {
+    "name" : "search_vector",
+    "type" : "tsvector",
+    "default" : "to_tsvector('russian'::regconfig, (((COALESCE(title, ''::character varying))::text || ' '::text) || COALESCE(description, ''::text)))",
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_listing_reserved",
+    "type" : "t",
+    "definition" : "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+  }, {
+    "name" : "lf_listings_author_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (author_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_listings_author_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL author_id"
+  }, {
+    "name" : "lf_listings_category_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (category_id) REFERENCES lf_categories(id)"
+  }, {
+    "name" : "lf_listings_category_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL category_id"
+  }, {
+    "name" : "lf_listings_check",
+    "type" : "c",
+    "definition" : "CHECK (((official_reported_at IS NULL) OR (official_reported_at >= event_at)))"
+  }, {
+    "name" : "lf_listings_check1",
+    "type" : "c",
+    "definition" : "CHECK (((event_until IS NULL) OR (((kind)::text = 'lost'::text) AND (event_until >= event_at))))"
+  }, {
+    "name" : "lf_listings_check2",
+    "type" : "c",
+    "definition" : "CHECK ((((kind)::text = 'found'::text) OR ((custodian_org_id IS NULL) AND (official_reported_at IS NULL))))"
+  }, {
+    "name" : "lf_listings_check3",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text <> ALL ((ARRAY['reserved'::character varying, 'returned'::character varying, 'auctioned'::character varying])::text[])) OR ((kind)::text = 'found'::text)))"
+  }, {
+    "name" : "lf_listings_check4",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text <> ALL ((ARRAY['published'::character varying, 'reserved'::character varying, 'returned'::character varying, 'auctioned'::character varying])::text[])) OR ((moderator_id IS NOT NULL) AND (moderated_at IS NOT NULL))))"
+  }, {
+    "name" : "lf_listings_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_listings_custodian_org_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (custodian_org_id) REFERENCES lf_organizations(id)"
+  }, {
+    "name" : "lf_listings_description_check",
+    "type" : "c",
+    "definition" : "CHECK ((length(TRIM(BOTH FROM description)) > 0))"
+  }, {
+    "name" : "lf_listings_description_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL description"
+  }, {
+    "name" : "lf_listings_event_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL event_at"
+  }, {
+    "name" : "lf_listings_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_listings_kind_check",
+    "type" : "c",
+    "definition" : "CHECK (((kind)::text = ANY ((ARRAY['lost'::character varying, 'found'::character varying])::text[])))"
+  }, {
+    "name" : "lf_listings_kind_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL kind"
+  }, {
+    "name" : "lf_listings_location_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (location_id) REFERENCES lf_locations(id)"
+  }, {
+    "name" : "lf_listings_location_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL location_id"
+  }, {
+    "name" : "lf_listings_moderator_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_listings_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_listings_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['draft'::character varying, 'pending'::character varying, 'published'::character varying, 'reserved'::character varying, 'returned'::character varying, 'auctioned'::character varying, 'archived'::character varying, 'rejected'::character varying])::text[])))"
+  }, {
+    "name" : "lf_listings_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  }, {
+    "name" : "lf_listings_title_check",
+    "type" : "c",
+    "definition" : "CHECK ((length(TRIM(BOTH FROM title)) > 0))"
+  }, {
+    "name" : "lf_listings_title_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL title"
+  } ]
+}, {
+  "name" : "lf_locations",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "city",
+    "type" : "character varying(80)",
+    "default" : "'Санкт-Петербург'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "description",
+    "type" : "character varying(240)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "latitude",
+    "type" : "numeric(9,6)",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "longitude",
+    "type" : "numeric(9,6)",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "metro_station",
+    "type" : "character varying(100)",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "organization_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_locations_check",
+    "type" : "c",
+    "definition" : "CHECK (((latitude IS NULL) = (longitude IS NULL)))"
+  }, {
+    "name" : "lf_locations_city_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL city"
+  }, {
+    "name" : "lf_locations_description_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL description"
+  }, {
+    "name" : "lf_locations_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_locations_latitude_check",
+    "type" : "c",
+    "definition" : "CHECK (((latitude >= ('-90'::integer)::numeric) AND (latitude <= (90)::numeric)))"
+  }, {
+    "name" : "lf_locations_longitude_check",
+    "type" : "c",
+    "definition" : "CHECK (((longitude >= ('-180'::integer)::numeric) AND (longitude <= (180)::numeric)))"
+  }, {
+    "name" : "lf_locations_organization_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (organization_id) REFERENCES lf_organizations(id)"
+  }, {
+    "name" : "lf_locations_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  } ]
+}, {
+  "name" : "lf_messages",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "conversation_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "sender_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "body",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "sent_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_messages_body_check",
+    "type" : "c",
+    "definition" : "CHECK (((length(TRIM(BOTH FROM body)) >= 1) AND (length(TRIM(BOTH FROM body)) <= 4000)))"
+  }, {
+    "name" : "lf_messages_body_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL body"
+  }, {
+    "name" : "lf_messages_conversation_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (conversation_id) REFERENCES lf_conversations(id)"
+  }, {
+    "name" : "lf_messages_conversation_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL conversation_id"
+  }, {
+    "name" : "lf_messages_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_messages_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_messages_sender_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (sender_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_messages_sender_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL sender_id"
+  }, {
+    "name" : "lf_messages_sent_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL sent_at"
+  } ]
+}, {
+  "name" : "lf_notifications",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "kind",
+    "type" : "character varying(40)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "body",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "read_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_notifications_body_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL body"
+  }, {
+    "name" : "lf_notifications_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_notifications_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_notifications_kind_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL kind"
+  }, {
+    "name" : "lf_notifications_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_notifications_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_notifications_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+}, {
+  "name" : "lf_organizations",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "name",
+    "type" : "character varying(160)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "phone",
+    "type" : "character varying(40)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "address",
+    "type" : "text",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "instructions",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "source_url",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "verified_on",
+    "type" : "date",
+    "default" : null,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_organizations_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_organizations_instructions_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL instructions"
+  }, {
+    "name" : "lf_organizations_name_key",
+    "type" : "u",
+    "definition" : "UNIQUE (name)"
+  }, {
+    "name" : "lf_organizations_name_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL name"
+  }, {
+    "name" : "lf_organizations_phone_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL phone"
+  }, {
+    "name" : "lf_organizations_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_organizations_source_url_check",
+    "type" : "c",
+    "definition" : "CHECK ((source_url ~~ 'https://%'::text))"
+  }, {
+    "name" : "lf_organizations_source_url_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL source_url"
+  }, {
+    "name" : "lf_organizations_verified_on_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL verified_on"
+  } ]
+}, {
+  "name" : "lf_outbox_events",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "kind",
+    "type" : "character varying(40)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "aggregate_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "payload",
+    "type" : "jsonb",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "attempts",
+    "type" : "integer",
+    "default" : "0",
+    "nullable" : false
+  }, {
+    "name" : "next_attempt_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  }, {
+    "name" : "delivered_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_outbox_events_aggregate_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL aggregate_id"
+  }, {
+    "name" : "lf_outbox_events_attempts_check",
+    "type" : "c",
+    "definition" : "CHECK ((attempts >= 0))"
+  }, {
+    "name" : "lf_outbox_events_attempts_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL attempts"
+  }, {
+    "name" : "lf_outbox_events_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_outbox_events_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_outbox_events_kind_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL kind"
+  }, {
+    "name" : "lf_outbox_events_next_attempt_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL next_attempt_at"
+  }, {
+    "name" : "lf_outbox_events_payload_check",
+    "type" : "c",
+    "definition" : "CHECK ((jsonb_typeof(payload) = 'object'::text))"
+  }, {
+    "name" : "lf_outbox_events_payload_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL payload"
+  }, {
+    "name" : "lf_outbox_events_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  } ]
+}, {
+  "name" : "lf_payment_events",
+  "columns" : [ {
+    "name" : "provider_event_id",
+    "type" : "character varying(100)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "order_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "amount",
+    "type" : "numeric(12,2)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "currency",
+    "type" : "character(3)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "received_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_payment_events_amount_check",
+    "type" : "c",
+    "definition" : "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"
+  }, {
+    "name" : "lf_payment_events_amount_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL amount"
+  }, {
+    "name" : "lf_payment_events_currency_check",
+    "type" : "c",
+    "definition" : "CHECK ((currency = 'RUB'::bpchar))"
+  }, {
+    "name" : "lf_payment_events_currency_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL currency"
+  }, {
+    "name" : "lf_payment_events_order_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (order_id) REFERENCES lf_payment_orders(id)"
+  }, {
+    "name" : "lf_payment_events_order_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL order_id"
+  }, {
+    "name" : "lf_payment_events_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (provider_event_id)"
+  }, {
+    "name" : "lf_payment_events_provider_event_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL provider_event_id"
+  }, {
+    "name" : "lf_payment_events_received_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL received_at"
+  } ]
+}, {
+  "name" : "lf_payment_orders",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "tariff_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "request_key",
+    "type" : "uuid",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "amount",
+    "type" : "numeric(12,2)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "duration_days",
+    "type" : "integer",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "currency",
+    "type" : "character(3)",
+    "default" : "'RUB'::bpchar",
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'pending'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  }, {
+    "name" : "paid_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_payment_orders_amount_check",
+    "type" : "c",
+    "definition" : "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"
+  }, {
+    "name" : "lf_payment_orders_amount_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL amount"
+  }, {
+    "name" : "lf_payment_orders_check",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text = 'paid'::text) = (paid_at IS NOT NULL)))"
+  }, {
+    "name" : "lf_payment_orders_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_payment_orders_currency_check",
+    "type" : "c",
+    "definition" : "CHECK ((currency = 'RUB'::bpchar))"
+  }, {
+    "name" : "lf_payment_orders_currency_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL currency"
+  }, {
+    "name" : "lf_payment_orders_duration_days_check",
+    "type" : "c",
+    "definition" : "CHECK (((duration_days >= 1) AND (duration_days <= 365)))"
+  }, {
+    "name" : "lf_payment_orders_duration_days_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL duration_days"
+  }, {
+    "name" : "lf_payment_orders_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_payment_orders_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_payment_orders_request_key_key",
+    "type" : "u",
+    "definition" : "UNIQUE (request_key)"
+  }, {
+    "name" : "lf_payment_orders_request_key_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL request_key"
+  }, {
+    "name" : "lf_payment_orders_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'paid'::character varying, 'cancelled'::character varying])::text[])))"
+  }, {
+    "name" : "lf_payment_orders_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  }, {
+    "name" : "lf_payment_orders_tariff_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (tariff_id) REFERENCES lf_tariffs(id)"
+  }, {
+    "name" : "lf_payment_orders_tariff_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL tariff_id"
+  }, {
+    "name" : "lf_payment_orders_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_payment_orders_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+}, {
+  "name" : "lf_private_attributes",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "listing_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "name",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "value",
+    "type" : "text",
+    "default" : null,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_private_attributes_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_private_attributes_listing_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (listing_id) REFERENCES lf_listings(id) ON DELETE CASCADE"
+  }, {
+    "name" : "lf_private_attributes_listing_id_name_key",
+    "type" : "u",
+    "definition" : "UNIQUE (listing_id, name)"
+  }, {
+    "name" : "lf_private_attributes_listing_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL listing_id"
+  }, {
+    "name" : "lf_private_attributes_name_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL name"
+  }, {
+    "name" : "lf_private_attributes_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_private_attributes_value_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL value"
+  } ]
+}, {
+  "name" : "lf_refresh_tokens",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "token_hash",
+    "type" : "character varying(64)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "expires_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "revoked_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_refresh_tokens_check",
+    "type" : "c",
+    "definition" : "CHECK ((expires_at > created_at))"
+  }, {
+    "name" : "lf_refresh_tokens_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_refresh_tokens_expires_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL expires_at"
+  }, {
+    "name" : "lf_refresh_tokens_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_refresh_tokens_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_refresh_tokens_token_hash_check",
+    "type" : "c",
+    "definition" : "CHECK (((token_hash)::text ~ '^[0-9a-f]{64}$'::text))"
+  }, {
+    "name" : "lf_refresh_tokens_token_hash_key",
+    "type" : "u",
+    "definition" : "UNIQUE (token_hash)"
+  }, {
+    "name" : "lf_refresh_tokens_token_hash_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL token_hash"
+  }, {
+    "name" : "lf_refresh_tokens_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_refresh_tokens_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+}, {
+  "name" : "lf_roles",
+  "columns" : [ {
+    "name" : "code",
+    "type" : "character varying(16)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "title",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_roles_code_check",
+    "type" : "c",
+    "definition" : "CHECK (((code)::text = ANY ((ARRAY['user'::character varying, 'moderator'::character varying, 'admin'::character varying])::text[])))"
+  }, {
+    "name" : "lf_roles_code_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL code"
+  }, {
+    "name" : "lf_roles_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (code)"
+  }, {
+    "name" : "lf_roles_title_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL title"
+  } ]
+}, {
+  "name" : "lf_subscriptions",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "payment_order_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "starts_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "ends_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_subscriptions_check",
+    "type" : "c",
+    "definition" : "CHECK ((ends_at > starts_at))"
+  }, {
+    "name" : "lf_subscriptions_ends_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL ends_at"
+  }, {
+    "name" : "lf_subscriptions_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_subscriptions_payment_order_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (payment_order_id) REFERENCES lf_payment_orders(id)"
+  }, {
+    "name" : "lf_subscriptions_payment_order_id_key",
+    "type" : "u",
+    "definition" : "UNIQUE (payment_order_id)"
+  }, {
+    "name" : "lf_subscriptions_payment_order_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL payment_order_id"
+  }, {
+    "name" : "lf_subscriptions_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_subscriptions_starts_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL starts_at"
+  }, {
+    "name" : "lf_subscriptions_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_subscriptions_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+}, {
+  "name" : "lf_tariffs",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "title",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "amount",
+    "type" : "numeric(12,2)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "duration_days",
+    "type" : "integer",
+    "default" : "30",
+    "nullable" : false
+  }, {
+    "name" : "active",
+    "type" : "boolean",
+    "default" : "true",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_tariffs_active_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL active"
+  }, {
+    "name" : "lf_tariffs_amount_check",
+    "type" : "c",
+    "definition" : "CHECK (((amount > (0)::numeric) AND (amount <> 'NaN'::numeric)))"
+  }, {
+    "name" : "lf_tariffs_amount_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL amount"
+  }, {
+    "name" : "lf_tariffs_duration_days_check",
+    "type" : "c",
+    "definition" : "CHECK (((duration_days >= 1) AND (duration_days <= 365)))"
+  }, {
+    "name" : "lf_tariffs_duration_days_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL duration_days"
+  }, {
+    "name" : "lf_tariffs_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_tariffs_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_tariffs_title_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL title"
+  } ]
+}, {
+  "name" : "lf_transfers",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "claim_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "finder_confirmed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "owner_confirmed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "moderator_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "override_reason",
+    "type" : "text",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "completed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_transfers_check",
+    "type" : "c",
+    "definition" : "CHECK (((moderator_id IS NULL) = (override_reason IS NULL)))"
+  }, {
+    "name" : "lf_transfers_check1",
+    "type" : "c",
+    "definition" : "CHECK (((completed_at IS NOT NULL) = (((finder_confirmed_at IS NOT NULL) AND (owner_confirmed_at IS NOT NULL)) OR (moderator_id IS NOT NULL))))"
+  }, {
+    "name" : "lf_transfers_claim_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (claim_id) REFERENCES lf_claims(id)"
+  }, {
+    "name" : "lf_transfers_claim_id_key",
+    "type" : "u",
+    "definition" : "UNIQUE (claim_id)"
+  }, {
+    "name" : "lf_transfers_claim_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL claim_id"
+  }, {
+    "name" : "lf_transfers_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_transfers_moderator_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (moderator_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_transfers_override_reason_check",
+    "type" : "c",
+    "definition" : "CHECK (((override_reason IS NULL) OR (length(TRIM(BOTH FROM override_reason)) > 0)))"
+  }, {
+    "name" : "lf_transfers_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  } ]
+}, {
+  "name" : "lf_user_roles",
+  "columns" : [ {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "role_code",
+    "type" : "character varying(16)",
+    "default" : null,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_user_roles_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (user_id, role_code)"
+  }, {
+    "name" : "lf_user_roles_role_code_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (role_code) REFERENCES lf_roles(code) ON DELETE RESTRICT"
+  }, {
+    "name" : "lf_user_roles_role_code_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL role_code"
+  }, {
+    "name" : "lf_user_roles_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id) ON DELETE RESTRICT"
+  }, {
+    "name" : "lf_user_roles_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+}, {
+  "name" : "lf_users",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "email",
+    "type" : "character varying(254)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "display_name",
+    "type" : "character varying(80)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "password_hash",
+    "type" : "character varying(100)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'pending'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "email_confirmed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "token_version",
+    "type" : "integer",
+    "default" : "0",
+    "nullable" : false
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_users_check",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text <> 'verified'::text) OR (email_confirmed_at IS NOT NULL)))"
+  }, {
+    "name" : "lf_users_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_users_display_name_check",
+    "type" : "c",
+    "definition" : "CHECK ((length(TRIM(BOTH FROM display_name)) > 0))"
+  }, {
+    "name" : "lf_users_display_name_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL display_name"
+  }, {
+    "name" : "lf_users_email_check",
+    "type" : "c",
+    "definition" : "CHECK ((((email)::text = lower((email)::text)) AND ((email)::text ~~ '%_@_%._%'::text)))"
+  }, {
+    "name" : "lf_users_email_key",
+    "type" : "u",
+    "definition" : "UNIQUE (email)"
+  }, {
+    "name" : "lf_users_email_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL email"
+  }, {
+    "name" : "lf_users_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_users_password_hash_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL password_hash"
+  }, {
+    "name" : "lf_users_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_users_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'verified'::character varying, 'blocked'::character varying])::text[])))"
+  }, {
+    "name" : "lf_users_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  }, {
+    "name" : "lf_users_token_version_check",
+    "type" : "c",
+    "definition" : "CHECK ((token_version >= 0))"
+  }, {
+    "name" : "lf_users_token_version_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL token_version"
+  } ]
+}, {
+  "name" : "lf_verification_tokens",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "purpose",
+    "type" : "character varying(16)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "token_hash",
+    "type" : "character varying(64)",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "expires_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "consumed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "name" : "lf_verification_tokens_check",
+    "type" : "c",
+    "definition" : "CHECK ((expires_at > created_at))"
+  }, {
+    "name" : "lf_verification_tokens_check1",
+    "type" : "c",
+    "definition" : "CHECK (((consumed_at IS NULL) OR (consumed_at >= created_at)))"
+  }, {
+    "name" : "lf_verification_tokens_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_verification_tokens_expires_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL expires_at"
+  }, {
+    "name" : "lf_verification_tokens_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_verification_tokens_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_verification_tokens_purpose_check",
+    "type" : "c",
+    "definition" : "CHECK (((purpose)::text = ANY ((ARRAY['email_confirm'::character varying, 'password_reset'::character varying])::text[])))"
+  }, {
+    "name" : "lf_verification_tokens_purpose_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL purpose"
+  }, {
+    "name" : "lf_verification_tokens_token_hash_check",
+    "type" : "c",
+    "definition" : "CHECK (((token_hash)::text ~ '^[0-9a-f]{64}$'::text))"
+  }, {
+    "name" : "lf_verification_tokens_token_hash_key",
+    "type" : "u",
+    "definition" : "UNIQUE (token_hash)"
+  }, {
+    "name" : "lf_verification_tokens_token_hash_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL token_hash"
+  }, {
+    "name" : "lf_verification_tokens_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_verification_tokens_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+}, {
+  "name" : "lf_verifications",
+  "columns" : [ {
+    "name" : "id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "user_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : false
+  }, {
+    "name" : "state",
+    "type" : "character varying(12)",
+    "default" : "'pending'::character varying",
+    "nullable" : false
+  }, {
+    "name" : "reviewer_id",
+    "type" : "bigint",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "reason",
+    "type" : "text",
+    "default" : null,
+    "nullable" : true
+  }, {
+    "name" : "created_at",
+    "type" : "timestamp with time zone",
+    "default" : "clock_timestamp()",
+    "nullable" : false
+  }, {
+    "name" : "reviewed_at",
+    "type" : "timestamp with time zone",
+    "default" : null,
+    "nullable" : true
+  } ],
+  "constraints" : [ {
+    "name" : "lf_verifications_check",
+    "type" : "c",
+    "definition" : "CHECK (((((state)::text = 'pending'::text) AND (reviewer_id IS NULL) AND (reviewed_at IS NULL)) OR (((state)::text <> 'pending'::text) AND (reviewer_id IS NOT NULL) AND (reviewed_at IS NOT NULL))))"
+  }, {
+    "name" : "lf_verifications_check1",
+    "type" : "c",
+    "definition" : "CHECK (((reviewer_id IS NULL) OR (reviewer_id <> user_id)))"
+  }, {
+    "name" : "lf_verifications_check2",
+    "type" : "c",
+    "definition" : "CHECK ((((state)::text <> 'rejected'::text) OR ((reason IS NOT NULL) AND (length(TRIM(BOTH FROM reason)) > 0))))"
+  }, {
+    "name" : "lf_verifications_created_at_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL created_at"
+  }, {
+    "name" : "lf_verifications_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL id"
+  }, {
+    "name" : "lf_verifications_pkey",
+    "type" : "p",
+    "definition" : "PRIMARY KEY (id)"
+  }, {
+    "name" : "lf_verifications_reviewer_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (reviewer_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_verifications_state_check",
+    "type" : "c",
+    "definition" : "CHECK (((state)::text = ANY ((ARRAY['pending'::character varying, 'approved'::character varying, 'rejected'::character varying])::text[])))"
+  }, {
+    "name" : "lf_verifications_state_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL state"
+  }, {
+    "name" : "lf_verifications_user_id_fkey",
+    "type" : "f",
+    "definition" : "FOREIGN KEY (user_id) REFERENCES lf_users(id)"
+  }, {
+    "name" : "lf_verifications_user_id_not_null",
+    "type" : "n",
+    "definition" : "NOT NULL user_id"
+  } ]
+} ]

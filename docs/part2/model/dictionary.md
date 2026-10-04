@@ -100,7 +100,7 @@ UNIQUE (name).
 
 PRIMARY KEY (id).
 
-#### 6. Заявка владельца: lf_claims
+#### 6. Заявка на передачу: lf_claims
 
 | Поле | Тип PostgreSQL | NULL | Ключ |
 | --- | --- | --- | --- |
@@ -110,6 +110,11 @@ PRIMARY KEY (id).
 | evidence | text | Нет | — |
 | state | varchar(12) | Нет | — |
 | created_at | timestamptz | Нет | — |
+| auction_id | bigint | Да | FK |
+
+FOREIGN KEY (auction_id) REFERENCES lf_auctions(id).
+
+UNIQUE (auction_id).
 
 FOREIGN KEY (claimant_id) REFERENCES lf_users(id).
 

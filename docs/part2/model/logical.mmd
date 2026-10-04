@@ -63,7 +63,9 @@ erDiagram
         text evidence
         varchar_12 state
         timestamptz created_at
+        bigint auction_id FK
     }
+    lf_auctions |o--o| lf_claims : "auction_id"
     lf_users ||--o{ lf_claims : "claimant_id"
     lf_listings ||--o{ lf_claims : "listing_id"
     lf_complaints {

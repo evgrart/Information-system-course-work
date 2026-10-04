@@ -1,46 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1260" height="940" viewBox="0 0 1260 940"><rect width="100%" height="100%" fill="white"/>
 <text x="630" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Допуск к продаже и аукцион</text>
-<polyline points="395,200 455,200 " fill="none" stroke="#263746" stroke-width="3"/>
-<text x="415" y="177.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
-<text x="435" y="223.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<polyline points="1040,278 1040,335 630,335 630,392 " fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="805,200 865,200 " fill="none" stroke="#263746" stroke-width="3"/>
+<text x="825" y="177.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
+<text x="845" y="223.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
+<polyline points="395,150 420,150 420,80 1240,80 1240,360 1100,360 1100,392 " fill="none" stroke="#263746" stroke-width="3"/>
+<text x="413" y="174.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
+<text x="1136" y="373.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
+<polyline points="1040,278 1040,335 1040,335 1040,392 " fill="none" stroke="#263746" stroke-width="3"/>
 <text x="1068" y="298.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
-<text x="658" y="372.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<polyline points="630,278 630,335 630,335 630,392 " fill="none" stroke="#263746" stroke-width="3"/>
-<text x="658" y="298.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
-<text x="658" y="372.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
+<text x="1068" y="372.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
+<polyline points="865,470 805,470 " fill="none" stroke="#263746" stroke-width="3"/>
+<text x="845" y="447.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
+<text x="825" y="493.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
+<polyline points="455,470 395,470 " fill="none" stroke="#263746" stroke-width="3"/>
+<text x="435" y="447.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
+<text x="415" y="493.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
+<polyline points="220,278 220,335 220,335 220,392 " fill="none" stroke="#263746" stroke-width="3"/>
+<text x="248" y="298.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
+<text x="248" y="372.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
 <polyline points="630,548 630,605 630,605 630,662 " fill="none" stroke="#263746" stroke-width="3"/>
-<text x="658" y="568.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
-<text x="658" y="642.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<polyline points="455,740 395,740 " fill="none" stroke="#263746" stroke-width="3"/>
-<text x="435" y="717.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
-<text x="415" y="763.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<polyline points="1040,278 1040,470 220,470 220,662 " fill="none" stroke="#263746" stroke-width="3"/>
-<text x="1068" y="298.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1</text>
-<text x="248" y="642.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..N</text>
-<rect x="455" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="630" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Объявление</text>
-<text x="630" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_listings</text>
-<text x="630" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
-<rect x="455" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="630" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Допуск к продаже</text>
-<text x="630" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_auction_permissions</text>
-<text x="630" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
-<rect x="45" y="662" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="220" y="703.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Ставка</text>
-<text x="220" y="740.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_bids</text>
-<text x="220" y="780.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
-<rect x="45" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="220" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Категория</text>
-<text x="220" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_categories</text>
-<text x="220" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<text x="658" y="568.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..1</text>
+<text x="658" y="642.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">0..1</text>
 <rect x="865" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="1040" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Пользователь</text>
-<text x="1040" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_users</text>
+<text x="1040" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Объявление</text>
+<text x="1040" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_listings</text>
 <text x="1040" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="865" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="1040" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Допуск к продаже</text>
+<text x="1040" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_auction_permissions</text>
+<text x="1040" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="45" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="220" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Ставка</text>
+<text x="220" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_bids</text>
+<text x="220" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
 <rect x="455" y="662" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
-<text x="630" y="703.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Аукцион</text>
-<text x="630" y="740.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_auctions</text>
+<text x="630" y="703.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Заявка на передачу</text>
+<text x="630" y="740.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_claims</text>
 <text x="630" y="780.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="455" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="630" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Категория</text>
+<text x="630" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_categories</text>
+<text x="630" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="45" y="122" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="220" y="163.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Пользователь</text>
+<text x="220" y="200.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_users</text>
+<text x="220" y="240.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
+<rect x="455" y="392" width="350" height="156" fill="#f4f6f8" stroke="#263746" stroke-width="3"/>
+<text x="630" y="433.0" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Аукцион</text>
+<text x="630" y="470.0" font-family="Arial, sans-serif" font-size="23" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">lf_auctions</text>
+<text x="630" y="510.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PK: id</text>
 <text x="630" y="900.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1 — один; 0..1 — необязательный; 0..N — множество</text>
 </svg>
