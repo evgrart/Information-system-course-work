@@ -1,5 +1,5 @@
 Helios stage four HTTP verification
-Checked at: 2026-10-04T12:05:44.537268Z
+Checked at: 2026-10-04T14:25:02.727002900Z
 PASS: deployed home page returns HTTP 200
 PASS: deployed metro contacts return HTTP 200
 PASS: login form for finder@example.invalid
@@ -24,4 +24,8 @@ PASS: admin@example.invalid reads /admin
 PASS: logout revokes session for admin@example.invalid
 PASS: private account inaccessible after logout for admin@example.invalid
 PASS: own PID is identified by exact application JAR argument
+PASS: deployed coursework schema has 42 foreign keys
+Finished auctions with a winner in deployed data: 0
+Deployed auction states: active:1
+PASS: no incomplete winner handovers in deployed data
 PASS: no disposable test objects remain on helios
