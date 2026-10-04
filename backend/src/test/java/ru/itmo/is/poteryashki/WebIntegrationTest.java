@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.*;
 class WebIntegrationTest {
     @Autowired MockMvc mvc;@Autowired WebSessions sessions;@Autowired WebTokens tokens;@Autowired SqlStore store;
     @Autowired ListingService listings;@Autowired AccountService accounts;@Autowired ReturnService returns;
+    @Autowired SubscriptionService subscriptions;
     private static final String PASS="DemoCourse2026!";
     @BeforeAll static void guard(){assertEquals("lf3check_",System.getenv("DB_PREFIX"));}
     Cookie login(String email){return new Cookie("LF_ACCESS",tokens.access(sessions.login(email,PASS).identity()));}
@@ -56,10 +57,12 @@ class WebIntegrationTest {
     @Test void bidPostedThroughMvcUsesDatabaseFunction()throws Exception{var key=UUID.randomUUID();mvc.perform(post("/auctions/1/bids").with(csrf()).cookie(login("owner@example.invalid")).param("amount","1200").param("key",key.toString())).andExpect(redirectedUrl("/auctions/1"));assertEquals(1L,store.id("select count(*) from lf_bids where request_key=?",key));}
     @Test void expiredSubscriptionCanConfirmTransferThroughPage()throws Exception{long transfer=returns.reserve(3,1);var c=login("owner@example.invalid");store.update("update lf_subscriptions set starts_at=starts_at-interval '60 days',ends_at=ends_at-interval '60 days' where user_id=4");mvc.perform(post("/transfers/"+transfer+"/confirm").with(csrf()).cookie(c)).andExpect(redirectedUrl("/claims"));}
     @Test void malformedJwtCannotAuthenticate()throws Exception{mvc.perform(get("/account").cookie(new Cookie("LF_ACCESS","broken"))).andExpect(redirectedUrl("/auth/login"));}
+    @Test void sampleClaimsHaveWorkingConversationLinks(){assertFalse(store.exists("select exists(select 1 from lf_claims c where not exists(select 1 from lf_conversations d where d.claim_id=c.id))"));}
+    @Test void pendingOrderOffersDemoPayment()throws Exception{subscriptions.createOrder(3,1,UUID.randomUUID());mvc.perform(get("/subscriptions").cookie(finder())).andExpect(content().string(containsString("Оплатить в учебном режиме")));}
     @Test void createFormContainsCsrfAndSubmitsActualFields()throws Exception{
         Cookie access=finder();var page=mvc.perform(get("/listings/new").cookie(access)).andReturn();
         var matcher=java.util.regex.Pattern.compile("name=\"_csrf\" value=\"([^\"]+)\"").matcher(page.getResponse().getContentAsString().split("<main",2)[1]);assertTrue(matcher.find(),"Creation form must carry CSRF");
-        Cookie csrfCookie=page.getResponse().getCookie("XSRF-TOKEN");assertNotNull(csrfCookie);
+        Cookie csrfCookie=page.getResponse().getCookie("LF_CSRF");assertNotNull(csrfCookie);
         var submitted=mvc.perform(post("/listings").cookie(access,csrfCookie).param("_csrf",matcher.group(1)).param("kind","found").param("category","1").param("location","1").param("title","Новая находка").param("description","Учебное описание").param("eventAt",java.time.LocalDateTime.now(java.time.ZoneId.of("Europe/Moscow")).minusHours(1).toString()).param("eventUntil","").param("custodian","").param("officialAt","")).andReturn();
         assertEquals(302,submitted.getResponse().getStatus(),String.valueOf(submitted.getResolvedException()));
     }

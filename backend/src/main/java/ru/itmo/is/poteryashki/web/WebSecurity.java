@@ -13,6 +13,7 @@ public class WebSecurity {
     @Bean SecurityFilterChain applicationFilterChain(HttpSecurity http, WebTokens tokens, WebSessions sessions,
             @org.springframework.beans.factory.annotation.Value("${app.cookie-secure}") boolean secure) throws Exception {
         var csrf = new CookieCsrfTokenRepository();
+        csrf.setCookieName("LF_CSRF");
         csrf.setCookieCustomizer(c -> c.httpOnly(true).secure(secure).sameSite("Lax"));
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Cookie authentication runs on every request. Rotate CSRF only when a session is issued or cleared.
