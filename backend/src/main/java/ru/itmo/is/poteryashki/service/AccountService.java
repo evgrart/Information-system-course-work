@@ -39,7 +39,13 @@ public class AccountService {
         var user=users.findById(identity.userId()).orElseThrow();
         require(!user.getState().equals("blocked") && user.getTokenVersion()==identity.tokenVersion(),"Identity revoked");
     }
-    /** Raw token is delivered only by the future mail adapter, never by a public endpoint. */
+    public String resendConfirmation(long user) {
+        access.audit(user);var row=store.one("select email_confirmed_at,state from lf_users where id=? for update",user);
+        require(row.get("email_confirmed_at")==null&&!row.get("state").equals("blocked"),"Email already confirmed");
+        require(!store.exists("select exists(select 1 from lf_verification_tokens where user_id=? and purpose='email_confirm' and created_at>clock_timestamp()-interval '1 minute')",user),"Wait before requesting another letter");
+        return issueToken(user,"email_confirm");
+    }
+    /** Raw token is delivered only by the mail adapter, never by a public endpoint. */
     public Optional<String> requestPasswordReset(String email) {
         access.audit(null);
         var user=users.findByEmail(email.trim().toLowerCase(Locale.ROOT));

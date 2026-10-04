@@ -36,7 +36,9 @@ public class PrivateMailbox {
             inbox.compute(user,(id,old)->{var list=new ArrayList<Letter>();list.add(new Letter(subject,text,path,Instant.now()));if(old!=null)list.addAll(old);return List.copyOf(list.subList(0,Math.min(20,list.size())));});
         } else {
             var message=new SimpleMailMessage();message.setFrom(from);message.setTo(email);message.setSubject(subject);message.setText(text+"\n"+publicUrl+path);
-            sender.send(message);
+            try{sender.send(message);}catch(org.springframework.mail.MailException e){
+                org.slf4j.LoggerFactory.getLogger(PrivateMailbox.class).warn("Mail delivery failed; recipient may request another letter");
+            }
         }
     }
 }

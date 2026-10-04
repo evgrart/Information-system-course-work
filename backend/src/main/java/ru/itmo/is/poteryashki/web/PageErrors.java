@@ -12,7 +12,11 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class PageErrors {
     @ExceptionHandler(SecurityException.class) @ResponseStatus(HttpStatus.FORBIDDEN)
-    String denied(SecurityException e,Model m){m.addAttribute("message","Действие недоступно. Проверьте вход, статус профиля и подписку. Для изменения записи нужны права её участника.");return "failure";}
+    String denied(SecurityException e,Model m){m.addAttribute("message",switch(e.getMessage()==null?"":e.getMessage()){
+        case "Invalid credentials"->"Неверная почта или пароль, либо аккаунт заблокирован. Вернитесь на страницу входа.";
+        case "Too many login attempts"->"Слишком много неудачных попыток входа. Повторите через 15 минут.";
+        case "Wait before requesting another letter"->"Письмо уже запрошено. Подождите одну минуту перед повторной отправкой.";
+        default->"Действие недоступно. Проверьте вход, статус профиля и подписку. Для изменения записи нужны права её участника.";});return "failure";}
     @ExceptionHandler(NoSuchElementException.class) @ResponseStatus(HttpStatus.NOT_FOUND)
     String missing(Model m){m.addAttribute("message","Запись не найдена или недоступна этому пользователю.");return "failure";}
     @ExceptionHandler({IllegalArgumentException.class,DataAccessException.class,org.springframework.web.bind.MissingServletRequestParameterException.class,org.springframework.web.multipart.MaxUploadSizeExceededException.class,org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})

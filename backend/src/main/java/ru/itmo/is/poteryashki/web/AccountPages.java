@@ -43,5 +43,6 @@ public class AccountPages {
         var raw=CookieAuthentication.cookie(request,"LF_REFRESH");if(raw!=null)sessions.logoutToken(raw);tokens.clear(response);return "redirect:/";
     }
     @PostMapping("/account/resubmit") String resubmit(@AuthenticationPrincipal WebIdentity me){accounts.submitProfile(me.userId());return "redirect:/account";}
+    @PostMapping("/account/confirmation") String confirmation(@AuthenticationPrincipal WebIdentity me){String raw=accounts.resendConfirmation(me.userId());String email=queries.profile(me.userId()).get("email").toString();mail.send(me.userId(),email,"Подтверждение почты","Подтвердите адрес. Ссылка действует один час.","/auth/confirm?token="+raw);return "redirect:/account/mail";}
     @GetMapping("/account/mail") String inbox(@AuthenticationPrincipal WebIdentity me,Model model){model.addAttribute("letters",mail.letters(me.userId()));model.addAttribute("demoMail",mail.demo());return "mail";}
 }
