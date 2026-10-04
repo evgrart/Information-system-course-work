@@ -10,10 +10,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 final class Remote implements AutoCloseable {
+    static { System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "warn"); }
     final SSHClient ssh = new SSHClient();
     final String user;
     Remote() throws Exception {
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "warn");
         user = System.getenv().getOrDefault("COURSE_SSH_USER", "s465826");
         if (!user.matches("[A-Za-z_][A-Za-z0-9_]*")) throw new IllegalArgumentException("Invalid SSH user");
         ssh.loadKnownHosts();
