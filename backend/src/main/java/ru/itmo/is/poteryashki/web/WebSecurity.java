@@ -10,8 +10,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration @ConditionalOnWebApplication
 public class WebSecurity {
-    @Bean SecurityFilterChain webSecurity(HttpSecurity http, WebTokens tokens, WebSessions sessions) throws Exception {
+    @Bean SecurityFilterChain applicationFilterChain(HttpSecurity http, WebTokens tokens, WebSessions sessions,
+            @org.springframework.beans.factory.annotation.Value("${app.cookie-secure}") boolean secure) throws Exception {
         var csrf = new CookieCsrfTokenRepository();
+        csrf.setCookieCustomizer(c -> c.httpOnly(true).secure(secure).sameSite("Lax"));
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(c -> c.csrfTokenRepository(csrf))
                 .authorizeHttpRequests(a -> a

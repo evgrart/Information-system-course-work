@@ -26,7 +26,7 @@ public class ListingPages {
         choices(m);var rows=queries.catalog(me.userId(),text,kind==null||kind.isBlank()?null:kind,category,location,from==null||from.isBlank()?null:UiText.time(from),to==null||to.isBlank()?null:UiText.time(to),cursor);
         m.addAttribute("listings",rows);m.addAttribute("next",rows.size()==24?rows.get(rows.size()-1).get("id"):null);return "catalog";
     }
-    @GetMapping("/listings/new") String create(Model m){choices(m);m.addAttribute("item",Collections.emptyMap());return "listing-form";}
+    @GetMapping("/listings/new") String create(Model m){choices(m);var item=new HashMap<String,Object>();for(String key:List.of("id","kind","state","title","description","category_id","location_id","event_at","event_until","custodian_org_id","official_reported_at"))item.put(key,null);m.addAttribute("item",item);return "listing-form";}
     @PostMapping("/listings") String create(@AuthenticationPrincipal WebIdentity me,@ModelAttribute ListingForm form){long id=listings.create(me.userId(),form.draft());return "redirect:/listings/"+id+"/edit";}
     @GetMapping("/listings/{id}") String detail(@AuthenticationPrincipal WebIdentity me,@PathVariable long id,Model m){m.addAttribute("item",queries.listing(me.userId(),id));m.addAttribute("photos",queries.photos(me.userId(),id));return "listing";}
     @GetMapping("/listings/{id}/edit") String edit(@AuthenticationPrincipal WebIdentity me,@PathVariable long id,Model m){choices(m);m.addAttribute("item",queries.ownedListing(me.userId(),id));m.addAttribute("attributes",listings.privateAttributes(me.userId(),id));m.addAttribute("photos",queries.photos(me.userId(),id));return "listing-form";}
