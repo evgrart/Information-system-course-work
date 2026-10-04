@@ -5,6 +5,8 @@ backend/.gradle/
 backend/build/
 tooling/build/
 .tools/
+backend/data/
+data/
 backend/.idea/
 *.local.properties
 *.local.env
