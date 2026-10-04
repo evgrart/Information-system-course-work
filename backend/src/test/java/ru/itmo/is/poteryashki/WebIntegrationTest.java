@@ -59,10 +59,13 @@ class WebIntegrationTest {
     @Test void malformedJwtCannotAuthenticate()throws Exception{mvc.perform(get("/account").cookie(new Cookie("LF_ACCESS","broken"))).andExpect(redirectedUrl("/auth/login"));}
     @Test void sampleClaimsHaveWorkingConversationLinks(){assertFalse(store.exists("select exists(select 1 from lf_claims c where not exists(select 1 from lf_conversations d where d.claim_id=c.id))"));}
     @Test void pendingOrderOffersDemoPayment()throws Exception{subscriptions.createOrder(3,1,UUID.randomUUID());mvc.perform(get("/subscriptions").cookie(finder())).andExpect(content().string(containsString("Оплатить в учебном режиме")));}
+    // csrf() used by other scenarios substitutes a test repository; this check needs the real cookie repository.
+    @org.springframework.test.annotation.DirtiesContext(methodMode=org.springframework.test.annotation.DirtiesContext.MethodMode.BEFORE_METHOD)
     @Test void createFormContainsCsrfAndSubmitsActualFields()throws Exception{
         Cookie access=finder();var page=mvc.perform(get("/listings/new").cookie(access)).andReturn();
         var matcher=java.util.regex.Pattern.compile("name=\"_csrf\" value=\"([^\"]+)\"").matcher(page.getResponse().getContentAsString().split("<main",2)[1]);assertTrue(matcher.find(),"Creation form must carry CSRF");
-        Cookie csrfCookie=page.getResponse().getCookie("LF_CSRF");assertNotNull(csrfCookie);
+        String cookieHeader=page.getResponse().getHeaders("Set-Cookie").stream().filter(h->h.startsWith("LF_CSRF=")).findFirst().orElseThrow();
+        Cookie csrfCookie=new Cookie("LF_CSRF",cookieHeader.substring("LF_CSRF=".length()).split(";",2)[0]);
         var submitted=mvc.perform(post("/listings").cookie(access,csrfCookie).param("_csrf",matcher.group(1)).param("kind","found").param("category","1").param("location","1").param("title","Новая находка").param("description","Учебное описание").param("eventAt",java.time.LocalDateTime.now(java.time.ZoneId.of("Europe/Moscow")).minusHours(1).toString()).param("eventUntil","").param("custodian","").param("officialAt","")).andReturn();
         assertEquals(302,submitted.getResponse().getStatus(),String.valueOf(submitted.getResolvedException()));
     }
