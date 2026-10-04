@@ -6,10 +6,16 @@
 | --- | --- | --- | --- |
 | Этап 1 | [Отчёт](docs/part1/report.pdf) | [Отчёт](docs/part1/report.docx) | [Markdown](docs/part1/report.md) |
 | Этапы 1–2 | [Общий отчёт](docs/part1-2/report.pdf) | [Общий отчёт](docs/part1-2/report.docx) | [Markdown](docs/part1-2/report.md) |
+| Этап 3 | [Отчёт](docs/part3/report.pdf) | — | [Markdown](docs/part3/report.md) |
+| Этапы 1–3 | [Общий отчёт](docs/part1-3/report.pdf) | — | [Markdown](docs/part1-3/report.md) |
 
 Первый этап: предметная область, требования, 16 прецедентов и архитектура. Стек последующей реализации: Java 17, Spring Boot, Spring Security/JWT, Hibernate/JPA, PostgreSQL, MinIO; frontend — Next.js, TypeScript, Redux Toolkit, Tailwind CSS, Radix UI/shadcn. Сборка — Gradle Wrapper и pnpm. На helios планируется запуск JAR со статическим frontend; файловый сервис размещается отдельно.
 
 Второй этап: 27 таблиц, 41 внешний ключ, связь пользователей и ролей M:N, ограничения, триггеры, индексы и функции PL/pgSQL. [Модели](docs/part2/model), [SQL](database), [текст этапа 2](docs/part2/report.md), [протоколы](docs/part2/validation).
+
+Третий этап: [Java-приложение](backend), 27 JPA-сущностей, слой хранения с вызовами 11 функций и процедур PL/pgSQL, семь предметных сервисов, транзакции и внутренние уведомления. [Диаграммы классов](docs/part3/uml), [45 проверок Java-кода](docs/part3/validation). JAR проверен на helios 04.10.2026; запуск: `python3.11 scripts/run_backend.py --demo` из каталога курсовой. HTTP-порт не открывается.
+
+Новые отчёты третьего этапа и этапов 1–3 представлены в PDF и Markdown. Word-документы первых двух этапов сохранены. Сборка нового отчёта: `.venv\Scripts\python.exe scripts\build_stage3_report.py`; нужен JDK 17 через JAVA_HOME, PlantUML скачивается с проверкой SHA-256. Полная проверка: `.venv\Scripts\python.exe scripts\verify_stage3.py --java-home <путь-к-JDK17>`; зависимости SSH-скрипта находятся в requirements-remote.txt. Данные титульного листа задаются в docs/report_data.json.
 
 Установка на helios выполнена 03.10.2026: PostgreSQL 18.3, база studs, схема s465826, объекты с префиксом lf_. Каталог /home/studs/s465826/poteryashki-course. У аккаунта нет права создавать отдельную базу или схему. Объекты лабораторной не изменяются.
 

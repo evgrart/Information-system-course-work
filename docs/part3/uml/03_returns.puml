@@ -1,0 +1,30 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 130
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+class ReturnService <<service>> {
++ claim(actor, listing, evidence): long
++ reserve(finder, claim): long
++ confirm(actor, transfer): boolean
+}
+class AccessPolicy
+class DatabaseFunctions
+class SqlStore
+ReturnService ..> AccessPolicy
+ReturnService ..> DatabaseFunctions
+ReturnService ..> SqlStore
+class Claim <<immutable entity>> {
+- listingId: Long
+- claimantId: Long
+- state: String
+}
+class Transfer <<immutable entity>> {
+- claimId: Long
+- finderConfirmedAt: OffsetDateTime
+- ownerConfirmedAt: OffsetDateTime
+}
+Claim "1" -- "0..1" Transfer : claimId
+
+@enduml

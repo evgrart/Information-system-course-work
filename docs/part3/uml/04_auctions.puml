@@ -1,0 +1,30 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 130
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+class AuctionService <<service>> {
++ requestPermission(): long
++ bid(actor, lot, amount, key): long
++ closeDue(limit): void
+}
+class AccessPolicy
+class DatabaseFunctions
+class SqlStore
+AuctionService ..> AccessPolicy
+AuctionService ..> DatabaseFunctions
+AuctionService ..> SqlStore
+class Auction <<immutable entity>> {
+- permissionId: Long
+- state: String
+- winnerBidId: Long
+}
+class Bid <<immutable entity>> {
+- auctionId: Long
+- amount: BigDecimal
+- requestKey: UUID
+}
+Auction "1" -- "0..*" Bid : auctionId
+
+@enduml

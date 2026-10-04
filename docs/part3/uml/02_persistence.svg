@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1100" viewBox="0 0 1500 1100">
+<rect width="100%" height="100%" fill="white"/>
+<text x="750.0" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Уровень хранения: JPA и функции PostgreSQL</text>
+<rect x="40" y="110" width="620" height="215" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="350.0" y="135.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«repository»</text>
+<text x="350.0" y="167.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">DatabaseFunctions</text>
+<polyline points="40,192 660,192" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="350.0" y="220.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- jdbc: JdbcTemplate</text>
+<text x="350.0" y="252.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- entities: EntityManager</text>
+<text x="350.0" y="284.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ reserve(claim, finder): long</text>
+<rect x="840" y="110" width="620" height="215" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="1150.0" y="135.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«repository»</text>
+<text x="1150.0" y="167.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">SqlStore</text>
+<polyline points="840,192 1460,192" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1150.0" y="220.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- jdbc: JdbcTemplate</text>
+<text x="1150.0" y="252.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- names: SqlNames</text>
+<text x="1150.0" y="284.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ one(sql, args): Map</text>
+<rect x="70" y="500" width="540" height="155" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="340.0" y="525.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«interface»</text>
+<text x="340.0" y="557.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">UserRepository</text>
+<polyline points="70,582 610,582" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="340.0" y="610.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ findByEmail(): Optional&lt;User&gt;</text>
+<rect x="880" y="500" width="540" height="155" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="1150.0" y="525.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«interface»</text>
+<text x="1150.0" y="557.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">ListingRepository</text>
+<polyline points="880,582 1420,582" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1150.0" y="610.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ findById(): Optional&lt;Listing&gt;</text>
+<rect x="70" y="800" width="540" height="210" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="340.0" y="825.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«immutable entity»</text>
+<text x="340.0" y="857.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">User</text>
+<polyline points="70,882 610,882" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="340.0" y="910.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- id: Long</text>
+<text x="340.0" y="942.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- passwordHash: String</text>
+<text x="340.0" y="974.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- tokenVersion: Integer</text>
+<rect x="880" y="800" width="540" height="210" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="1150.0" y="825.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«immutable entity»</text>
+<text x="1150.0" y="857.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Listing</text>
+<polyline points="880,882 1420,882" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1150.0" y="910.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- id: Long</text>
+<text x="1150.0" y="942.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- authorId: Long</text>
+<text x="1150.0" y="974.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- state: String</text>
+<polyline points="610,900 880,900" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="750" y="872.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1 — 0..*</text>
+<rect x="600" y="385" width="300" height="65" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="750.0" y="417.5" font-family="Arial, sans-serif" font-size="26" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">DataSource</text>
+<polyline points="350,325 350,418 600,418" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="581.0906108505937,408.8657237836642 600,418 581.0906108505937,427.1342762163358" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1150,325 1150,418 900,418" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="918.9093891494063,427.1342762163358 900,418 918.9093891494063,408.8657237836642" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="340,655 340,800" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="349.1342762163358,781.0906108505937 340,800 330.8657237836642,781.0906108505937" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="1150,655 1150,800" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="1159.1342762163358,781.0906108505937 1150,800 1140.8657237836642,781.0906108505937" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="750" y="720.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">JPA: чтение; JDBC: CRUD и вызов PL/pgSQL; DDL: validate.</text>
+</svg>

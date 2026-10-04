@@ -1,0 +1,39 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 130
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+
+class DatabaseFunctions <<repository>> {
+ - jdbc : JdbcTemplate
+ - entities : EntityManager
+ + reserve(claim, finder) : long
+ + bid(auction, bidder, amount, key) : long
+ + closeDue(limit) : void
+}
+class SqlStore <<repository>> {
+ + update(sql, args) : int
+ + one(sql, args) : Map
+}
+interface UserRepository
+interface ListingRepository
+interface Repository
+class User <<immutable entity>>
+class Listing <<immutable entity>>
+class JdbcTemplate
+class EntityManager
+interface DataSource
+UserRepository --|> Repository
+ListingRepository --|> Repository
+UserRepository ..> User
+ListingRepository ..> Listing
+DatabaseFunctions ..> JdbcTemplate
+DatabaseFunctions ..> EntityManager
+SqlStore ..> JdbcTemplate
+SqlStore ..> EntityManager
+JdbcTemplate ..> DataSource
+EntityManager ..> DataSource
+User "1" -- "0..*" Listing : authorId
+
+@enduml

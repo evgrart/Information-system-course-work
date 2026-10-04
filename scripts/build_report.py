@@ -499,10 +499,17 @@ def table_widths(rows,total):
 
 
 def pdf_inline(s):
+    links=[]
+    def named_link(match):
+        marker=f'__REPORT_LINK_{len(links)}__'
+        links.append(f'<link href="{html.escape(match.group(2),quote=True)}" color="#234e76">{html.escape(match.group(1))}</link>')
+        return marker
+    s=re.sub(r'\[([^\]]+)\]\((https?://[^\s)]+)\)',named_link,s)
     s=html.escape(s)
     s=s.replace('&lt;br&gt;','<br/>')
     s=re.sub(r'\*\*(.*?)\*\*',r'<b>\1</b>',s)
     s=re.sub(r'https://[^\s<]+',lambda m:f'<link href="{m.group(0)}" color="#234e76">{m.group(0)}</link>',s)
+    for i,link in enumerate(links):s=s.replace(f'__REPORT_LINK_{i}__',link)
     return s
 
 
@@ -537,7 +544,7 @@ def build_pdf(items, toc_pages=None):
         if kind=='heading':
             level,text=val
             if level==1:continue
-            if level==2 and text=='Задание':story.append(PageBreak())
+            if level==2 and text.startswith('Задание'):story.append(PageBreak())
             p=Paragraph(pdf_inline(text),h1 if level==2 else h2)
             if level==2:p.section_title=text
             story.append(p)

@@ -1,0 +1,65 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 130
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+class AccountService <<service>> {
++ register() : Registration
++ authenticate() : Identity
+}
+class SubscriptionService <<service>> {
++ createOrder() : long
++ payDemo() : long
+}
+class ListingService <<service>> {
++ create() : long
++ search() : List
+}
+class ReturnService <<service>> {
++ reserve() : long
++ confirm() : boolean
+}
+class AuctionService <<service>> {
++ bid() : long
++ closeDue() : void
+}
+class AdministrationService <<service>> {
++ block() : void
++ audit() : List
+}
+class AccessPolicy <<service>>
+class SqlStore <<repository>>
+class DatabaseFunctions <<repository>>
+interface UserRepository
+interface ListingRepository
+class OutboxService <<service>>
+
+AccountService ..> AccessPolicy
+AccountService ..> SqlStore
+SubscriptionService ..> AccessPolicy
+SubscriptionService ..> SqlStore
+ListingService ..> AccessPolicy
+ListingService ..> SqlStore
+ReturnService ..> AccessPolicy
+ReturnService ..> SqlStore
+AuctionService ..> AccessPolicy
+AuctionService ..> SqlStore
+AdministrationService ..> AccessPolicy
+AdministrationService ..> SqlStore
+AccountService ..> DatabaseFunctions
+SubscriptionService ..> DatabaseFunctions
+ListingService ..> DatabaseFunctions
+ReturnService ..> DatabaseFunctions
+AuctionService ..> DatabaseFunctions
+AccountService ..> UserRepository
+ListingService ..> ListingRepository
+OutboxService ..> SqlStore
+OutboxService ..> AccessPolicy
+AccessPolicy ..> DatabaseFunctions
+AccessPolicy ..> SqlStore
+AccountService -[hidden]down-> SubscriptionService
+SubscriptionService -[hidden]down-> ListingService
+ReturnService -[hidden]down-> AuctionService
+AuctionService -[hidden]down-> AdministrationService
+@enduml

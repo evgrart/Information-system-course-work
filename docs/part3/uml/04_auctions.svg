@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1100" viewBox="0 0 1500 1100">
+<rect width="100%" height="100%" fill="white"/>
+<text x="750.0" y="35.0" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Бизнес-логика аукциона и подписки</text>
+<rect x="450" y="110" width="600" height="220" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="750.0" y="135.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«service»</text>
+<text x="750.0" y="167.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">AuctionService</text>
+<polyline points="450,192 1050,192" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="750.0" y="220.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ requestPermission(): long</text>
+<text x="750.0" y="252.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ bid(actor, lot, amount, key): long</text>
+<text x="750.0" y="284.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ closeDue(limit): void</text>
+<rect x="40" y="475" width="440" height="190" fill="#edf3f8" stroke="#263746" stroke-width="3"/>
+<text x="260.0" y="500.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«service»</text>
+<text x="260.0" y="532.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">AccessPolicy</text>
+<polyline points="40,557 480,557" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="260.0" y="585.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ audit(user): void</text>
+<text x="260.0" y="617.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ actor(user, paid): void</text>
+<rect x="530" y="475" width="440" height="190" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="750.0" y="500.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«repository»</text>
+<text x="750.0" y="532.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">DatabaseFunctions</text>
+<polyline points="530,557 970,557" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="750.0" y="585.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ bid(), closeDue()</text>
+<text x="750.0" y="617.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">PL/pgSQL этапа 2</text>
+<rect x="1020" y="475" width="440" height="190" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="1240.0" y="500.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«repository»</text>
+<text x="1240.0" y="532.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">SqlStore</text>
+<polyline points="1020,557 1460,557" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1240.0" y="585.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ id(sql, args): Long</text>
+<text x="1240.0" y="617.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">+ update(sql, args): int</text>
+<polyline points="750,330 750,400 260,400 260,475" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="269.1342762163358,456.0906108505938 260,475 250.86572378366418,456.0906108505938" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="750,330 750,400 750,400 750,475" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="759.1342762163358,456.0906108505938 750,475 740.8657237836642,456.0906108505938" fill="none" stroke="#263746" stroke-width="3"/>
+<polyline points="750,330 750,400 1240,400 1240,475" fill="none" stroke="#263746" stroke-width="3" stroke-dasharray="9 7"/>
+<polyline points="1249.1342762163358,456.0906108505938 1240,475 1230.8657237836642,456.0906108505938" fill="none" stroke="#263746" stroke-width="3"/>
+<rect x="120" y="800" width="500" height="215" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="370.0" y="825.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«immutable entity»</text>
+<text x="370.0" y="857.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Auction</text>
+<polyline points="120,882 620,882" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="370.0" y="910.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- permissionId: Long</text>
+<text x="370.0" y="942.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- state: String</text>
+<text x="370.0" y="974.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- winnerBidId: Long</text>
+<rect x="880" y="800" width="500" height="215" fill="white" stroke="#263746" stroke-width="3"/>
+<text x="1130.0" y="825.0" font-family="Arial, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">«immutable entity»</text>
+<text x="1130.0" y="857.0" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#263746">Bid</text>
+<polyline points="880,882 1380,882" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="1130.0" y="910.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- auctionId: Long</text>
+<text x="1130.0" y="942.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- amount: BigDecimal</text>
+<text x="1130.0" y="974.0" font-family="Arial, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">- requestKey: UUID</text>
+<polyline points="620,900 880,900" fill="none" stroke="#263746" stroke-width="3"/>
+<text x="750" y="872.0" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">1 — 0..*</text>
+<text x="750" y="735.0" font-family="Arial, sans-serif" font-size="25" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#263746">Записи связаны идентификаторами; связанные объекты загружаются явно.</text>
+</svg>
