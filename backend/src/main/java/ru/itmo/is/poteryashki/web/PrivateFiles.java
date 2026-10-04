@@ -27,7 +27,7 @@ public class PrivateFiles {
                 if(w<=0||h<=0||(long)w*h>16_000_000)throw new IllegalArgumentException("Image too large");
                 var output=new ByteArrayOutputStream();if(!ImageIO.write(reader.read(0),format,output))throw new IllegalArgumentException("Invalid image");clean=output.toByteArray();
             }finally{reader.dispose();}
-        }
+        }catch(javax.imageio.IIOException e){throw new IllegalArgumentException("Invalid image data",e);}
         if(clean.length>5*1024*1024)throw new IllegalArgumentException("Image too large");
         return save(namespace,format.equals("jpeg")?"jpg":"png","image/"+format,clean);
     }

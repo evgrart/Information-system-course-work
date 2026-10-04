@@ -21,10 +21,10 @@ public class ListingPages {
         private java.time.OffsetDateTime time(String value){return value==null||value.isBlank()?null:UiText.time(value);}
     }
     private void choices(Model m){m.addAttribute("categories",queries.categories());m.addAttribute("locations",queries.locations());m.addAttribute("organizations",queries.metro());}
-    @GetMapping("/catalog") String catalog(@AuthenticationPrincipal WebIdentity me,@RequestParam(required=false) String text,@RequestParam(required=false) String kind,@RequestParam(required=false) Long category,@RequestParam(required=false) Long location,@RequestParam(required=false) String from,@RequestParam(required=false) String to,@RequestParam(required=false) Long cursor,Model m){
+    @GetMapping("/catalog") String catalog(@AuthenticationPrincipal WebIdentity me,@RequestParam(required=false) String text,@RequestParam(required=false) String kind,@RequestParam(required=false) Long category,@RequestParam(required=false) Long location,@RequestParam(required=false) String from,@RequestParam(required=false) String to,@RequestParam(required=false) Long cursor,@RequestParam(defaultValue="published") String state,Model m){
         var p=queries.profile(me.userId());if(p.get("paid_until")==null||!p.get("state").equals("verified")||p.get("email_confirmed_at")==null)return "redirect:/subscriptions";
-        choices(m);var rows=queries.catalog(me.userId(),text,kind==null||kind.isBlank()?null:kind,category,location,from==null||from.isBlank()?null:UiText.time(from),to==null||to.isBlank()?null:UiText.time(to),cursor);
-        m.addAttribute("listings",rows);m.addAttribute("next",rows.size()==24?rows.get(rows.size()-1).get("id"):null);return "catalog";
+        choices(m);var rows=queries.catalog(me.userId(),text,kind==null||kind.isBlank()?null:kind,category,location,from==null||from.isBlank()?null:UiText.time(from),to==null||to.isBlank()?null:UiText.time(to),cursor,state.equals("all")?null:state);
+        m.addAttribute("listings",rows);m.addAttribute("next",rows.size()==20?rows.get(rows.size()-1).get("id"):null);return "catalog";
     }
     @GetMapping("/listings/new") String create(Model m){choices(m);var item=new HashMap<String,Object>();for(String key:List.of("id","kind","state","title","description","category_id","location_id","event_at","event_until","custodian_org_id","official_reported_at"))item.put(key,null);m.addAttribute("item",item);return "listing-form";}
     @PostMapping("/listings") String create(@AuthenticationPrincipal WebIdentity me,@ModelAttribute ListingForm form){long id=listings.create(me.userId(),form.draft());return "redirect:/listings/"+id+"/edit";}

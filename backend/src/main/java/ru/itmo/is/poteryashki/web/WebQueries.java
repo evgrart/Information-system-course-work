@@ -25,8 +25,8 @@ public class WebQueries {
     public long accountForMail(String email) { return store.id("select id from lf_users where email=?",email.strip().toLowerCase(Locale.ROOT)); }
     public List<Map<String,Object>> metro() { return store.rows("select id,name,phone,address,instructions,source_url,verified_on,verified_on<current_date-30 as needs_review from lf_organizations order by id"); }
     public Map<String,Object> counts() { return store.one("select (select count(*) from lf_listings where state='published') as listings,(select count(*) from lf_transfers where completed_at is not null) as returned"); }
-    public List<Map<String,Object>> catalog(long user, String text, String kind, Long category, Long location, OffsetDateTime from, OffsetDateTime to, Long cursor) {
-        var matches = listings.search(user, text, kind, category, location, from, to, cursor, 24);
+    public List<Map<String,Object>> catalog(long user, String text, String kind, Long category, Long location, OffsetDateTime from, OffsetDateTime to, Long cursor,String state) {
+        var matches = listings.searchByState(user, text, kind, category, location, from, to, cursor, 20,state);
         var result = new ArrayList<Map<String,Object>>();
         for (var match : matches) result.add(store.one("select p.*,(select id from lf_listing_images i where i.listing_id=p.id order by position limit 1) as photo_id from lf_public_listings p where p.id=?", match.get("id")));
         return result;
@@ -46,19 +46,19 @@ public class WebQueries {
     public List<Map<String,Object>> orders(long user) { return store.rows("select o.id,o.state,o.amount,o.created_at,t.title from lf_payment_orders o join lf_tariffs t on t.id=o.tariff_id where o.user_id=? order by o.id desc",user); }
     public List<Map<String,Object>> claims(long user) {
         access.actor(user,false);
-        return store.rows("select c.id,c.listing_id,c.state,c.evidence,c.claimant_id,l.author_id,l.title,d.id as conversation_id,t.id as transfer_id,t.finder_confirmed_at,t.owner_confirmed_at,t.completed_at from lf_claims c join lf_listings l on l.id=c.listing_id left join lf_conversations d on d.claim_id=c.id left join lf_transfers t on t.claim_id=c.id where ? in(c.claimant_id,l.author_id) order by c.id desc",user);
+        return store.rows("select c.id,c.listing_id,c.state,c.evidence,c.claimant_id,c.auction_id,l.author_id,l.title,d.id as conversation_id,t.id as transfer_id,t.finder_confirmed_at,t.owner_confirmed_at,t.completed_at from lf_claims c join lf_listings l on l.id=c.listing_id left join lf_conversations d on d.claim_id=c.id left join lf_transfers t on t.claim_id=c.id where ? in(c.claimant_id,l.author_id) order by c.id desc",user);
     }
     public Map<String,Object> conversation(long user, long conversation) {
         returns.messages(user,conversation);
-        return store.one("select d.id,c.id as claim_id,c.state,c.evidence,c.claimant_id,l.author_id,l.title,t.id as transfer_id,t.finder_confirmed_at,t.owner_confirmed_at,t.completed_at from lf_conversations d join lf_claims c on c.id=d.claim_id join lf_listings l on l.id=c.listing_id left join lf_transfers t on t.claim_id=c.id where d.id=?",conversation);
+        return store.one("select d.id,c.id as claim_id,c.listing_id,c.state,c.evidence,c.claimant_id,l.author_id,l.title,t.id as transfer_id,t.finder_confirmed_at,t.owner_confirmed_at,t.completed_at from lf_conversations d join lf_claims c on c.id=d.claim_id join lf_listings l on l.id=c.listing_id left join lf_transfers t on t.claim_id=c.id where d.id=?",conversation);
     }
     public List<Map<String,Object>> auctions(long user) {
         access.actor(user,true);
-        return store.rows("select a.id,a.listing_id,a.seller_id,a.state,a.starts_at,a.ends_at,a.start_price,a.bid_step,l.title,l.description,(select max(amount) from lf_bids b where b.auction_id=a.id) as highest_bid,(select count(*) from lf_bids b where b.auction_id=a.id) as bid_count,(select bidder_id from lf_bids b where b.id=a.winner_bid_id) as winner_id from lf_auctions a join lf_listings l on l.id=a.listing_id where l.state in('published','auctioned') order by a.id desc");
+        return store.rows("select a.id,a.listing_id,a.seller_id,a.state,a.starts_at,a.ends_at,a.start_price,a.bid_step,l.title,l.description,(select max(amount) from lf_bids b where b.auction_id=a.id) as highest_bid,(select count(*) from lf_bids b where b.auction_id=a.id) as bid_count,(select bidder_id from lf_bids b where b.id=a.winner_bid_id) as winner_id from lf_auctions a join lf_listings l on l.id=a.listing_id where l.state in('published','auctioned','reserved','returned') order by a.id desc");
     }
     public Map<String,Object> auction(long user,long id) {
         access.actor(user,true);
-        return store.one("select a.id,a.listing_id,a.seller_id,a.state,a.starts_at,a.ends_at,a.start_price,a.bid_step,l.title,l.description,(select max(amount) from lf_bids b where b.auction_id=a.id) as highest_bid,(select bidder_id from lf_bids b where b.id=a.winner_bid_id) as winner_id from lf_auctions a join lf_listings l on l.id=a.listing_id where a.id=? and (l.state in('published','auctioned') or a.seller_id=?)",id,user);
+        return store.one("select a.id,a.listing_id,a.seller_id,a.state,a.starts_at,a.ends_at,a.start_price,a.bid_step,l.title,l.description,(select max(amount) from lf_bids b where b.auction_id=a.id) as highest_bid,(select bidder_id from lf_bids b where b.id=a.winner_bid_id) as winner_id from lf_auctions a join lf_listings l on l.id=a.listing_id where a.id=? and (l.state in('published','auctioned','reserved','returned') or a.seller_id=?)",id,user);
     }
     public List<Map<String,Object>> permissions(long user) { return store.rows("select p.id,p.listing_id,p.basis,p.state,p.reason,l.title from lf_auction_permissions p join lf_listings l on l.id=p.listing_id where p.applicant_id=? order by p.id desc",user); }
     public List<Map<String,Object>> verifications(long staff) {
@@ -76,6 +76,11 @@ public class WebQueries {
     public List<Map<String,Object>> complaints(long staff) {
         access.moderator(staff);
         return store.rows("select id,listing_id,reported_user_id,reason,state from lf_complaints where state='pending' order by id");
+    }
+    public List<Map<String,Object>> ownComplaints(long user) { return store.rows("select id,listing_id,reported_user_id,reason,state,resolution,created_at from lf_complaints where reporter_id=? order by id desc",user); }
+    public List<Map<String,Object>> caseConversations(long staff,long complaint) {
+        access.moderator(staff);
+        return store.rows("select d.id,c.evidence from lf_complaints p join lf_claims c on c.listing_id=p.listing_id join lf_conversations d on d.claim_id=c.id where p.id=? and p.state='pending' order by d.id",complaint);
     }
     public List<Map<String,Object>> pendingTransfers(long staff) {
         access.moderator(staff);

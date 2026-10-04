@@ -20,7 +20,7 @@ public class MainPages {
     @GetMapping("/metro") String metro(Model m){m.addAttribute("organizations",queries.metro());return "metro";}
     @GetMapping("/account") String account(@AuthenticationPrincipal WebIdentity me,Model m){
         m.addAttribute("listings",queries.ownListings(me.userId()));m.addAttribute("demoMail",mail.demo());
-        var p=queries.profile(me.userId());m.addAttribute("notifications",p.get("state").equals("verified")&&p.get("email_confirmed_at")!=null?admin.notifications(me.userId()):java.util.List.of());return "account";
+        m.addAttribute("notifications",admin.notifications(me.userId()));m.addAttribute("complaints",queries.ownComplaints(me.userId()));return "account";
     }
     @GetMapping("/subscriptions") String subscription(@AuthenticationPrincipal WebIdentity me,Model m){
         m.addAttribute("tariffs",queries.tariffs());m.addAttribute("orders",queries.orders(me.userId()));m.addAttribute("key",UUID.randomUUID());m.addAttribute("event",UUID.randomUUID());m.addAttribute("demoPayments",demoPayments);return "subscriptions";
