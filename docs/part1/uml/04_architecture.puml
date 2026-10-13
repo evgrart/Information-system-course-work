@@ -1,34 +1,34 @@
 @startuml
+!pragma layout smetana
 top to bottom direction
 skinparam dpi 130
-skinparam defaultFontSize 18
-skinparam shadowing false
 skinparam defaultFontName Arial
-node "Рабочее место" {
-component "Браузер\nHTML-страницы / формы" as Browser
+skinparam defaultFontSize 16
+skinparam shadowing false
+component "Браузер\nHTML и формы" as Browser
+node "Spring Boot · одна JVM · Java 17" {
+  component "Spring Security / WebSessions\nJWT, CSRF, проверенный сеанс" as Security
+  component "Spring MVC / Thymeleaf\nконтроллеры, формы, модели страниц" as MVC
+  component "Предметные сервисы / AccessPolicy\nаккаунты, объявления, возврат, торги,\nмодерация, подписки, события" as Services
+  component "WebJobs\nзакрытие торгов, Outbox" as Jobs
+  component "Уровень хранения\nJPA / SqlStore / DatabaseFunctions\nпараметризованные запросы" as Storage
+  component "Адаптеры\nPrivateFiles / почта / учебная оплата" as Adapters
 }
-node "helios: учётная запись студента" {
-node "Одна JVM Spring Boot" {
-component "Spring MVC / Thymeleaf\nSpring Security / JWT" as Web
-component "Прикладные сервисы\nРежим demo: тестовые адаптеры" as Services
-component "Hibernate / JPA / JDBC / функции PL/pgSQL" as Repo
-}
-artifact "Шаблоны Thymeleaf\nHTML / CSS в JAR" as Frontend
-}
-database "PostgreSQL\npg / studs / s465826\nтаблицы lf_*" as DB
-node "Отдельный сервис" {
-database "MinIO\nзакрытый бакет" as Files
-}
-component "Платёжный сервис\nрабочий режим" as Pay
-component "SMTP-сервис\nрабочий режим" as Mail
-component "Официальный сайт метро\nисточник справочника" as Metro
-Browser --> Web : HTTP через SSH-туннель
-Web --> Services
-Frontend ..> Web : представления
-Services --> Repo
-Repo --> DB : JDBC
-Services --> Files : S3 API
-Services --> Pay
-Services --> Mail
-Metro ..> Services : ручное обновление администратором
+database "PostgreSQL\nограничения, триггеры, PL/pgSQL" as DB
+folder "Закрытые вложения\nSTORAGE_ROOT" as Files
+cloud "Почтовая служба\nпри настройке SMTP" as Mail
+Browser --> Security : HTTP-запрос
+Security --> MVC : WebIdentity
+MVC --> Services : команда пользователя
+Jobs --> Services : фоновая операция
+Services --> Storage : транзакция
+MVC --> Storage : WebQueries / чтение
+Services --> Adapters : проверка и доставка
+Storage --> DB : JDBC / функции
+Adapters --> Files : запись и разрешённая выдача
+Adapters ..> Mail : SMTP / STARTTLS
+note bottom of DB
+  Критичные переходы выполняются в БД.
+  Java вызывает функции, а не заменяет их.
+end note
 @enduml

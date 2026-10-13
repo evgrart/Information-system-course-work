@@ -1,0 +1,30 @@
+@startuml
+skinparam dpi 130
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+actor "Владелец\nучастник A" as Owner
+participant "ИС «Потеряшки»" as System
+actor "Нашедший\nучастник B" as Finder
+Owner -> System : Найти и открыть находку
+System --> Owner : Публичная карточка
+Owner -> System : Подать заявку с приметами
+System --> Finder : Новая заявка и личный диалог
+Finder -> System : Запросить уточнение
+System --> Owner : Сообщение
+Owner -> System : Ответить
+System --> Finder : Ответ владельца
+Finder -> System : Согласовать возврат
+System -> System : Проверить и создать один резерв
+System --> Owner : Передача согласована
+note over Owner,Finder
+  Стороны договариваются о встрече.
+  Физическая передача происходит вне ИС.
+end note
+Finder -> System : Подтвердить передачу
+System --> Finder : Ожидается подтверждение владельца
+Owner -> System : Подтвердить получение
+System -> System : Завершить заявку и передачу
+System --> Owner : Вещь возвращена
+System --> Finder : Передача завершена
+@enduml

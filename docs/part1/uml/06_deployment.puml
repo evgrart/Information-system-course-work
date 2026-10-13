@@ -1,0 +1,36 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam dpi 130
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+node "Рабочее место студента" {
+  component "Браузер\n127.0.0.1:18081" as Browser
+  component "SSH-клиент\nлокальное перенаправление порта" as Tunnel
+  artifact "Gradle Wrapper\nJAR приложения и tooling" as Build
+}
+node "helios.cs.ifmo.ru · s465826" {
+  component "SSH-сервер\nпорт 2222" as SSH
+  node "/home/studs/s465826/poteryashki-course" {
+    artifact "poteryashki.jar\nSpring Boot JVM, 64–256 МиБ\nHTTP 127.0.0.1:18081" as App
+    artifact "course-tools.jar / database\nустановка, явные SQL-обновления" as Tools
+    folder "Закрытый каталог вложений\nSTORAGE_ROOT" as Files
+  }
+}
+node "Сервер PostgreSQL · pg:5432" {
+  database "studs / s465826\nобъекты курсовой lf_*" as DB
+}
+Browser --> Tunnel : HTTP
+Tunnel --> SSH : защищённый туннель
+SSH --> App : перенаправление на loopback
+Build ..> Tools : SFTP / SHA-256
+Build ..> App : исполняемый JAR
+App --> DB : JDBC
+App --> Files : чтение и запись
+Tools --> DB : psql, только lf_*
+note bottom of DB
+  Общая база; отдельные имена объектов.
+  Таблицы другой лабораторной не входят в установку.
+end note
+@enduml

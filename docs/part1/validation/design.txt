@@ -1,0 +1,7 @@
+Design revision: 2026-10-13
+PASS: three human roles and two external technical actors
+PASS: eight scenarios, each with one goal, participants, preconditions, steps, alternatives and postconditions
+PASS: use-case diagrams contain exactly UC-01 through UC-08
+PASS: 20 functional and 16 nonfunctional requirements
+PASS: six diagrams with editable sources, PNG and SVG
+PASS: references and diagram links agree across all reports
