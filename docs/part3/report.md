@@ -173,22 +173,14 @@ OutboxService выбирает недоставленные события с FO
 
 | Прецедент | Реализованные методы | Граница третьего этапа |
 | --- | --- | --- |
-| UC-01 Регистрация | register, confirmEmail | Доставка письма подключается отдельно |
-| UC-02 Проверка профиля | submitProfile, reviewProfile | Решение сохраняется через триггеры |
-| UC-03 Вход и восстановление | authenticate, checkIdentity, requestPasswordReset, resetPassword | HTTP, JWT и Cookie — следующий этап |
-| UC-04 Подписка | createOrder, payDemo, periods | Учебная оплата без настоящего списания |
-| UC-05 Объявление | create, edit, submit, archive, attachImage, putPrivateAttribute | Двоичное хранилище фотографий подключается отдельно |
-| UC-06 Модерация | moderate | Нет самомодерации |
-| UC-07 Поиск | search, detail | Используется lf_search_listings |
-| UC-08 Метрополитен | organizations, detail | Справочник официальных контактов |
-| UC-09 Заявка и резерв | claim, send, messages, reserve, reject, cancel | Приватность и единственный резерв |
-| UC-10 Передача | confirm, resolve | Два подтверждения или решение модератора |
-| UC-11 Жалобы | complain, reviewComplaint, block | Жалоба на один объект |
-| UC-12 Допуск и лот | requestPermission, reviewPermission, create | Правовое основание проверяет модератор |
-| UC-13 Ставки | bid | PL/pgSQL и ключ повторного запроса |
-| UC-14 Завершение | finalizeAuction, closeDue, cancel | Выбор победителя в PostgreSQL |
-| UC-15 Администрирование | grantRole, revokeRole, tariff, retireTariff, updateOrganization | Только служебные роли, причина и защита последнего администратора |
-| UC-16 Аудит | audit | Неизменяемый журнал второго этапа |
+| UC-01 Получить доступ | register, confirmEmail, submitProfile, reviewProfile, authenticate, createOrder, payDemo, periods; восстановление доступа | Решение профиля и оплата в БД; HTTP и внешняя почта относятся к следующему этапу |
+| UC-02 Опубликовать объявление | create, edit, attachImage, putPrivateAttribute, submit, moderate, archive | Автор готовит материал, независимый модератор публикует; двоичный адаптер — следующий этап |
+| UC-03 Вернуть вещь | search, searchByState, detail, claim, send, messages, reserve, reject, cancel, confirm, organizations | Владелец и нашедший взаимодействуют через одно дело; хранитель-организация показывается как альтернатива |
+| UC-04 Разрешить спор | complain, messages, send, reviewComplaint, resolve, block | Доступ сотрудника к диалогу только при открытой жалобе, независимое решение |
+| UC-05 Продать вещь | requestPermission, reviewPermission, create, bid, finalizeAuction, closeDue, confirm | Допуск, конкурирующие ставки, итог PL/pgSQL и передача победителю |
+| UC-06 Изменить полномочия | grantRole, revokeRole, audit | Актуальные права, обязательная причина и защита последнего администратора |
+| UC-07 Актуализировать инструкцию | updateOrganization, organizations, audit | Администратор обновляет источник, участник получает справочную запись |
+| UC-08 Изменить тариф | tariff, retireTariff, createOrder, payDemo, audit | Новый заказ получает новую цену; старые заказы и периоды сохраняют условия |
 
 ## 19. Проверка и демонстрация на helios
 
