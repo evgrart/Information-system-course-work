@@ -30,7 +30,8 @@ final class Presentation {
             html.append("<footer><span>Потеряшки · ").append(n).append(" / ").append(slides.length).append("</span><span><a href=\"#s").append(Math.max(1,n-1)).append("\">← Назад</a> · <a href=\"#s").append(Math.min(slides.length,n+1)).append("\">Далее →</a></span></footer></section>");fo.append("</fo:flow></fo:page-sequence>");
         }
         fo.append("</fo:root>");html.append("</body></html>");Files.writeString(folder.resolve("presentation.html"),html);
-        var factory=Reports.factory(root);var agent=factory.newFOUserAgent();agent.setTitle("Потеряшки · Курсовая работа");agent.setAuthor("Евграфов Артём Андреевич");agent.setCreator("");agent.setProducer("");
+        var data=Catalog.JSON.readTree(root.resolve("docs/report_data.json").toFile());
+        var factory=Reports.factory(root);var agent=factory.newFOUserAgent();agent.setTitle("Потеряшки · Курсовая работа");agent.setAuthor(String.join("; ",Reports.students(data)));agent.setCreator("");agent.setProducer("");
         agent.getEventBroadcaster().addEventListener(e->{if(e.getSeverity()==EventSeverity.ERROR||e.getSeverity()==EventSeverity.FATAL||e.getEventID().contains("overflow"))throw new IllegalStateException("Slide layout: "+e.getEventID());});
         try(var out=Files.newOutputStream(folder.resolve("presentation.pdf"))){var fop=factory.newFop(MimeConstants.MIME_PDF,agent,out);TransformerFactory.newInstance().newTransformer().transform(new StreamSource(new StringReader(fo.toString())),new SAXResult(fop.getDefaultHandler()));Verification.require(fop.getResults().getPageCount()==slides.length,"Unexpected presentation pages");}
         System.out.println("Presentation: "+slides.length+" slides, HTML and PDF");

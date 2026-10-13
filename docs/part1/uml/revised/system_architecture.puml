@@ -1,0 +1,39 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam dpi 160
+skinparam defaultFontName Arial
+skinparam defaultFontSize 22
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+component "Браузер\nHTML / CSS" as Browser
+node "helios" {
+  rectangle "Java 17 / Spring Boot" {
+    component "Apache Tomcat\nвстроенный веб-сервер" as Tomcat
+    component "Spring Security" as Security
+    component "Spring MVC / Thymeleaf" as Presentation
+    component "Java-сервисы\nSpring Transactions" as Logic
+    component "Spring Data JPA / Hibernate\nJdbcTemplate" as Storage
+    component "Spring Scheduling" as Jobs
+    component "Spring Mail" as MailAdapter
+    component "Java NIO / ImageIO" as Media
+  }
+  folder "Файловая система" as Files
+}
+database "PostgreSQL\nPL/pgSQL" as DB
+cloud "SMTP-сервер" as Mail
+Browser --> Tomcat : SSH-туннель
+Tomcat --> Security
+Security --> Presentation
+Presentation --> Logic
+Jobs --> Logic
+Logic --> Storage
+Logic --> Media
+Logic --> MailAdapter
+Storage --> DB
+Media --> Files
+MailAdapter ..> Mail
+Files -[hidden]down- DB
+DB -[hidden]down- Mail
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam dpi 160
+skinparam defaultFontName Arial
+skinparam defaultFontSize 17
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor white
+skinparam ArrowColor black
+actor "Участник\nзаявитель" as Reporter
+actor "Участник\nдругая сторона" as Other
+actor "Модератор" as Moderator
+rectangle "ИС «Потеряшки»" {
+  usecase "UC-04. Разрешить спор\nо находке" as Dispute
+  usecase "Направить жалобу" as Complain
+  usecase "Изучить материалы\nи пояснения сторон" as Review
+  usecase "Сохранить решение\nпо жалобе" as Decision
+  usecase "Завершить спорную\nпередачу" as Resolve
+  usecase "Прочитать результат" as Result
+}
+Reporter -- Dispute
+Moderator -- Dispute
+Other -- Review
+Reporter -- Review
+Moderator -- Review
+Dispute ..> Complain : <<include>>
+Dispute ..> Review : <<include>>
+Dispute ..> Decision : <<include>>
+Dispute ..> Result : <<include>>
+Resolve ..> Dispute : <<extend>>\n[выдача подтверждена]
+Complain -[hidden]down- Review
+Review -[hidden]down- Decision
+Decision -[hidden]down- Result
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam dpi 160
+skinparam defaultFontName Arial
+skinparam defaultFontSize 17
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor white
+skinparam ArrowColor black
+actor "Участник\nпродавец" as Seller
+actor "Участники\nпокупатели" as Buyers
+actor "Модератор" as Moderator
+rectangle "ИС «Потеряшки»" {
+  usecase "UC-05. Продать вещь\nна аукционе" as Auction
+  usecase "Проверить основание\nи допустить продажу" as Permission
+  usecase "Создать лот\nи задать условия" as Lot
+  usecase "Принять ставки" as Bid
+  usecase "Определить победителя" as Winner
+  usecase "Подтвердить передачу\nпобедителю" as Transfer
+}
+Seller -- Auction
+Seller -- Lot
+Moderator -- Permission
+Buyers -- Bid
+Seller -- Transfer
+Buyers -- Transfer
+Auction ..> Permission : <<include>>
+Auction ..> Lot : <<include>>
+Auction ..> Bid : <<include>>
+Auction ..> Winner : <<include>>
+Auction ..> Transfer : <<include>>
+Permission -[hidden]down- Lot
+Lot -[hidden]down- Bid
+Bid -[hidden]down- Winner
+Winner -[hidden]down- Transfer
+@enduml

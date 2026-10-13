@@ -1,7 +1,12 @@
-Design revision: 2026-10-13
-PASS: three human roles and two external technical actors
-PASS: eight scenarios, each with one goal, participants, preconditions, steps, alternatives and postconditions
-PASS: use-case diagrams contain exactly UC-01 through UC-08
-PASS: 20 functional and 16 nonfunctional requirements
-PASS: six diagrams with editable sources, PNG and SVG
-PASS: references and diagram links agree across all reports
+Редакция первого этапа: 13.10.2026
+PASS: 10 функциональных и 6 нефункциональных карточек по форме шаблона ОПИ
+PASS: описание каждого требования начинается с «Система должна»
+PASS: 5 подробных процессов, основной и альтернативные потоки, участники и постусловия
+PASS: отдельная use-case диаграмма каждого процесса, PNG/SVG/PlantUML
+PASS: общая архитектура с уровнями приложения, PostgreSQL, файлами и SSH-туннелем
+PASS: sequence-диаграмма и UC-06–08 отсутствуют в текущей первой части
+PASS: 46 страниц PDF, 32 корректных закладок
+PASS: текст и таблицы Markdown соответствуют исходнику LaTeX
+PASS: нет пустых страниц, переполнений, пропущенных символов и неразрешённых ссылок
+PASS: корректные авторы, группа P3309 и преподаватель на титульном листе
+PASS: разделы 6.6 и 6.7 отсутствуют

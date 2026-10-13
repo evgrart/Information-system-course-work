@@ -49,13 +49,18 @@ final class Reports {
                 .replaceFirst("Отчёт по этапам 1–3 курсовой работы:[^\\n]+","Итоговый отчёт по этапам 1–4 курсовой работы: анализ предметной области, реализация базы данных, уровней хранения, бизнес-логики и представления.")
                 + "\n" + skipTitle(fourth).replace("(uml/","(../part4/uml/").replace("(screenshots/","(../part4/screenshots/")+"\n");
         var data = Catalog.JSON.readTree(root.resolve("docs/report_data.json").toFile());
+        var students = students(data);
         var factory = factory(root);
         for (var entry : Map.of("part1", "Этап 1", "part1-2", "Этапы 1–2", "part3", "Этап 3", "part1-3", "Этапы 1–3","part4","Этап 4","part1-4","Этапы 1–4").entrySet()) {
             Path folder = root.resolve("docs/" + entry.getKey());
-            String fo = document(folder, entry.getValue(), data.path("student").asText(), data.path("group").asText(), data.path("teacher").asText());
+            if (entry.getKey().equals("part1") && Files.isRegularFile(folder.resolve("report.tex"))) {
+                System.out.println("part1: LaTeX source; build with docs/part1/build.ps1");
+                continue;
+            }
+            String fo = document(folder, entry.getValue(), String.join("\n", students), data.path("group").asText(), data.path("teacher").asText());
             try (var out = Files.newOutputStream(folder.resolve("report.pdf"))) {
                 var agent = factory.newFOUserAgent(); agent.setTitle("ИС «Потеряшки». " + entry.getValue());
-                agent.setAuthor(data.path("student").asText()); agent.setCreator(""); agent.setProducer("");
+                agent.setAuthor(String.join("; ", students)); agent.setCreator(""); agent.setProducer("");
                 agent.getEventBroadcaster().addEventListener(event -> {
                     if (event.getSeverity() == EventSeverity.ERROR || event.getSeverity() == EventSeverity.FATAL)
                         throw new IllegalStateException("PDF layout: " + event.getEventID() + " " + event.getParams());
@@ -68,6 +73,15 @@ final class Reports {
                 System.out.println(entry.getKey() + ": PDF, " + fop.getResults().getPageCount() + " pages");
             }
         }
+    }
+    static List<String> students(com.fasterxml.jackson.databind.JsonNode data) {
+        var names = new ArrayList<String>();
+        for (var name : data.path("students")) {
+            if (!name.isTextual() || name.asText().isBlank()) throw new IllegalArgumentException("Invalid student name");
+            names.add(name.asText());
+        }
+        if (names.isEmpty()) throw new IllegalArgumentException("Missing report students");
+        return List.copyOf(names);
     }
     static String skipTitle(String text) { return String.join("\n", text.lines().skip(2).toList()); }
     static FopFactory factory(Path root) throws Exception {
@@ -96,9 +110,9 @@ final class Reports {
         for (var b : blocks) if (b.kind().equals("heading") && b.level() == 2)
             fo.append("<fo:bookmark internal-destination=\"h").append(++heading).append("\"><fo:bookmark-title>").append(Models.xml(b.text())).append("</fo:bookmark-title></fo:bookmark>");
         fo.append("</fo:bookmark-tree><fo:page-sequence master-reference=\"cover\" force-page-count=\"no-force\"><fo:flow flow-name=\"xsl-region-body\">");
-        String[] cover = {"Университет ИТМО", "Факультет программной инженерии и компьютерной техники\nОбразовательная программа\n«Системное и прикладное программное обеспечение»", "Курсовая работа\nПо дисциплине «Информационные системы»", "Информационная система для поиска\nи возврата потерянных вещей «Потеряшки»", label, "Выполнил студент группы " + group + "\n" + student, "Проверил:\n" + teacher, "Санкт-Петербург 2026"};
+        String[] cover = {"Университет ИТМО", "Факультет программной инженерии и компьютерной техники\nОбразовательная программа\n«Системное и прикладное программное обеспечение»", "Курсовая работа\nПо дисциплине «Информационные системы»", "Информационная система для поиска\nи возврата потерянных вещей «Потеряшки»", label, "Выполнили студенты группы " + group + "\n" + student, "Проверил:\n" + teacher, "Санкт-Петербург 2026"};
         for (int i = 0; i < cover.length; i++) {
-            String space = i == 2 ? "40mm" : i == 5 ? "20mm" : i == 7 ? "34mm" : "0mm";
+            String space = i == 2 ? "40mm" : i == 5 ? "20mm" : i == 7 ? "24mm" : "0mm";
             fo.append("<fo:block font-size=\"").append(i == 0 ? "18pt" : "16pt").append("\" line-height=\"22pt\" text-align=\"").append(i == 5 || i == 6 ? "right" : "center").append("\" space-before=\"").append(space).append("\" space-after=\"16pt\"");
             if (i == 2 || i == 3) fo.append(" font-weight=\"bold\"");
             fo.append('>'); for (String line : cover[i].split("\n")) fo.append("<fo:block>").append(Models.xml(line)).append("</fo:block>"); fo.append("</fo:block>");

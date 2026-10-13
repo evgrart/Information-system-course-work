@@ -1,0 +1,38 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam dpi 160
+skinparam defaultFontName Arial
+skinparam defaultFontSize 17
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor white
+skinparam ArrowColor black
+actor "Участник\nпредполагаемый владелец" as Owner
+actor "Участник\nнашедший" as Finder
+rectangle "ИС «Потеряшки»" {
+  usecase "UC-03. Вернуть вещь\nвладельцу" as Return
+  usecase "Найти карточку вещи" as Search
+  usecase "Направить заявку\nс приметами" as Claim
+  usecase "Согласовать возврат\nв закрытом диалоге" as Discuss
+  usecase "Зарезервировать вещь" as Reserve
+  usecase "Подтвердить выдачу\nи получение" as Confirm
+  usecase "Просмотреть контакты\nорганизации хранения" as Metro
+}
+Owner -- Return
+Finder -- Return
+Owner -- Claim
+Finder -- Reserve
+Owner -- Confirm
+Finder -- Confirm
+Return ..> Search : <<include>>
+Return ..> Claim : <<include>>
+Return ..> Discuss : <<include>>
+Return ..> Reserve : <<include>>
+Return ..> Confirm : <<include>>
+Metro ..> Search : <<extend>>\n[вещь у организации]
+Search -[hidden]down- Claim
+Claim -[hidden]down- Discuss
+Discuss -[hidden]down- Reserve
+Reserve -[hidden]down- Confirm
+@enduml
