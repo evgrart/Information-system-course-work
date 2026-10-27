@@ -7,7 +7,7 @@
 | Материалы | PDF | Исходный текст |
 | --- | --- | --- |
 | Этап 1 | [Отчёт](docs/part1/report.pdf) | [LaTeX](docs/part1/report.tex), [сборка](docs/part1/README.md) |
-| Этапы 1–2 | [Общий отчёт](docs/part1-2/report.pdf) | [Markdown](docs/part1-2/report.md) |
+| Этапы 1–2 | [Общий отчёт](docs/part1-2/report.pdf) | [LaTeX](docs/part1-2/report.tex), [сборка](docs/part1-2/README.md) |
 | Этап 3 | [Отчёт](docs/part3/report.pdf) | [Markdown](docs/part3/report.md) |
 | Этапы 1–3 | [Общий отчёт](docs/part1-3/report.pdf) | [Markdown](docs/part1-3/report.md) |
 | Этап 4 | [Отчёт](docs/part4/report.pdf) | [Markdown](docs/part4/report.md) |
@@ -42,7 +42,7 @@ $env:JAVA_HOME='C:\Users\minec\.jdks\corretto-17.0.14'
 | entities | Генерация JPA-сущностей из каталога PostgreSQL |
 | models | Словарь, две Mermaid-модели и шесть ER-схем |
 | diagrams | Пересборка PNG/SVG из PlantUML средствами Java |
-| reports | PDF для этапов 1–2, 3, 1–3, 4 и 1–4; первая часть собирается отдельно из LaTeX |
+| reports | PDF для этапов 3, 1–3, 4 и 1–4; отчёты 1 и 1–2 собираются отдельно из LaTeX |
 | presentation | 13 слайдов в HTML и PDF из общего Markdown |
 | demo-assets | Учебные изображения и документы для начального набора |
 | audit | Проверка текста, границ страниц и закладок PDF |
@@ -57,7 +57,7 @@ $env:JAVA_HOME='C:\Users\minec\.jdks\corretto-17.0.14'
 & "$env:JAVA_HOME\bin\java.exe" -Xmx512m -jar tooling/build/libs/course-tools.jar audit
 ```
 
-Первая часть переведена в [LaTeX](docs/part1/report.tex); [инструкция сборки](docs/part1/README.md). Её титульный лист редактируется в этом исходнике. Остальные отчёты используют [report_data.json](docs/report_data.json). Оформление основано на шаблоне D:\ITMO\ITMOlabs\opd\sem2\lab6\opd6.tex: поля 30/15/20/20 мм, Times New Roman 14, таблицы и подписи меньшим кеглем. Для Java-сборки PDF нужны times.ttf, timesbd.ttf, timesi.ttf, timesbi.ttf, consola.ttf; каталог задаётся COURSE_FONTS, по умолчанию C:/Windows/Fonts. DOCX первых двух этапов оставлены в архиве.
+Отчёты [первого этапа](docs/part1/report.tex) и [этапов 1–2](docs/part1-2/report.tex) переведены в LaTeX. Текст первой части общий — [content.tex](docs/part1/content.tex); текст второго этапа — [content.tex](docs/part2/content.tex). Титульные листы редактируются в основных файлах отчётов. Остальные PDF используют [report_data.json](docs/report_data.json). Оформление основано на шаблоне D:\ITMO\ITMOlabs\opd\sem2\lab6\opd6.tex: поля 30/15/20/20 мм, Times New Roman 14, таблицы и подписи меньшим кеглем. Для Java-сборки PDF нужны times.ttf, timesbd.ttf, timesi.ttf, timesbi.ttf, consola.ttf; каталог задаётся COURSE_FONTS, по умолчанию C:/Windows/Fonts. DOCX первых двух этапов оставлены в архиве.
 
 Проверка на helios запускается с машины разработчика:
 
@@ -82,7 +82,7 @@ JVM приложения ограничена 64–256 МиБ. Hibernate раб�
 
 Проверены 113 тестов приложения, 8 тестов Java-инструментов и 50 условий целостности PostgreSQL. Конкурентные операции проверяются через два соединения с базой. Для сборки приложения и отчётов используются JDK и Gradle Wrapper; SQL и PL/pgSQL реализуют операции базы данных.
 
-Для первой части авторы, группа и преподаватель указаны в report.tex; для остальных PDF — в report_data.json.
+Для отчётов 1 и 1–2 авторы, группа и преподаватель указаны в соответствующем report.tex; для остальных PDF — в report_data.json.
 
 Для работы с веб-интерфейсом на helios:
 

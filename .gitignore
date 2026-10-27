@@ -12,3 +12,4 @@ backend/.idea/
 *.local.properties
 *.local.env
 docs/part1/.latex-build/
+docs/part1-2/.latex-build/

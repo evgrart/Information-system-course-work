@@ -3,37 +3,52 @@
 top to bottom direction
 skinparam dpi 160
 skinparam defaultFontName Arial
-skinparam defaultFontSize 22
+skinparam defaultFontSize 20
 skinparam shadowing false
 skinparam packageStyle rectangle
-skinparam componentStyle rectangle
-component "Браузер\nHTML / CSS" as Browser
-node "helios" {
-  rectangle "Java 17 / Spring Boot" {
-    component "Apache Tomcat\nвстроенный веб-сервер" as Tomcat
-    component "Spring Security" as Security
-    component "Spring MVC / Thymeleaf" as Presentation
-    component "Java-сервисы\nSpring Transactions" as Logic
-    component "Spring Data JPA / Hibernate\nJdbcTemplate" as Storage
-    component "Spring Scheduling" as Jobs
-    component "Spring Mail" as MailAdapter
-    component "Java NIO / ImageIO" as Media
+skinparam componentStyle uml2
+component "Веб-браузер\nHTML / CSS" as Browser <<клиент>>
+frame "Приложение «Потеряшки» · Spring Boot / Java 17" {
+  node "Встроенный Apache Tomcat" as Tomcat
+  package "Веб-слой" {
+    component "Фильтры доступа\nSpring Security" as Security
+    component "MVC-контроллеры\nSpring MVC" as Controllers
+    artifact "HTML-шаблоны\nThymeleaf" as Templates
   }
-  folder "Файловая система" as Files
+  package "Прикладной слой" {
+    component "Предметные сервисы\nSpring Transactions" as Services
+    component "Планировщик\nSpring Scheduling" as Jobs
+  }
+  package "Хранение данных" {
+    component "Репозитории\nSpring Data JPA / Hibernate" as Repositories
+    component "SQL-доступ\nJdbcTemplate" as SQL
+  }
+  package "Адаптеры приложения" {
+    component "Файлы\nJava NIO / ImageIO" as Media
+    component "Почта\nSpring Mail" as MailAdapter
+    component "Учебная оплата\nJava" as Payments
+  }
 }
-database "PostgreSQL\nPL/pgSQL" as DB
+database "PostgreSQL\nтаблицы и PL/pgSQL" as DB
+folder "Закрытый каталог\nвложений" as Files
 cloud "SMTP-сервер" as Mail
-Browser --> Tomcat : SSH-туннель
+Browser --> Tomcat : HTTP через SSH
 Tomcat --> Security
-Security --> Presentation
-Presentation --> Logic
-Jobs --> Logic
-Logic --> Storage
-Logic --> Media
-Logic --> MailAdapter
-Storage --> DB
+Security --> Controllers
+Controllers --> Templates : модель страницы
+Controllers --> Services
+Controllers ..> SQL : чтение
+Controllers --> Media
+Controllers --> MailAdapter
+Controllers --> Payments
+Payments --> Services
+Jobs --> Services
+Services --> Repositories
+Services --> SQL
+Repositories --> DB
+SQL --> DB
 Media --> Files
-MailAdapter ..> Mail
+MailAdapter ..> Mail : при настройке SMTP
 Files -[hidden]down- DB
 DB -[hidden]down- Mail
 @enduml

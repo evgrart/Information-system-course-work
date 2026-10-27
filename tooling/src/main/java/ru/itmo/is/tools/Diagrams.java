@@ -17,13 +17,24 @@ final class Diagrams {
         System.out.println("Rendered " + count + " UML diagrams (PNG and SVG)");
     }
     static void renderFile(Path source) throws Exception {
+        String stem = source.toString().substring(0, source.toString().length() - 5);
+        Path layout = Path.of(stem + ".layout.svg");
+        if (Files.isRegularFile(layout)) {
+            var transcoder = new org.apache.batik.transcoder.image.PNGTranscoder();
+            transcoder.addTranscodingHint(org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_WIDTH, 2400f);
+            try (var out = Files.newOutputStream(Path.of(stem + ".png"))) {
+                transcoder.transcode(new org.apache.batik.transcoder.TranscoderInput(layout.toUri().toString()),
+                        new org.apache.batik.transcoder.TranscoderOutput(out));
+            }
+            Files.copy(layout, Path.of(stem + ".svg"), StandardCopyOption.REPLACE_EXISTING);
+            return;
+        }
         String text = Files.readString(source);
         // Embedded Smetana performs layout without a Graphviz installation.
         if (!text.contains("!pragma layout smetana")) text = text.replace("@startuml", "@startuml\n!pragma layout smetana");
         var reader = new SourceStringReader(text);
         if (reader.getBlocks().isEmpty() || reader.getBlocks().get(0).getDiagram() instanceof net.sourceforge.plantuml.error.PSystemError)
             throw new IllegalStateException("Invalid diagram: " + source);
-        String stem = source.toString().substring(0, source.toString().length() - 5);
         for (FileFormat format : List.of(FileFormat.PNG, FileFormat.SVG)) {
             Path target = Path.of(stem + "." + format.name().toLowerCase(Locale.ROOT));
             try (var out = Files.newOutputStream(target)) {

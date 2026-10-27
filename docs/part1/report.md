@@ -586,7 +586,7 @@
 
 Java, Spring Boot, Hibernate/JPA, PostgreSQL, Lombok и Gradle выбраны с учётом проекта MyFilmList [7]. Spring MVC и Thymeleaf позволяют включить контроллеры и представления в один JAR [8, 9]. Семейство Spring Boot 3.5 поддерживает выбранную версию Java [5]. Версии фиксируются в build.gradle. Изменения схемы представлены SQL-скриптами в Git; Hibernate проверяет соответствие сущностей существующей схеме и не создаёт таблицы при запуске.
 
-На схеме представлены технологии системы и их связи: Java 17 и Spring Boot, Apache Tomcat, Spring Security, Spring MVC и Thymeleaf, Spring Transactions, Spring Data JPA и Hibernate, JdbcTemplate, PostgreSQL и PL/pgSQL. Tomcat встроен в Spring Boot: он принимает HTTP-запросы браузера и передаёт их через фильтры Spring Security в Spring MVC. Фоновые задачи выполняются средствами Spring Scheduling, файлы обрабатываются через Java NIO и ImageIO. Spring Mail подключается к SMTP-серверу при настройке внешней почты; эта связь показана пунктиром. Доступ к приложению на helios выполняется через SSH-туннель.
+Схема раскрывает устройство приложения «Потеряшки» внутри Spring Boot: встроенный Tomcat, фильтры Spring Security, MVC-контроллеры, HTML-шаблоны Thymeleaf, предметные сервисы, планировщик, репозитории и адаптеры. Узлы обозначают веб-сервер, компоненты — программные модули, артефакт — шаблоны, цилиндр — PostgreSQL, папка — закрытые вложения. Контроллеры вызывают сервисы и формируют модели страниц; сервисы используют JPA-репозитории и SQL-доступ через JdbcTemplate. PostgreSQL и настраиваемый SMTP-сервер показаны вне приложения. Приложение размещается на helios; браузер подключается по HTTP через SSH-туннель.
 
 ![Рисунок 6 — Общая архитектура информационной системы](uml/revised/system_architecture.png)
 

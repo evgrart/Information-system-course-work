@@ -53,8 +53,8 @@ final class Reports {
         var factory = factory(root);
         for (var entry : Map.of("part1", "Этап 1", "part1-2", "Этапы 1–2", "part3", "Этап 3", "part1-3", "Этапы 1–3","part4","Этап 4","part1-4","Этапы 1–4").entrySet()) {
             Path folder = root.resolve("docs/" + entry.getKey());
-            if (entry.getKey().equals("part1") && Files.isRegularFile(folder.resolve("report.tex"))) {
-                System.out.println("part1: LaTeX source; build with docs/part1/build.ps1");
+            if (Files.isRegularFile(folder.resolve("report.tex"))) {
+                System.out.println(entry.getKey() + ": LaTeX source; build with docs/" + entry.getKey() + "/build.ps1");
                 continue;
             }
             String fo = document(folder, entry.getValue(), String.join("\n", students), data.path("group").asText(), data.path("teacher").asText());

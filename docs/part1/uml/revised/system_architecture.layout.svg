@@ -1,0 +1,127 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='1740' viewBox='0 0 1200 1740'>
+<title>Архитектура приложения «Потеряшки»</title>
+<desc>Компоненты веб-слоя, предметные сервисы, адаптеры и хранение данных внутри приложения Spring Boot.</desc>
+<defs>
+<marker id='arrow' markerWidth='9' markerHeight='9' refX='8' refY='4.5' orient='auto'><path d='M0,0 L9,4.5 L0,9 Z' fill='#333'/></marker>
+<style>
+text{font-family:Arial,sans-serif;fill:#202020}
+.frame{fill:white;stroke:#333;stroke-width:2.5}
+.layer{fill:#f5f6f7;stroke:#666;stroke-width:1.8}
+.module,.icon{fill:white;stroke:#333;stroke-width:1.8}
+.role{font-size:28px;text-anchor:middle;font-weight:bold}
+.tech{font-size:25px;text-anchor:middle}
+.layername{font-size:28px;font-weight:bold}
+.title{font-size:30px;font-weight:bold}
+.edge{font-size:23px;text-anchor:middle}
+.link,.optional{fill:none;stroke:#333;stroke-width:2.4;stroke-linejoin:round}
+.optional{stroke-dasharray:9 7}
+</style>
+</defs>
+<rect width='1200' height='1740' fill='white'/>
+
+<rect x='30' y='165' width='1140' height='1360' class='frame'/>
+<text x='55' y='210' class='title'>«Потеряшки» · Spring Boot / Java 17</text>
+<rect x='65' y='385' width='1070' height='230' class='layer'/>
+<text x='85' y='420' class='layername'>Веб-слой</text>
+<rect x='65' y='695' width='1070' height='205' class='layer'/>
+<text x='85' y='730' class='layername'>Прикладной слой</text>
+<rect x='65' y='985' width='1070' height='205' class='layer'/>
+<text x='85' y='1020' class='layername'>Адаптеры приложения</text>
+<rect x='65' y='1280' width='1070' height='210' class='layer'/>
+<text x='85' y='1315' class='layername'>Хранение данных</text>
+<path d='M970,110 V230' class='link' marker-end='url(#arrow)'/>
+<text x='1040' y='145' class='edge'>HTTP / SSH</text>
+<path d='M970,330 V355 H248 V455' class='link' marker-end='url(#arrow)'/>
+<path d='M390,512 H465' class='link' marker-end='url(#arrow)'/>
+<path d='M750,512 H825' class='link' marker-end='url(#arrow)'/>
+<path d='M595,575 V650 H340 V750' class='link' marker-end='url(#arrow)'/>
+<path d='M785,805 H565' class='link' marker-end='url(#arrow)'/>
+<path d='M650,575 V935 H607 V1035' class='link' marker-end='url(#arrow)'/>
+<path d='M535,1035 V945 H500 V860' class='link' marker-end='url(#arrow)'/>
+<path d='M500,575 V665 H78 V1090 H110' class='link' marker-end='url(#arrow)'/>
+<path d='M700,575 V655 H1120 V1090 H1095' class='link' marker-end='url(#arrow)'/>
+<path d='M735,575 V635 H1150 V1405 H1080' class='optional' marker-end='url(#arrow)'/>
+<text x='1150' y='930' class='edge'>чтение</text>
+<path d='M440,860 V1215 H375 V1335' class='link' marker-end='url(#arrow)'/>
+<path d='M525,860 V930 H793 V1225 H905 V1335' class='link' marker-end='url(#arrow)'/>
+<path d='M110,1105 H45 V1550 H182 V1590' class='link' marker-end='url(#arrow)'/>
+<path d='M1095,1105 H1185 V1650 H1160' class='optional' marker-end='url(#arrow)'/>
+<path d='M375,1445 V1555 H525 V1590' class='link' marker-end='url(#arrow)'/>
+<path d='M905,1445 V1555 H675 V1590' class='link' marker-end='url(#arrow)'/>
+<rect x='820' y='20' width='300' height='105' class='module'/>
+<rect x='1082' y='32' width='24' height='27' class='icon'/>
+<rect x='1075' y='37' width='14' height='6' class='icon'/>
+<rect x='1075' y='48' width='14' height='6' class='icon'/>
+<text x='970' y='76' class='role'>Веб-браузер</text>
+<text x='970' y='115' class='tech'>HTML / CSS</text>
+<path d='M820,230 H1105 L1120,245 V330 H835 L820,315 Z M820,230 L835,245 H1120 M835,245 V330' class='module'/>
+<text x='970' y='270' class='role'>Apache Tomcat</text>
+<text x='970' y='307' class='tech'>встроенный сервер</text>
+<rect x='105' y='455' width='285' height='120' class='module'/>
+<rect x='352' y='467' width='24' height='27' class='icon'/>
+<rect x='345' y='472' width='14' height='6' class='icon'/>
+<rect x='345' y='483' width='14' height='6' class='icon'/>
+<text x='247' y='511' class='role'>Фильтры доступа</text>
+<text x='247' y='550' class='tech'>Spring Security</text>
+<rect x='465' y='455' width='285' height='120' class='module'/>
+<rect x='712' y='467' width='24' height='27' class='icon'/>
+<rect x='705' y='472' width='14' height='6' class='icon'/>
+<rect x='705' y='483' width='14' height='6' class='icon'/>
+<text x='607' y='511' class='role'>Контроллеры</text>
+<text x='607' y='550' class='tech'>Spring MVC</text>
+<path d='M825,455 H1070 L1095,480 V575 H825 Z M1070,455 V480 H1095' class='module'/>
+<text x='960' y='503' class='role'>HTML-шаблоны</text>
+<text x='960' y='541' class='tech'>Thymeleaf</text>
+<rect x='115' y='750' width='450' height='110' class='module'/>
+<rect x='527' y='762' width='24' height='27' class='icon'/>
+<rect x='520' y='767' width='14' height='6' class='icon'/>
+<rect x='520' y='778' width='14' height='6' class='icon'/>
+<text x='340' y='806' class='role'>Предметные сервисы</text>
+<text x='340' y='845' class='tech'>Java / Spring Transactions</text>
+<rect x='785' y='750' width='300' height='110' class='module'/>
+<rect x='1047' y='762' width='24' height='27' class='icon'/>
+<rect x='1040' y='767' width='14' height='6' class='icon'/>
+<rect x='1040' y='778' width='14' height='6' class='icon'/>
+<text x='935' y='806' class='role'>Планировщик</text>
+<text x='935' y='845' class='tech'>Spring Scheduling</text>
+<rect x='110' y='1035' width='280' height='110' class='module'/>
+<rect x='352' y='1047' width='24' height='27' class='icon'/>
+<rect x='345' y='1052' width='14' height='6' class='icon'/>
+<rect x='345' y='1063' width='14' height='6' class='icon'/>
+<text x='250' y='1091' class='role'>Файлы</text>
+<text x='250' y='1130' class='tech'>Java NIO / ImageIO</text>
+<rect x='465' y='1035' width='285' height='110' class='module'/>
+<rect x='712' y='1047' width='24' height='27' class='icon'/>
+<rect x='705' y='1052' width='14' height='6' class='icon'/>
+<rect x='705' y='1063' width='14' height='6' class='icon'/>
+<text x='607' y='1091' class='role'>Учебная оплата</text>
+<text x='607' y='1130' class='tech'>Java</text>
+<rect x='825' y='1035' width='270' height='110' class='module'/>
+<rect x='1057' y='1047' width='24' height='27' class='icon'/>
+<rect x='1050' y='1052' width='14' height='6' class='icon'/>
+<rect x='1050' y='1063' width='14' height='6' class='icon'/>
+<text x='960' y='1091' class='role'>Почта</text>
+<text x='960' y='1130' class='tech'>Spring Mail</text>
+<rect x='190' y='1335' width='370' height='110' class='module'/>
+<rect x='522' y='1347' width='24' height='27' class='icon'/>
+<rect x='515' y='1352' width='14' height='6' class='icon'/>
+<rect x='515' y='1363' width='14' height='6' class='icon'/>
+<text x='375' y='1391' class='role'>Репозитории</text>
+<text x='375' y='1430' class='tech'>Spring Data JPA / Hibernate</text>
+<rect x='730' y='1335' width='350' height='110' class='module'/>
+<rect x='1042' y='1347' width='24' height='27' class='icon'/>
+<rect x='1035' y='1352' width='14' height='6' class='icon'/>
+<rect x='1035' y='1363' width='14' height='6' class='icon'/>
+<text x='905' y='1391' class='role'>SQL-доступ</text>
+<text x='905' y='1430' class='tech'>JdbcTemplate</text>
+<path d='M40,1590 H145 L165,1612 H325 V1710 H40 Z M40,1612 H325' class='module'/>
+<text x='182' y='1650' class='role'>Вложения</text>
+<text x='182' y='1686' class='tech'>локальный каталог</text>
+<path d='M415,1608 C415,1584 785,1584 785,1608 V1690 C785,1714 415,1714 415,1690 Z' class='module'/>
+<ellipse cx='600' cy='1608' rx='185' ry='20' class='module'/>
+<text x='600' y='1656' class='role'>PostgreSQL</text>
+<text x='600' y='1690' class='tech'>таблицы / PL/pgSQL</text>
+<path d='M880,1697 C848,1688 847,1650 869,1635 C861,1595 903,1580 926,1599 C947,1579 985,1584 995,1605 C1027,1587 1064,1595 1069,1618 C1106,1600 1145,1621 1140,1650 C1170,1670 1150,1710 1118,1707 H894 C887,1707 882,1703 880,1697 Z' class='module'/>
+<text x='1004' y='1652' class='role'>Внешняя почта</text>
+<text x='1004' y='1686' class='tech'>SMTP</text>
+</svg>

@@ -1,0 +1,87 @@
+\documentclass[14pt,a4paper]{extarticle}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Consolas}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\usepackage[left=30mm,right=15mm,top=20mm,bottom=20mm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\fontsize{16}{20}\selectfont\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalfont\fontsize{14}{18}\selectfont\bfseries}{\thesubsection.}{0.6em}{}
+\titlespacing*{\section}{0pt}{0pt}{12pt}
+\titlespacing*{\subsection}{0pt}{14pt}{8pt}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=normalfont,labelsep=endash,justification=raggedright,singlelinecheck=false}
+\usepackage{longtable,array,ragged2e}
+\usepackage{etoolbox}
+\makeatletter
+% В новых ядрах LaTeX бесконечное сжатие мешает разбиению страниц longtable.
+\patchcmd{\LT@output}{\vss}{\vfil}{}{}
+\patchcmd{\LT@output}{\vss}{\vfil}{}{}
+\makeatother
+\newlength{\tablecontentwidth}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTpre}{8pt}
+\setlength{\LTpost}{8pt}
+\usepackage{enumitem}
+\setlist{nosep,topsep=6pt,leftmargin=12.5mm}
+\usepackage{placeins}
+\usepackage{needspace}
+\usepackage{xurl}
+\usepackage[unicode,hidelinks,bookmarksnumbered]{hyperref}
+\hypersetup{pdftitle={ИС «Потеряшки». Этапы 1–2},pdfauthor={Шубин Егор Вячеславович; Евграфов Артём Андреевич}}
+\urlstyle{same}
+\setcounter{tocdepth}{2}
+\setlength{\parindent}{12.5mm}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{3em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+
+\usepackage{fvextra}
+\graphicspath{{../part1/}{../part2/}}
+\begin{document}
+\begin{titlepage}
+\begin{center}
+{\fontsize{18}{22}\selectfont Университет ИТМО\par}
+\vspace{8mm}
+{\fontsize{16}{20}\selectfont Факультет программной инженерии и компьютерной техники\par
+Образовательная программа\par
+«Системное и прикладное программное обеспечение»\par}
+\vspace{30mm}
+{\fontsize{16}{22}\selectfont\bfseries Курсовая работа\par
+По дисциплине «Информационные системы»\par}
+\vspace{10mm}
+{\fontsize{16}{22}\selectfont\bfseries Информационная система для поиска\par
+и возврата потерянных вещей «Потеряшки»\par}
+\vspace{8mm}
+{\fontsize{16}{20}\selectfont Этапы 1–2\par}
+\end{center}
+\vspace{20mm}
+\begin{flushright}
+Выполнили студенты группы P3309\\
+Шубин Егор Вячеславович\\
+Евграфов Артём Андреевич\\
+\vspace{7mm}
+Проверил:\\
+Николаев Владимир Вячеславович
+\end{flushright}
+\vfill
+\begin{center}
+Санкт-Петербург 2026
+\end{center}
+\end{titlepage}
+
+\pagenumbering{arabic}
+\tableofcontents
+\input{../part1/content}
+\input{../part2/content}
+\end{document}
